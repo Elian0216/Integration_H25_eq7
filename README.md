@@ -8,7 +8,9 @@ python -m venv .venv
 ```
 Activer l'environnement virtuel
 ```python
-.venv\Scripts\activate.bat
+CMD : .venv\Scripts\activate.bat
+
+PowerShell : .venv\Scripts\activate
 ```
 Installer Django
 ```python
