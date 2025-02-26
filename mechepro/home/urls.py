@@ -3,5 +3,6 @@ from . import views
 
 # URL Configuration for the home app
 urlpatterns = [
-    path('hello/', views.say_hello),
+    path('user/', views.see_user, name='user'),
+    path('', views.see_home, name='home')
 ]
