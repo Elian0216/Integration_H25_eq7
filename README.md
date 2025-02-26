@@ -21,3 +21,12 @@ pip install Django
 cd mechepro
 python manage.py runserver
 ```
+## Setup Whitenoise (pour les fichiers statiques)
+### Installer Whitenoise
+```python
+pip install whitenoise
+```
+### Mettre à jour les fichiers statiques
+```python
+python manage.py collectstatic
+```
