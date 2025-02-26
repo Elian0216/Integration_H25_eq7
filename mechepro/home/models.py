@@ -12,6 +12,10 @@ class Utilisateur(models.Model):
     numero_telephone = models.CharField(max_length=10)
     date_de_naissance = models.DateField(null=True)
 
+    def __str__(self):
+         return f"{self.nom_utilisateur}"
+
+
 
 class Adresse(models.Model):
     rue = models.CharField(max_length=10)
