@@ -5,7 +5,7 @@ from django.db import models
 
 class Utilisateur(models.Model):
     nom_utilisateur = models.CharField(max_length=10)
-    mot_de_pass = models.CharField(max_length=10)
+    mot_de_passe = models.CharField(max_length=10)
     adress_courriel = models.EmailField(unique=True)
     prenom = models.CharField(max_length=10)
     nom = models.CharField(max_length=10)
@@ -13,7 +13,7 @@ class Utilisateur(models.Model):
     date_de_naissance = models.DateField(null=True)
 
 
-class Adress(models.Model):
+class Adresse(models.Model):
     rue = models.CharField(max_length=10)
     ville = models.CharField(max_length=10)
     code_zip = models.CharField(max_length=10)
