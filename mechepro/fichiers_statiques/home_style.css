@@ -3,6 +3,28 @@ body {
     color: white;
     font-family: verdana;
     text-align: center;
+    align-items: center;
+}
+
+.logo_a {
+    color: inherit;
+    /* Uses the same color as the parent element */
+    text-decoration: none;
+    /* Removes underline */
+}
+
+
+.logo_a:hover,
+.logo_a:visited,
+.logo_a:active {
+    color: inherit;
+    /* Keeps color the same in all states */
+}
+
+.body_centre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bn632-hover {
@@ -51,8 +73,4 @@ body {
     display: flex;
     align-items: right;
     justify-content: space-around;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

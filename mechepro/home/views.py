@@ -4,15 +4,20 @@ from django.http import HttpResponse
 # Create your views here.
 
 
-def calculate():
-    x = 1
-    y = 2
-    return x
-
-
 def see_user(request):
-    x = calculate()
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
+
 
 def see_home(request):
     return render(request, 'home.html')
+
+
+def see_inscription(request):
+    return render(request, 'inscription.html')
+
+
+def see_a_propos(resquest):
+    return render(resquest, 'a_propos.html')
+
+def see_connexion(request):
+    return render(request, 'connexion.html')
