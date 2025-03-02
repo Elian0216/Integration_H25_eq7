@@ -11,10 +11,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{% static 'home_style.css' %}">
+    <link rel="stylesheet" href="{% static 'inscription_style.css' %}">
 </head>
 
 <body>
     <div class="en_tete">
+<<<<<<< HEAD
+    <h1> <a class="logo_a" href="/">MèchePro</a></h1>
+    <a href="/about"><button class="">À propos</a>
+    <a href="/inscription"><button class="bn632-hover bn25">S'inscrire</button></a>
+    </div>
+
+
+    {% block contenu %}
+
+    {% endblock %}
+=======
         <h1>MèchePro</h1>
 
     <a href="/about"><button class="">À propos</a>
@@ -24,8 +36,8 @@
 
         {% block contenu %}
         {% endblock %}
+>>>>>>> main
 
-    <script src="" async defer></script>
 </body>
 
 </html>
