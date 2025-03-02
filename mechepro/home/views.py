@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
 
 # Create your views here.
@@ -31,21 +32,20 @@ def inscrire_utilisateur(request):
         adresse_courriel = request.POST.get('adresse_courriel')
         prenom = request.POST.get('prenom')
         nom = request.POST.get('nom')
-        numero_telephone = "12345"#request.POST.get('numero_telephone')
+        numero_telephone = request.POST.get('numero_telephone')
         date_de_naissance = request.POST.get('date_de_naissance')
-
-
-        #mot_de_passe_hashed = make_password(mot_de_passe)
-        
+ 
+        mot_de_passe_hashed = make_password(mot_de_passe)
         Utilisateur.objects.create(
             nom_utilisateur=nom_utilisateur,
-            mot_de_passe=mot_de_passe,
+            mot_de_passe=mot_de_passe_hashed,
             adresse_courriel=adresse_courriel,
             prenom=prenom,
             nom=nom,
             numero_telephone=numero_telephone,
             date_de_naissance=date_de_naissance
         )
+        print(numero_telephone)
         exists = Utilisateur.objects.filter(prenom="prenom").exists()
         print(exists)
     return render(request, 'home.html')  

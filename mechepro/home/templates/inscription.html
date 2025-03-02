@@ -9,21 +9,28 @@ MèchePro | Zone d'inscription
     {% csrf_token %}
     <pre>
     <div class="body_centre">
-        <div class="container">
-            <div>
-                <h1>Créer un compte</h1>
-                <p>Vous avez déjà un compte? <a href="/connect">Connectez-vous</a></p>
+    <div class="container">
+    <div>
+    <h1>Créer un compte</h1>
+    <p>Vous avez déjà un compte? <a href="/connect">Connectez-vous</a></p>
 
-<input type="text" name="prenom" placeholder="Prénom" required>
-<input type="text" name="nom" placeholder="Nom" required>
-<input type="date" name="date_de_naissance" required>
-<input type="email" name="adresse_courriel" placeholder="Adresse Courriel" required>
-<input type="text" name="nom_utilisateur" placeholder="Nom d'utilisateur" required>
-<input type="password" name="mot_de_passe" placeholder="Créer un mot de passe" required>
+    <input type="text" name="prenom" placeholder="Prénom" required>
 
-                <button type="submit" class="bn632-hover bn25">S'inscrire</button>
-            </div>
-        </div>
+    <input type="text" name="nom" placeholder="Nom" required>
+
+    <input type="date" name="date_de_naissance" required>
+
+    <input type="email" name="adresse_courriel" placeholder="Adresse Courriel" required>
+
+    <input type="tel" name="numero_telephone" placeholder="Numéro de Téléphone" required>
+    
+    <input type="text" name="nom_utilisateur" placeholder="Nom d'utilisateur" required>
+
+    <input type="password" name="mot_de_passe" placeholder="Créer un mot de passe" required>
+
+    <button type="submit" class="bn632-hover bn25">S'inscrire</button>
+    </div>
+    </div>
     </div>
 </pre>
 </form>
