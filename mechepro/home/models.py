@@ -6,7 +6,7 @@ from django.db import models
 class Utilisateur(models.Model):
     nom_utilisateur = models.CharField(max_length=10)
     mot_de_passe = models.CharField(max_length=10)
-    adress_courriel = models.EmailField(unique=True)
+    adresse_courriel = models.EmailField(unique=True)
     prenom = models.CharField(max_length=10)
     nom = models.CharField(max_length=10)
     numero_telephone = models.CharField(max_length=10)

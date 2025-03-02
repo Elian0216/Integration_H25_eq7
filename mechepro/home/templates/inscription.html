@@ -5,6 +5,8 @@ MèchePro | Zone d'inscription
 {% endblock %}
 
 {% block contenu %}
+<form method="POST" action="{% url 'inscrire_utilisateur' %}">
+    {% csrf_token %}
 <pre>
 <form>
     <div class="body_centre">
@@ -12,17 +14,17 @@ MèchePro | Zone d'inscription
     <div>
     <h1>Créer un compte</h1>
     <p>Vous avez déjà un compte? <a href="/connect">Connectez-vous</a></p>
-    <input type="text" placeholder="Prénom" required>
+    <input type="text" name="prenom" placeholder="Prénom" required>
  
-    <input type="text" placeholder="Nom" required>
+    <input type="text" name="nom" placeholder="Nom" required>
   
-    <input type="date" placeholder="Date de naissance" required>
+    <input type="date" name="date_de_naissance" placeholder="Date de naissance" required>
  
-    <input type="email" placeholder="Adresse Courriel" required>
+    <input type="email" name="addresse_courriel" placeholder="Adresse Courriel" required>
 
-    <input type="text" placeholder="Nom d'utilisateur" required>
+    <input type="text" name="nom_utilisateur" placeholder="Nom d'utilisateur" required>
     
-    <input type="password" placeholder="Créer un mot de passe" required>
+    <input type="password" name="mot_de_passe" placeholder="Créer un mot de passe" required>
     <button type="submit" class="bn632-hover bn25">S'inscrire</button>
     </div>
 </div>
