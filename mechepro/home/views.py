@@ -28,20 +28,24 @@ def inscrire_utilisateur(request):
     if request.method == "POST":
         nom_utilisateur = request.POST.get('nom_utilisateur')
         mot_de_passe = request.POST.get('mot_de_passe')
-        adress_courriel = request.POST.get('adress_courriel')
+        adresse_courriel = request.POST.get('adresse_courriel')
         prenom = request.POST.get('prenom')
         nom = request.POST.get('nom')
-        numero_telephone = request.POST.get('numero_telephone')
+        numero_telephone = "12345"#request.POST.get('numero_telephone')
         date_de_naissance = request.POST.get('date_de_naissance')
 
+
+        #mot_de_passe_hashed = make_password(mot_de_passe)
+        
         Utilisateur.objects.create(
             nom_utilisateur=nom_utilisateur,
             mot_de_passe=mot_de_passe,
-            adress_courriel=adress_courriel,
+            adresse_courriel=adresse_courriel,
             prenom=prenom,
             nom=nom,
             numero_telephone=numero_telephone,
             date_de_naissance=date_de_naissance
         )
-
-    return render(request, 'home.html')  # Ensure this is properly aligned
+        exists = Utilisateur.objects.filter(prenom="prenom").exists()
+        print(exists)
+    return render(request, 'home.html')  
