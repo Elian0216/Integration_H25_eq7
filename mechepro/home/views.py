@@ -2,9 +2,26 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+
 
 # Create your views here.
 
+def connexion(request):
+    if request.method == 'POST':
+        nom_utilisateur = request.POST['nom_utilisateur']
+        mot_de_passe = request.POST['mot_de_passe']
+        utilisateur = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
+
+        if utilisateur is not None:
+            login(request, utilisateur)
+            messages.success(request, "Connexion réussie!")
+            return redirect('')  # Remplace par le nom de la page d'accueil
+
+    return render(request, 'home.html')
 
 def see_user(request):
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
