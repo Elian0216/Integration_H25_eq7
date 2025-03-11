@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
+from .analyseFinanciere.graphique import generer_graphique
 
 # Create your views here.
 
@@ -49,3 +50,6 @@ def inscrire_utilisateur(request):
         exists = Utilisateur.objects.filter(prenom="prenom").exists()
         print(exists)
     return render(request, 'home.html')  
+
+def afficher_graphique(request):
+    return generer_graphique(request)

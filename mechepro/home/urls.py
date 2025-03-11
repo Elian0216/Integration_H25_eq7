@@ -8,5 +8,6 @@ urlpatterns = [
     path('inscription/', views.see_inscription, name='inscription'),
     path('about/', views.see_a_propos, name='about'),
     path('connect/', views.see_connexion, name='connect'),
-    path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur')
+    path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
+    path('graphique/', views.afficher_graphique, name='graphique'),
 ]
