@@ -1,20 +1,19 @@
-import yfinance as yf
+from .yahooFinance import get_donnees_stock
 import plotly.graph_objects as go
 from django.shortcuts import render
-from plotly.utils import PlotlyJSONEncoder
-import json
 
 def generer_graphique(request):
-    # Fetch AAPL stock data
+    # Test avec AAPL
     ticker = "AAPL"
-    stock_data = yf.download(ticker, period="1y")  # 1 year of data
-    print(stock_data)
+    stock_data = get_donnees_stock(ticker, "5y")
+    # stock_data = yf.download(ticker, period="1y")  # 1 year of data
+    # print(stock_data["Open"])
 
-    # Create a Plotly candlestick chart
+    # Creation du graphique
     fig = go.Figure(
         data=[
             go.Candlestick(
-                x=stock_data.index,
+                x=stock_data["index"],
                 open=stock_data["Open"],
                 high=stock_data["High"],
                 low=stock_data["Low"],
@@ -28,7 +27,6 @@ def generer_graphique(request):
         ),
     )
 
-    # Convert the Plotly figure to JSON for rendering in the template
-    plot_json = json.dumps(fig, cls=PlotlyJSONEncoder)
+    graph_html = fig.to_html(full_html=False)
 
-    return render(request, "page_analyse.html", {"plot_json": plot_json})
+    return render(request, "page_analyse.html", {"graph_html": graph_html})
