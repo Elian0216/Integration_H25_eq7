@@ -6,14 +6,16 @@ MèchePro | Zone d'inscription
 
 {% block contenu %}
 <form method="POST" action="{% url 'inscrire_utilisateur' %}">
-    {% csrf_token %}
-    <pre>
     <div class="body_centre">
-    <div class="container">
-    <div>
-    <h1>Créer un compte</h1>
-    <p>Vous avez déjà un compte? <a href="/connect">Connectez-vous</a></p>
-
+        <div class="container">
+            {% csrf_token %}
+            <pre>
+    
+            <div>
+            <h1>Créer un compte</h1>
+    
+            <p>Vous avez déjà un compte? <a href="/connect">Connectez-vous</a></p>
+        
     <input type="text" name="prenom" placeholder="Prénom" required>
 
     <input type="text" name="nom" placeholder="Nom" required>
@@ -28,10 +30,10 @@ MèchePro | Zone d'inscription
 
     <input type="password" name="mot_de_passe" placeholder="Créer un mot de passe" required>
 
-    <button type="submit" class="bn632-hover bn25">S'inscrire</button>
-    </div>
-    </div>
-    </div>
-</pre>
-</form>
+    <button type="submit" class="bouton_inscription">S'inscrire</button>
+            </div>
+            </div>
+            </div>
+        </pre>
+        </form>
 {% endblock %}
