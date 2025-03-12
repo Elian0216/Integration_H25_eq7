@@ -3,9 +3,31 @@ body {
     color: white;
     font-family: verdana;
     text-align: center;
+    align-items: center;
 }
 
-.bn632-hover {
+.logo_a {
+    color: inherit;
+    /* Uses the same color as the parent element */
+    text-decoration: none;
+    /* Removes underline */
+}
+
+
+.logo_a:hover,
+.logo_a:visited,
+.logo_a:active {
+    color: inherit;
+    /* Keeps color the same in all states */
+}
+
+.body_centre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bouton_inscription {
     width: 160px;
     font-size: 16px;
     font-weight: 600;
@@ -21,9 +43,16 @@ body {
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
+
+    background-image: linear-gradient(to right,
+    #29323c,
+    #485563,
+    #2b5876,
+    #4e4376);
+    box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
 }
 
-.bn632-hover:hover {
+.bouton_inscription:hover {
     background-position: 100% 0;
     moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
@@ -31,17 +60,8 @@ body {
     transition: all .4s ease-in-out;
 }
 
-.bn632-hover:focus {
+.bouton_inscription:focus {
     outline: none;
-}
-
-.bn632-hover.bn25 {
-    background-image: linear-gradient(to right,
-            #29323c,
-            #485563,
-            #2b5876,
-            #4e4376);
-    box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
 }
 
 .en_tete {
@@ -51,8 +71,4 @@ body {
     display: flex;
     align-items: right;
     justify-content: space-around;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
