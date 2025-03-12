@@ -1,3 +1,4 @@
+from .alpha_vantage import *
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
@@ -5,6 +6,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.dateparse import parse_date
+
 
 
 
@@ -27,7 +29,7 @@ def see_user(request):
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
 
 
-def see_home(request):
+def see_home(request):  
     return render(request, 'home.html')
 
 
