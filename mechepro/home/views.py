@@ -1,4 +1,4 @@
-from .alpha_vantage import *
+from .analyseFinanciere.alpha_vantage import *
 from .analyseFinanciere.graphique import generer_graphique
 
 from django.shortcuts import render, redirect
@@ -40,6 +40,7 @@ def see_a_propos(resquest):
 
 def see_connexion(request):
     return render(request, 'connexion.html')
+
 
 
 def inscrire_utilisateur(request):
@@ -87,3 +88,4 @@ def inscrire_utilisateur(request):
 
 def afficher_graphique(request):
     return generer_graphique(request)
+

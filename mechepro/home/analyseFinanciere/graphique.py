@@ -1,6 +1,7 @@
 from .yahooFinance import get_donnees_stock
 import plotly.graph_objects as go
 from django.shortcuts import render
+from .yahooFinance import get_all_stock_symbols
 
 def generer_graphique(request):
     # Test avec AAPL
@@ -29,4 +30,6 @@ def generer_graphique(request):
 
     graph_html = fig.to_html(full_html=False)
 
-    return render(request, "page_analyse.html", {"graph_html": graph_html})
+    return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": get_all_stock_symbols()})	
+
+

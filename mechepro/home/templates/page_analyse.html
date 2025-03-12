@@ -1,11 +1,34 @@
+{% extends "master.html" %}
 <!DOCTYPE html>
 <html>
+    {% block titre %}
+MèchePro | {{ titre }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block contenu %}
 <head>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <title>AAPL Stock Chart</title>
+    
 </head>
 <body>
-    <h1>AAPL Stock Price (1 Year)</h1>
+    <h2>Sélectionnez un symbole boursier</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="symbol">Sélectionnez un symbole :</label>
+        <select name="symbol" id="symbol">
+            {% for symbol, name in symbols %}
+                <option value="{{ symbol }}">{{ symbol }}, {{ name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Valider</button>
+    </form>
+    <h1>{{ titre }}</h1>
+
     {{ graph_html | safe}}
+
 </body>
 </html>
+{% endblock %}

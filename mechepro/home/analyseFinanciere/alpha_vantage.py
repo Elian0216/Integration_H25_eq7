@@ -42,6 +42,16 @@ def calculer_rsi(symbol):
 
 
 def obtenir_donnees_json(url):
-    r = requests.get(url)
-    data = r.json()
-    return data
+    try:
+        r = requests.get(url, timeout=5)  # Set timeout to 5 seconds
+        data = r.json()
+        return data
+    except requests.Timeout:
+        print("Timeout error: the server did not respond within 5 seconds")
+        return None
+    
+def get_symboles_stock():
+    key = settings.ALPHA_VANTAGE_API_KEY
+    data = TimeSeries(key=key, output_format='json').get_symbol_search('')  # Recherche tous les symboles disponibles
+    symbols = [(item['1. symbol'], item['2. name']) for item in data]
+    return symbols
