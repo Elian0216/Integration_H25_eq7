@@ -1,14 +1,12 @@
 from .alpha_vantage import *
-from django.shortcuts import render
+from .analyseFinanciere.graphique import generer_graphique
+
+from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
-from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.dateparse import parse_date
-
-
-
 
 # Create your views here.
 
@@ -85,3 +83,7 @@ def inscrire_utilisateur(request):
             messages.error(request, f"Erreur lors de l'inscription : {e}")
 
     return render(request, 'inscription.html')
+
+
+def afficher_graphique(request):
+    return generer_graphique(request)
