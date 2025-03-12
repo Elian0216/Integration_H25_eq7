@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
@@ -17,11 +18,17 @@ def connexion(request):
         utilisateur = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
 
         if utilisateur is not None:
-            login(request, utilisateur)
-            messages.success(request, "Connexion réussie!")
-            return redirect('')  # Remplace par le nom de la page d'accueil
 
-    return render(request, 'home.html')
+            login(request, utilisateur)
+            return redirect('/')
+            #return render(request, 'home.html')
+        else:
+            return render(request,"connexion.html",{
+                    "log_in_faux" : True
+                })
+            #return redirect('/connect')
+        #return render(request, 'home.html')
+
 
 def see_user(request):
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
@@ -39,7 +46,9 @@ def see_a_propos(resquest):
     return render(resquest, 'a_propos.html')
 
 def see_connexion(request):
-    return render(request, 'connexion.html')
+    return render(request, 'connexion.html', {
+        "log_in_faux" : False
+    })
 
 
 def inscrire_utilisateur(request):

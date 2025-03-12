@@ -1,15 +1,15 @@
 {% extends "master.html" %}
 
 {% block titre %}
-MèchePro | Zone d'inscription
+    MèchePro | Zone d'inscription
 {% endblock %}
 
 {% block contenu %}
-<form method="POST" action="{% url 'inscrire_utilisateur' %}">
-    <div class="body_centre">
-        <div class="container">
-            {% csrf_token %}
-            <pre>
+    <form method="POST" action="{% url 'inscrire_utilisateur' %}">
+        <div class="body_centre">
+            <div class="container">
+                {% csrf_token %}
+                <pre>
     
             <div>
             <h1>Créer un compte</h1>
@@ -33,7 +33,7 @@ MèchePro | Zone d'inscription
     <button type="submit" class="bouton_inscription">S'inscrire</button>
             </div>
             </div>
-            </div>
+        </div>
         </pre>
-        </form>
+    </form>
 {% endblock %}

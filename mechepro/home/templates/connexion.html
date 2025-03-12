@@ -10,6 +10,9 @@ MèchePro | Connexion
     <div class="body_centre">
         <div class="container">
             <h2>Connexion</h2>
+            {% if log_in_faux %}
+            	<h5 style="color: #ff0000"> Mot de passe invalide!</h5>
+            {% endif %}
 
             <input type="text" name="nom_utilisateur" placeholder="Nom d'utilisateur" required>
             <input type="password" name="mot_de_passe" placeholder="Mot de passe" required>
