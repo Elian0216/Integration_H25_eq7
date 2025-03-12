@@ -26,7 +26,6 @@ def connexion(request):
             return render(request,"connexion.html",{
                     "log_in_faux" : True
                 })
-            #return redirect('/connect')
         #return render(request, 'home.html')
 
 
@@ -72,7 +71,11 @@ def inscrire_utilisateur(request):
             # Vérification de l'existence de l'utilisateur
             if Utilisateur.check(nom_utilisateur=nom_utilisateur):
                 messages.error(request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
-                print("TESTTTTTT existe")
+                print("user existe")
+                return render(request, "inscription.html", {
+                    "utilisateur_existe": True
+                })
+
             else:
                 print("creation")
                 # Création de l'utilisateur
@@ -87,8 +90,7 @@ def inscrire_utilisateur(request):
                 )
                 utilisateur.save()
                 messages.success(request, "Utilisateur enregistré avec succès.")
-
+                return redirect('connect')
         except Exception as e:
             messages.error(request, f"Erreur lors de l'inscription : {e}")
 
-    return render(request, 'inscription.html')
