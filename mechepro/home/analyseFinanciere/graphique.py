@@ -5,7 +5,7 @@ from .yahooFinance import get_all_stock_symbols
 
 def generer_graphique(request):
     # Test avec AAPL
-    ticker = "AAPL"
+    ticker = request.POST.get("symbol", "AAPL")
     stock_data = get_donnees_stock(ticker, "5y")
     # stock_data = yf.download(ticker, period="1y")  # 1 year of data
     # print(stock_data["Open"])
