@@ -2,6 +2,7 @@ from .analyseFinanciere.alpha_vantage import *
 from .analyseFinanciere.graphique import generer_graphique
 
 from django.shortcuts import render, redirect
+
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
 from django.contrib.auth import authenticate, login
@@ -17,11 +18,16 @@ def connexion(request):
         utilisateur = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
 
         if utilisateur is not None:
-            login(request, utilisateur)
-            messages.success(request, "Connexion réussie!")
-            return redirect('')  # Remplace par le nom de la page d'accueil
 
-    return render(request, 'home.html')
+            login(request, utilisateur)
+            return redirect('/')
+            #return render(request, 'home.html')
+        else:
+            return render(request,"connexion.html",{
+                    "log_in_faux" : True
+                })
+        #return render(request, 'home.html')
+
 
 def see_user(request):
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
@@ -39,7 +45,9 @@ def see_a_propos(resquest):
     return render(resquest, 'a_propos.html')
 
 def see_connexion(request):
-    return render(request, 'connexion.html')
+    return render(request, 'connexion.html', {
+        "log_in_faux" : False
+    })
 
 
 
@@ -64,7 +72,11 @@ def inscrire_utilisateur(request):
             # Vérification de l'existence de l'utilisateur
             if Utilisateur.check(nom_utilisateur=nom_utilisateur):
                 messages.error(request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
-                print("TESTTTTTT existe")
+                print("user existe")
+                return render(request, "inscription.html", {
+                    "utilisateur_existe": True
+                })
+
             else:
                 print("creation")
                 # Création de l'utilisateur
@@ -79,7 +91,7 @@ def inscrire_utilisateur(request):
                 )
                 utilisateur.save()
                 messages.success(request, "Utilisateur enregistré avec succès.")
-
+                return redirect('connect')
         except Exception as e:
             messages.error(request, f"Erreur lors de l'inscription : {e}")
 
