@@ -82,5 +82,3 @@ def generer_graphique(request):
 
     return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": get_all_stock_symbols()})	
 
-
-# BANGER POUR RESIZE : document.getElementsByClassName('js-plotly-plot')[0].on('plotly_relayout', function(data) {console.log("fsafd")})
