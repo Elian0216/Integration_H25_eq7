@@ -1,13 +1,13 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from .analyseFinanciere.alpha_vantage import *
+from .analyseFinanciere.graphique import generer_graphique
+
+from django.shortcuts import render, redirect
+
 from django.contrib.auth.hashers import make_password
 from .models import Utilisateur
-from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.dateparse import parse_date
-
-
 
 # Create your views here.
 
@@ -33,7 +33,7 @@ def see_user(request):
     return render(request, 'user_page.html', {'name': 'Valère Bardon'})
 
 
-def see_home(request):
+def see_home(request):  
     return render(request, 'home.html')
 
 
@@ -48,6 +48,7 @@ def see_connexion(request):
     return render(request, 'connexion.html', {
         "log_in_faux" : False
     })
+
 
 
 def inscrire_utilisateur(request):
@@ -93,4 +94,10 @@ def inscrire_utilisateur(request):
                 return redirect('connect')
         except Exception as e:
             messages.error(request, f"Erreur lors de l'inscription : {e}")
+
+    return render(request, 'inscription.html')
+
+
+def afficher_graphique(request):
+    return generer_graphique(request)
 

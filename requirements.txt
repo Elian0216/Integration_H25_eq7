@@ -1,0 +1,7 @@
+django
+plotly
+yfinance
+alpha_vantage
+whitenoise
+lxml
+djongo
