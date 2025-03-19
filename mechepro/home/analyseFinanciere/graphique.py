@@ -76,7 +76,7 @@ def generer_graphique(request):
             full_html=False,
             config={
                 "scrollZoom": True,
-                "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect"],
+                "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
             }
         )
 

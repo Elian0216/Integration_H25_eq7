@@ -33,14 +33,14 @@ MèchePro | {{ titre }}
 <script>
     var plotDiv = document.getElementsByClassName('js-plotly-plot')[0];
 
-var debouncedUpdate = debounce(updateYAxis, 100);
+var updateAntiRebond = antiRebond(updateAxeY, 100);
 plotDiv.on('plotly_relayout', function(eventData) {
     if (eventData['xaxis.range[0]'] || eventData['xaxis.range[1]']) {
-        debouncedUpdate();
+        updateAntiRebond();
     }
 })
 
-function debounce(func, wait) {
+function antiRebond(func, wait) {
     var timeout;
     return function(...args) {
         clearTimeout(timeout);
@@ -48,7 +48,7 @@ function debounce(func, wait) {
     };
 }
 
-function updateYAxis() {
+function updateAxeY() {
     var visibleHighsData = [];
     var visibleLowsData = [];
     var xData = plotDiv.data[0].x;
