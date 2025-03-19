@@ -1,14 +1,12 @@
 from .yahooFinance import get_donnees_stock
 import plotly.graph_objects as go
 from django.shortcuts import render
-from .yahooFinance import get_all_stock_symbols
+from .yahooFinance import get_all_stock_symbols, calculer_RSI
 
 def generer_graphique(request):
     # Test avec AAPL
     ticker = request.POST.get("symbol", "AAPL")
     stock_data = get_donnees_stock(ticker, "5y")
-    # stock_data = yf.download(ticker, period="1y")  # 1 year of data
-    # print(stock_data["Open"])
 
     # Creation du graphique
     fig = go.Figure(
