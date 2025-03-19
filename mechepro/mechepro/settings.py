@@ -29,8 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1']
 
 # Alpha vantage API Key
-ALPHA_VANTAGE_API_KEY = os.environ.get('ALPHA_VANTAGE_API_KEY')
-
+ALPHA_VANTAGE_API_KEY = 'JLZLZ8M7908MFPY5'
 # Application definition
 
 INSTALLED_APPS = [
