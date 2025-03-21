@@ -79,8 +79,16 @@ WSGI_APPLICATION = 'mechepro.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'basemechepro',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://6240216:HyAHiALXGnq4ERNI@basemechepro.cxjkm.mongodb.net/?retryWrites=true&w=majority&appName=basemechepro',
+            'username': '6240216',
+            'password': 'HyAHiALXGnq4ERNI'
+
+        }
+
     }
 }
 

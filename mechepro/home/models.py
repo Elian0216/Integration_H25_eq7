@@ -1,9 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+from djongo.models import CheckConstraint, Q
+from djongo import models
+from pymongo.read_concern import ReadConcern
+
 
 # Create your models here.
 
 
 class Utilisateur(models.Model):
+    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
     nom_utilisateur = models.CharField(max_length=10, unique=True)
     mot_de_passe = models.CharField(max_length=10)
     adresse_courriel = models.EmailField(unique=True)
