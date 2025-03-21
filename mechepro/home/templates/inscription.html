@@ -4,9 +4,6 @@
     MèchePro | Zone d'inscription
 {% endblock %}
 
-{% block head %}
-<link rel="stylesheet" href="{% static 'inscription_style.css' %}">
-{% endblock %}
 
 {% block contenu %}
     <form method="POST" action="{% url 'inscrire_utilisateur' %}">
