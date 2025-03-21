@@ -30,5 +30,50 @@ MèchePro | {{ titre }}
     {{ graph_html | safe}}
 
 </body>
+<script>
+    var plotDiv = document.getElementsByClassName('js-plotly-plot')[0];
+
+var updateAntiRebond = antiRebond(updateAxeY, 100);
+plotDiv.on('plotly_relayout', function(eventData) {
+    if (eventData['xaxis.range[0]'] || eventData['xaxis.range[1]']) {
+        updateAntiRebond();
+    }
+})
+
+function antiRebond(func, wait) {
+    var timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
+function updateAxeY() {
+    var visibleHighsData = [];
+    var visibleLowsData = [];
+    var xData = plotDiv.data[0].x;
+    var highs = plotDiv.data[0].high;
+    var lows = plotDiv.data[0].low;
+    var xRange = plotDiv.layout.xaxis.range;
+    
+    for (var i = 0; i < xData.length; i++) {
+        if (xData[i] >= xRange[0] && xData[i] <= xRange[1]) {
+            visibleHighsData.push(highs[i]);
+            visibleLowsData.push(lows[i]);
+        }
+    }
+    
+    // Calculate min and max of visible y-values
+    if (visibleHighsData.length > 0) {
+        var minY = Math.min(...visibleLowsData);
+        var maxY = Math.max(...visibleHighsData);
+    
+        // Update the y-axis range
+        Plotly.relayout(plotDiv, {
+            'yaxis.range': [minY, maxY]
+        });
+    }
+}
+</script>
 </html>
 {% endblock %}
