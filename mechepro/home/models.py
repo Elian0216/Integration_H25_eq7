@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 from djongo.models import CheckConstraint, Q
 from djongo import models
-from pymongo.read_concern import ReadConcern
 
 
 # Create your models here.
