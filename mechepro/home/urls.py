@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import connexion
+from rest_framework.routers import DefaultRouter
 
 # URL Configuration for the home app
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path('connect/', views.see_connexion, name='connect'),
     path('connexion/', connexion, name='connexion'),
     path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
-    path('graphique/', views.afficher_graphique, name='graphique'),]
+    path('graphique/', views.afficher_graphique, name='graphique'),
+]
