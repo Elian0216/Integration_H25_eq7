@@ -1,4 +1,4 @@
-django
+Django
 plotly
 yfinance
 alpha_vantage
