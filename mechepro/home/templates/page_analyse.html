@@ -36,9 +36,16 @@ MèchePro | {{ titre }}
 
     {{ graph_html | safe}}
 
+    <h3>Analyse</h3>
+    <button id="btnAnalyseFractales"class="btnAnalyse">Analyser (Fractales)</button>
+
 </body>
 <script>
-    var plotDiv = document.getElementsByClassName('js-plotly-plot')[0];
+document.getElementById('btnAnalyseFractales').addEventListener('click', function() {
+    
+})
+
+var plotDiv = document.getElementsByClassName('js-plotly-plot')[0];
 
 var updateAntiRebond = antiRebond(updateAxeY, 100);
 plotDiv.on('plotly_relayout', function(eventData) {
