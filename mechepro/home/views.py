@@ -1,3 +1,5 @@
+import json
+
 from django.db.models.functions import datetime
 
 from .analyseFinanciere.alpha_vantage import *
@@ -87,12 +89,14 @@ def inscrire_utilisateur(request):
                 print("creation")
                 # Création de l'utilisateur
                 usr= User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=datetime.date.today())
+                liste=[] #liste de favoris, initialement vide
 
                 #Notre modele
                 utilisateur = Utilisateur(
                     utilisateur = usr,  #chaque modele a un objet utilisateur du syteme django,afin d'utilisier l'authentification)
                     numero_telephone=numero_telephone,
-                    date_de_naissance=date_de_naissance
+                    date_de_naissance=date_de_naissance,
+                    favoris=json.dumps(liste)
                 )
                 utilisateur.save()
                 messages.success(request, "Utilisateur enregistré avec succès.")

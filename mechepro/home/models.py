@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from djongo.models import CheckConstraint, Q
 from djongo import models
-
+import json
 
 # Create your models here.
 
@@ -12,7 +12,18 @@ class Utilisateur(models.Model):
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     numero_telephone = models.CharField(max_length=10)
     date_de_naissance = models.DateField(null=True)
-    #favoris=models.
+    favoris=models.JSONField(null=True) #un string encodé en JSON
+    # Pour convertir json.dumps(liste). Pour désérializer, uilisier json.loads(obj)
+
+    def ajouter_favoris(self, ticker):
+        liste_favoris = json.loads(self.favoris) #convertis le JSON en liste avec laquelle nous pouvons travailler
+        liste_favoris.append(ticker)
+        self.favoris = json.dumps(liste_favoris)
+
+    def enlever_favoris(self, ticker):
+        liste_favoris = json.loads(self.favoris)
+        liste_favoris.remove(ticker)
+        self.favoris = json.dumps(liste_favoris)
 
     def __str__(self):
          return f"{self.utilisateur}"
