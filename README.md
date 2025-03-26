@@ -29,4 +29,7 @@ pip install whitenoise
 ### Mettre à jour les fichiers statiques
 ```python
 python manage.py collectstatic
+
+
+npx shadcn@latest add button
 ```
