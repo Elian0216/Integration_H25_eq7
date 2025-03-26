@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.utils.dateparse import parse_date
 
 from django.contrib.auth.models import User
+import datetime
 
 # Create your views here.
 
@@ -85,7 +86,7 @@ def inscrire_utilisateur(request):
             else:
                 print("creation")
                 # Création de l'utilisateur
-                usr= User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=date.today())
+                usr= User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=datetime.date.today())
 
                 #Notre modele
                 utilisateur = Utilisateur(
