@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.utils.dateparse import parse_date
 
+from django.contrib.auth.models import User
+
 # Create your views here.
 
 def connexion(request):
@@ -18,11 +20,12 @@ def connexion(request):
         utilisateur = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
 
         if utilisateur is not None:
-
+            print("Connexion réussie!")
             login(request, utilisateur)
             return redirect('/')
             #return render(request, 'home.html')
         else:
+            print("echec")
             return render(request,"connexion.html",{
                     "log_in_faux" : True
                 })
@@ -63,7 +66,7 @@ def inscrire_utilisateur(request):
             date_de_naissance = request.POST.get('date_de_naissance')
 
             # Hachage du mot de passe
-            mot_de_passe_hashed = make_password(mot_de_passe)
+            #mot_de_passe_hashed = make_password(mot_de_passe)
 
             # Conversion de la date si fournie
             date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
@@ -80,9 +83,13 @@ def inscrire_utilisateur(request):
             else:
                 print("creation")
                 # Création de l'utilisateur
+                usr= User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel)
+
+
                 utilisateur = Utilisateur(
+                    utilisateur = usr,
                     nom_utilisateur=nom_utilisateur,
-                    mot_de_passe=mot_de_passe_hashed,
+                    mot_de_passe=mot_de_passe,
                     adresse_courriel=adresse_courriel,
                     prenom=prenom,
                     nom=nom,
@@ -93,6 +100,7 @@ def inscrire_utilisateur(request):
                 messages.success(request, "Utilisateur enregistré avec succès.")
                 return redirect('connect')
         except Exception as e:
+
             messages.error(request, f"Erreur lors de l'inscription : {e}")
 
     return render(request, 'inscription.html')

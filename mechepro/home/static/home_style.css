@@ -8,7 +8,6 @@ body {
 
 .logo_a {
     color: inherit;
-    /* Uses the same color as the parent element */
     text-decoration: none;
     /* Removes underline */
 }
@@ -18,7 +17,6 @@ body {
 .logo_a:visited,
 .logo_a:active {
     color: inherit;
-    /* Keeps color the same in all states */
 }
 
 .body_centre {

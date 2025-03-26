@@ -1,7 +1,9 @@
 from .yahooFinance import get_donnees_stock
-import plotly.graph_objects as go
-from django.shortcuts import render
 from .yahooFinance import get_all_stock_symbols, calculer_RSI
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+from django.shortcuts import render
+
 
 def generer_graphique(request):
     # Test avec AAPL
@@ -9,25 +11,47 @@ def generer_graphique(request):
     stock_data = get_donnees_stock(ticker, "5y")
 
     # Creation du graphique
-    fig = go.Figure(
-        data=[
-            go.Candlestick(
-                x=stock_data["index"],
-                open=stock_data["Open"],
-                high=stock_data["High"],
-                low=stock_data["Low"],
-                close=stock_data["Close"],
-            )
-        ],
-        layout=go.Layout(
-            title=f"{ticker} Stock Price (1 Year)",
-            xaxis_title="Date",
-            yaxis_title="Price (USD)",
-            dragmode="pan", # Mode de déplacement dans le graphique
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1,
+                    subplot_titles=('Candlestick Chart', 'RSI'))
+    
+
+    fig.add_trace(
+        go.Candlestick(
+            x=stock_data["index"],
+            open=stock_data["Open"],
+            high=stock_data["High"],
+            low=stock_data["Low"],
+            close=stock_data["Close"],
+            name="Candlestick"
         ),
+        row=1,
+        col=1
+    )
+
+     # Changer les couleurs des bougies
+    fig.update_traces(
+            increasing=dict(line=dict(color="green")),
+            decreasing=dict(line=dict(color="red")),
+        )
+    
+    RSI_data = calculer_RSI(stock_data)
+    fig.add_trace(
+        go.Scatter(
+            x=RSI_data["index"],
+            y=RSI_data["RSI"],
+            # mode="lines",
+            name="RSI",
+            line=dict(color="blue"),
+        ),
+        row=2,
+        col=1
     )
 
     fig.update_layout(
+        title=f"{ticker} Stock Price (1 Year)",
+        xaxis_title="Date",
+        yaxis_title="Price (USD)",
+        dragmode="pan", # Mode de déplacement dans le graphique
         xaxis=dict(
             rangeslider=dict(
                 visible=True,  # Show the range slider
@@ -53,13 +77,6 @@ def generer_graphique(request):
 
     )
 
-    # Changer les couleurs des bougies
-    fig.update_traces(
-            increasing=dict(line=dict(color="green")),
-            decreasing=dict(line=dict(color="red")),
-        )
-    
-    # Template pour les indicateurs
     # fig.add_trace(
     #     go.Scatter(
     #         x=stock_data.index,
