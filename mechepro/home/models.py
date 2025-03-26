@@ -3,14 +3,14 @@ from django.contrib.auth.models import User
 
 from djongo.models import CheckConstraint, Q
 from djongo import models
-from pymongo.read_concern import ReadConcern
+
 
 
 # Create your models here.
 
 
 class Utilisateur(models.Model):
-    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
+    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     nom_utilisateur = models.CharField(max_length=10, unique=True)
     mot_de_passe = models.CharField(max_length=10)
     adresse_courriel = models.EmailField(unique=True)
@@ -20,7 +20,7 @@ class Utilisateur(models.Model):
     date_de_naissance = models.DateField(null=True)
 
     def __str__(self):
-         return f"{self.nom_utilisateur}"
+         return f"{self.utilisateur}"
     
 
 
