@@ -5,7 +5,6 @@ from djongo.models import CheckConstraint, Q
 from djongo import models
 
 
-
 # Create your models here.
 
 

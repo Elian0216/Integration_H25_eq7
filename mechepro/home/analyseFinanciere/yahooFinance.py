@@ -5,18 +5,17 @@ import numpy as np
 
 def get_donnees_stock(ticker, period="1y"):
     stock_data = yf.download(ticker, period=period)
-    stock_data_formattee = {}
+    stock_data_formatte = {}
 
     for colonne in stock_data.columns:
-        stock_data_formattee[colonne[0]
-                             ] = stock_data[colonne].to_numpy().tolist()
+        stock_data_formatte[colonne[0]] = stock_data[colonne].to_numpy().tolist()
         # print(stock_data[colonne].to_numpy().tolist())
 
-    stock_data_formattee["index"] = stock_data.index
+    stock_data_formatte["index"] = stock_data.index
 
-    # print(stock_data_formattee)
+    # print(stock_data_formatte)
 
-    return stock_data_formattee
+    return stock_data_formatte
 
 
 # Pour tester le script directement
@@ -66,7 +65,7 @@ def calculer_RSI(data, period=14):
     # Afficher et retourner les dernières valeurs du RSI
 
     # 1253 2025-03-14  20.920586 EXEMPLE D'UNE SORTIE
-    return df[['index', 'RSI']].tail()
+    return df[['index', 'RSI']]
 
 
 def calculer_MACD(data, short_period=12, long_period=26, signal_period=9):
