@@ -4,10 +4,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from django.shortcuts import render
 
+ensemble_daction = get_all_stock_symbols()
 
 def generer_graphique(request):
     # Test avec AAPL
     ticker = request.POST.get("symbol", "AAPL")
+    print(ticker)
     stock_data = get_donnees_stock(ticker, "5y")
 
     # Creation du graphique
@@ -95,5 +97,5 @@ def generer_graphique(request):
             }
         )
 
-    return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": get_all_stock_symbols()})	
+    return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": ensemble_daction})
 
