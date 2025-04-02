@@ -31,5 +31,5 @@ pip install whitenoise
 python manage.py collectstatic
 
 
-npx shadcn@latest add button
+npx shadcn@latest init
 ```
