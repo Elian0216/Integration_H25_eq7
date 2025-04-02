@@ -25,6 +25,13 @@ class Utilisateur(models.Model):
         liste_favoris.remove(ticker)
         self.favoris = json.dumps(liste_favoris)
 
+    def est_favoris(self, ticker):
+        liste_favoris = json.loads(self.favoris)
+        if ticker in liste_favoris:
+            return True
+        else:
+            return False
+
     def __str__(self):
          return f"{self.utilisateur}"
     
