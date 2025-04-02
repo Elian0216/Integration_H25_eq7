@@ -106,7 +106,7 @@ export default function inscription() {
               />
             </div>
 
-            <Button className="w-full">Créer un Compte</Button>
+            <Button className="w-full">Créer un compte</Button>
           </div>
         </div>
 
