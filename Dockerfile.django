@@ -1,0 +1,11 @@
+FROM python:3.13.2
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+
+RUN pip install -r requirements.txt --no-deps
+
+COPY . /app/
+
+CMD ["python", "mechepro/manage.py", "runserver", "0.0.0.0:8000"]
