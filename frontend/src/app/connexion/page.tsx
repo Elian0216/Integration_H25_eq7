@@ -55,7 +55,7 @@ export default function connexion() {
               />
             </div>
 
-            <Button className="w-full">Créer un Compte</Button>
+            <Button className="w-full">Se connecter</Button>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export default function connexion() {
           <p className="text-accent-foreground text-center text-sm">
             Vous n'avez pas un compte ?
             <Button asChild variant="link" className="px-2">
-              <Link href="/inscription">Créer en un</Link>
+              <Link href="/inscription">Créez un compte</Link>
             </Button>
           </p>
         </div>
