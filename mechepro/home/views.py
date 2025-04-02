@@ -16,6 +16,8 @@ import datetime
 
 from django.http import JsonResponse
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 # Create your views here.
 
 def connexion(request):
@@ -110,6 +112,7 @@ def afficher_graphique(request):
     return generer_graphique(request)
 
 
+@ensure_csrf_cookie
 def test_api(request):
     data = {"message": "Test successful!"}
     return JsonResponse(data)
