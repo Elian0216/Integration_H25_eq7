@@ -26,8 +26,8 @@ MèchePro | {{ titre }}
         {% csrf_token %}
         <label for="symbol">Sélectionnez un symbole :</label>
         <select name="symbol" id="symbol">
-            {% for symbol, name in symbols %}
-                <option value="{{ symbol }}">{{ symbol }}, {{ name }}</option>
+            {% for symbol, name, secteur in symbols %}
+                <option value="{{ symbol }}">{{ symbol }}, {{ name }}, {{secteur}}</option>
             {% endfor %}
         </select>
         <button type="submit">Valider</button>
