@@ -112,8 +112,8 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 .mask-image {
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 90%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, black 20%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
 }
 
 @layer base {
