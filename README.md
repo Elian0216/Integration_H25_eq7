@@ -12,9 +12,9 @@ CMD : .venv\Scripts\activate.bat
 
 PowerShell : .venv\Scripts\activate
 ```
-Installer Django
+Installer les librairies requises
 ```python
-pip install Django
+pip install -r requirements.txt --no-deps
 ```
 ## Lancer le serveur
 ```python

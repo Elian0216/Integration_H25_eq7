@@ -1,8 +1,0 @@
-Django
-plotly
-yfinance
-alpha_vantage
-whitenoise
-lxml
-djongo
-sqlparse==0.2.4
