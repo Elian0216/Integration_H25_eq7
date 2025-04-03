@@ -11,5 +11,5 @@ urlpatterns = [
     path('connexion/', views.connexion, name='connexion'),
     path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
     path('graphique/', views.afficher_graphique, name='graphique'),
-    path('api/test', views.test_api, name='test_api'),
+    path('test', views.test_api, name='test_api'),
 ]

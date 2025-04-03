@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt --no-deps
 
 COPY . /app/
 
-CMD ["python", "mechepro/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

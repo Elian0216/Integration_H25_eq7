@@ -16,7 +16,7 @@ import datetime
 
 from django.http import JsonResponse
 
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -112,7 +112,7 @@ def afficher_graphique(request):
     return generer_graphique(request)
 
 
-@ensure_csrf_cookie
+@csrf_exempt
 def test_api(request):
     data = {"message": "Test successful!"}
     return JsonResponse(data)

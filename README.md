@@ -33,3 +33,10 @@ python manage.py collectstatic
 
 npx shadcn@latest init
 ```
+
+## Docker
+```bash
+docker compose build # Build
+docker compose up # Run
+docker compose down # Stop
+```
