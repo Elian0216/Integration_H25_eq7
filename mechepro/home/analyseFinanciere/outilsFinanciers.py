@@ -1,7 +1,11 @@
 import numpy as np
 import pandas as pd
+from sklearn.cluster import KMeans
 
 from home.analyseFinanciere.Fractale import Fractale
+
+from home.analyseFinanciere.yahooFinance import get_donnees_stock
+
 
 #les paramètres data représentent la sortie de la fonctions get_donnees_stock dans yahooFinance.py
 #c'est dans con appel où la période de temps sera définie.
@@ -98,3 +102,22 @@ def trouver_minimums(data):
                 date=dates[pos]
                 fractales_min.append(Fractale(date, min, est_max=False))
     return fractales_min
+
+
+
+
+
+def k_moyennes(data):
+    points = trouver_minimums(data) + trouver_maximums(data)
+
+    points_seulement_montant=[]
+    for point in points:
+        points_seulement_montant.append((point.montant, 0))
+
+    modele = KMeans(n_clusters=2, random_state=0).fit(points_seulement_montant)
+    print(modele.cluster_centers_)
+
+if __name__ == "__main__":
+    k_moyennes(get_donnees_stock("MSFT"))
+    #print(get_donnees_stock("AAPL"))
+
