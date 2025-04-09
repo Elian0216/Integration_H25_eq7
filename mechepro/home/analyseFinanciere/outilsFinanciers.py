@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
-from yahooFinance import *
 
+from home.analyseFinanciere.Fractale import Fractale
+from yahooFinance import *
+#les paramètres data représentent la sortie de la fonctions get_donnees_stock dans yahooFinance.py
+#c'est dans con appel où la période de temps sera définie.
 def calculer_RSI(data, period=14):
     # Convertir la liste de dictionnaires en DataFrame
     df = pd.DataFrame(data)
@@ -58,19 +61,46 @@ def calculer_MACD(data, short_period=12, long_period=26, signal_period=9):
 #     print(macd_data)
 
 
+def moyenne_mobile(data):
+    prix_fermeture = data['Close']
+    somme=0
+    for jour in prix_fermeture:
+        somme+=jour
+    return round(somme/prix_fermeture.__len__(), 3)
+
 def trouver_maximums(data):
 #cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
-    maximums = data["High"]
-    pos_max_trouve = []
+    maximums = data["High"] #liste de max quotidiens
+    dates = data['index']
+    fractales_max=[]
     for max in maximums:
-        if (max is maximums[0] ) or  (max is maximums[1]) or (max is maximums[maximums.len()-1]) or  (max is maximums[maximums.len()-2]):
+        if (max == maximums[0] ) or  (max == maximums[1]) or (max == maximums[maximums.__len__()-1]) or (max == maximums[maximums.__len__()-2]):
             pass #rien faire si c'est le premier, le dernier, le deuxieme, ou l'avant dernier
         else:
-            pos = max.index(max)
+            pos = maximums.index(max)
             if max>maximums[pos+1] and max>maximums[pos+2] and max>maximums[pos-1] and max>maximums[pos-2]:
-                pos_max_trouve.append(pos)
+                date=dates[pos]
+                fractales_max.append(Fractale(date, max))
+    return fractales_max
+
+
+def trouver_minimums(data):
+#cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
+    minimums = data["Low"] #liste de max quotidiens
+    dates = data['index']
+    fractales_min=[]
+    for min in minimums:
+        if (min == minimums[0] ) or  (min == minimums[1]) or (min == minimums[minimums.__len__()-1]) or (min ==minimums[minimums.__len__()-2]):
+            pass #rien faire si c'est le premier, le dernier, le deuxieme, ou l'avant dernier
+        else:
+            pos = minimums.index(min)
+            if min<minimums[pos+1] and min<minimums[pos+2] and min<minimums[pos-1] and min<minimums[pos-2]:
+                date=dates[pos]
+                fractales_min.append(Fractale(date, min, est_max=False))
+    return fractales_min
+
 
 
 if __name__=='__main__':
-    trouver_maximums(get_donnees_stock("AAPL"))
-    print(donnees)
+    print(moyenne_mobile(get_donnees_stock("MSFT")))
+

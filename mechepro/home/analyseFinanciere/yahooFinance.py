@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def get_donnees_stock(ticker, period="1y"):
-    stock_data = yf.download(ticker, period=period)
+    stock_data = yf.download(ticker, period=period) #, rounding=True
     stock_data_formatte = {}
 
     for colonne in stock_data.columns:
@@ -19,7 +19,7 @@ def get_donnees_stock(ticker, period="1y"):
 
 # Pour tester le script directement
 if __name__ == "__main__":
-    get_donnees_stock("AAPL")
+    print(get_donnees_stock("AAPL"))
 
 
 def get_all_stock_symbols():
