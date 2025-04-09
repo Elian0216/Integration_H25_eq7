@@ -7,12 +7,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Star } from "lucide-react";
+import { BotIcon, BotOff, Star, Trash, Trash2 } from "lucide-react";
 
 interface FavorisProps {
     tokens: string[];
-    setTokens?: React.Dispatch<React.SetStateAction<string[]>>;
+    setTokens?: React.Dispatch<React.SetStateAction<string>>;
 }
+const handleSupprimer = (token: string) => {
+    // Logique pour supprimer le token des favoris
+    console.log(`Supprimer ${token} des favoris`);
+  }
 function Favoris({ tokens, setTokens }: FavorisProps) {
 
   return (
@@ -24,8 +28,9 @@ function Favoris({ tokens, setTokens }: FavorisProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
             {tokens.map((token, index) => (
-                <DropdownMenuItem key={index} onClick={() => setTokens(tokens.filter((_, i) => i !== index))}>
+                <DropdownMenuItem className="flex justify-between p-2" key={index} onClick={() => setTokens}>
                     {token}
+                    <Trash2 className="text-red-500" onClick={() => handleSupprimer(token)} />
                 </DropdownMenuItem>
             ))}
         </DropdownMenuContent>
