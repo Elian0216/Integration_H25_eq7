@@ -1,0 +1,31 @@
+services:
+  django:
+    build:
+      context: ./mechepro
+      dockerfile: Dockerfile.django
+    volumes:
+      - ./mechepro:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - nextjs
+
+  nextjs:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.nextjs
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules/
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+      - nextjs
