@@ -4,7 +4,10 @@ import React from 'react'
 function analyse() {
   return (
     <>
-    <Retour />
+     <div className="flex flex-col items-center justify-center h-screen">
+      Graphique
+      <div id='graphique'></div>
+      </div>
     </>
   )
 }
