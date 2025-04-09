@@ -2,6 +2,7 @@
 
 import Retour from "@/components/retour";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import Favoris from "@/components/ui/favoris";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import React, { use, useState } from "react";
@@ -34,6 +35,11 @@ const Analyse = () => {
                 className="bg-zinc-800 border-zinc-700 pl-9 w-full sm:w-64"
               />
             </form>
+          </div>
+          <div className="absolute top-[25%] right-[10%]">
+            {//REMPLACER PAR TOKENS DE L'UTILISATEUR
+            }
+            <Favoris tokens={["BTC", "XRP"]} />
           </div>
         </div>
 
