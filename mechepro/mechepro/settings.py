@@ -196,19 +196,21 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
 ]
 
+CORS_EXPOSE_HEADERS = ["X-CSRFToken"]
+
 # CORS_ALLOW_HEADERS = '*'
-# CORS_ALLOW_HEADERS = [
-#     'accept',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken', # Add this line
-#     'x-requested-with',
-# ]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken', # Add this line
+    'x-requested-with',
+]
 
 # Uncomment and modify if needed
 # CSRF_COOKIE_DOMAIN = 'localhost'
-# CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'

@@ -12,4 +12,5 @@ urlpatterns = [
     path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
     path('graphique/', views.afficher_graphique, name='graphique'),
     path('test', views.test_api, name='test_api'),
+    path('csrf/', views.get_token, name='get_csrf_token'),
 ]

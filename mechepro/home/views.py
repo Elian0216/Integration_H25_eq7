@@ -18,10 +18,10 @@ import datetime
 
 from django.http import JsonResponse
 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, get_token
 
 # Create your views here.
-
+@ensure_csrf_cookie
 def connexion(request):
     if request.method == 'POST':
         nom_utilisateur = request.POST['nom_utilisateur']
@@ -30,14 +30,21 @@ def connexion(request):
 
         if utilisateur is not None:
             print("Connexion réussie!")
-            login(request, utilisateur)
-            return redirect('/')
-            #return render(request, 'home.html')
+            return JsonResponse({
+                "message": "Connexion réussie",
+                "username": nom_utilisateur
+            })
+            # login(request, utilisateur)
+            # return redirect('/')
+            # return render(request, 'home.html')
         else:
-            print("echec")
-            return render(request,"connexion.html",{
-                    "log_in_faux" : True
-                })
+            print("Échec")
+            return JsonResponse({
+                "message": "Échec de la connexion"
+            })
+            # return render(request,"connexion.html",{
+            #         "log_in_faux" : True
+            #     })
         #return render(request, 'home.html')
 
 
@@ -120,3 +127,9 @@ def afficher_graphique(request):
 def test_api(request):
     data = {"message": "Test successful!"}
     return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({"detail": "Cookie set successfully"})
