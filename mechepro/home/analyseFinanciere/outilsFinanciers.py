@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from yahooFinance import *
 
 def calculer_RSI(data, period=14):
     # Convertir la liste de dictionnaires en DataFrame
@@ -55,3 +56,21 @@ def calculer_MACD(data, short_period=12, long_period=26, signal_period=9):
 #     data = get_donnees_stock("AAPL")
 #     macd_data = calculer_MACD(data)
 #     print(macd_data)
+
+
+def trouver_maximums(data):
+#cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
+    maximums = data["High"]
+    pos_max_trouve = []
+    for max in maximums:
+        if (max is maximums[0] ) or  (max is maximums[1]) or (max is maximums[maximums.len()-1]) or  (max is maximums[maximums.len()-2]):
+            pass #rien faire si c'est le premier, le dernier, le deuxieme, ou l'avant dernier
+        else:
+            pos = max.index(max)
+            if max>maximums[pos+1] and max>maximums[pos+2] and max>maximums[pos-1] and max>maximums[pos-2]:
+                pos_max_trouve.append(pos)
+
+
+if __name__=='__main__':
+    trouver_maximums(get_donnees_stock("AAPL"))
+    print(donnees)
