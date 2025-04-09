@@ -6,8 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "npx shadcn@latest init"
+    "lint": "next lint"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.2",

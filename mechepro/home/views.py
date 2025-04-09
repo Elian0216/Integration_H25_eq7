@@ -16,6 +16,10 @@ from django.utils.dateparse import parse_date
 from django.contrib.auth.models import User
 import datetime
 
+from django.http import JsonResponse
+
+from django.views.decorators.csrf import csrf_exempt
+
 # Create your views here.
 
 def connexion(request):
@@ -111,3 +115,8 @@ def inscrire_utilisateur(request):
 def afficher_graphique(request):
     return generer_graphique(request)
 
+
+@csrf_exempt
+def test_api(request):
+    data = {"message": "Test successful!"}
+    return JsonResponse(data)
