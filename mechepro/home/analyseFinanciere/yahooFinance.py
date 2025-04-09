@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
 
 def get_all_stock_symbols():
-    # lire le symboles et leur description du fichier
+    # lire les symboles et leur description du fichier
     fichier = open("home/analyseFinanciere/all.csv")#changer le nom pour elargir
 
     # Vérifier que les symboles sont valides avec yfinance

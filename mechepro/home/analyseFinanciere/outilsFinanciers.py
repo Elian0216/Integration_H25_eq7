@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from home.analyseFinanciere.Fractale import Fractale
-from yahooFinance import *
+
 #les paramètres data représentent la sortie de la fonctions get_donnees_stock dans yahooFinance.py
 #c'est dans con appel où la période de temps sera définie.
 def calculer_RSI(data, period=14):
@@ -98,9 +98,3 @@ def trouver_minimums(data):
                 date=dates[pos]
                 fractales_min.append(Fractale(date, min, est_max=False))
     return fractales_min
-
-
-
-if __name__=='__main__':
-    print(moyenne_mobile(get_donnees_stock("MSFT")))
-
