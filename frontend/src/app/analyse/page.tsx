@@ -1,9 +1,9 @@
 "use client";
-
 import Retour from "@/components/retour";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import Favoris from "@/components/ui/favoris";
 import { Plus, Search } from "lucide-react";
+import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
 import Link from "next/link";
 import React, { use, useState } from "react";
 
@@ -11,12 +11,20 @@ const Analyse = () => {
   const [token, setToken] = useState("BTC");
   const [inputValue, setInputValue] = useState("");
 
+  // const userTokens = await fetch("/api/user/tokens", {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // }).then((res) => res.json());
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
       setToken(inputValue.trim());
     }
   };
+
 
   const handleAjouterFavoris = () => {
     // Logique pour ajouter le token aux favoris
@@ -42,7 +50,7 @@ const Analyse = () => {
             </form>
           </div>
           <div className="absolute top-[25%] right-[50%] flex items-center justify-center bg-zinc-800 border border-zinc-700 rounded-md p-2 shadow-md">
-            <Plus className="text-green-400" onClick={handleAjouterFavoris}/>
+            <Plus className="text-green-400" onClick={handleAjouterFavoris} />
           </div>
           <div className="absolute top-[25%] right-[10%]">
             {
