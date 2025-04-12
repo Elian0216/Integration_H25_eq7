@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 
 async function callTestApi() {
     try {
-      const response = await fetch('http://localhost/api/test/', {
+      const response = await fetch(process.env.API_PATH + 'test/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
