@@ -5,6 +5,7 @@ import { ModeToggle } from "@/components/ui/toggler";
 import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import "./globals.css";
+import CsrfUtils from "@/utils/csrf_utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,11 +27,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
         <body>
+          <CsrfUtils />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

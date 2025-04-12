@@ -18,12 +18,14 @@ import datetime
 
 from django.http import JsonResponse
 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, get_token
+import json
 
 # Create your views here.
-
+@ensure_csrf_cookie
 def connexion(request):
     if request.method == 'POST':
+        print("--- " + str(request.POST))
         nom_utilisateur = request.POST['nom_utilisateur']
         mot_de_passe = request.POST['mot_de_passe']
         utilisateur = authenticate(request, username=nom_utilisateur, password=mot_de_passe)
@@ -31,14 +33,24 @@ def connexion(request):
         if utilisateur is not None:
             print("Connexion réussie!")
             login(request, utilisateur)
-            return redirect('/')
-            #return render(request, 'home.html')
+            return JsonResponse({
+                "message": "Connexion réussie",
+                "username": nom_utilisateur
+            })
+            # return redirect('/')
+            # return render(request, 'home.html')
         else:
-            print("echec")
-            return render(request,"connexion.html",{
-                    "log_in_faux" : True
-                })
+            print("Échec de la connexion.")
+            return JsonResponse({
+                "message": "Échec de la connexion"
+            })
+            # return render(request,"connexion.html",{
+            #         "log_in_faux" : True
+            #     })
         #return render(request, 'home.html')
+    else:
+        print("Pas de post")
+        return JsonResponse({"message": "Mauvais type d'appel"})
 
 
 def see_user(request):
@@ -120,3 +132,19 @@ def afficher_graphique(request):
 def test_api(request):
     data = {"message": "Test successful!"}
     return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    token = get_token(request)
+    return JsonResponse({"detail": "Cookie set successfully"})
+
+
+@ensure_csrf_cookie
+def is_auth(request):
+    if (request.user.is_authenticated):
+        print("User is auth !")
+        return JsonResponse({"message": "User is auth !"})
+    else:
+        print("User is not auth :(")
+        return JsonResponse({"message": "User is not auth :("})
