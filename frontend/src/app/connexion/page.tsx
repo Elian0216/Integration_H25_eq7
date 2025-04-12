@@ -1,24 +1,51 @@
-'use server'
+'use client'
 import Link from "next/link";
+import Form from "next/form";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React from "react";
 import Retour from "@/components/retour";
+import Cookies from "js-cookie"
+
 
 export default function connexion() {
-  function handleConnexion(data: FormData) {
-    console.log(data);
+  function handleForm(e: any) {
+    const csrfToken = Cookies.get('csrftoken');
+    if (!csrfToken) {
+      alert("An error occured. " + csrfToken);
+      return;
+    }
+
+    let inputs = document.getElementsByTagName("input");
+    var map: { [key: string]: string } = {}
+    for (let index = 0; index < inputs.length; index++) {
+      const element = inputs[index];
+      map[element.name] = element.value;
+    }
+    console.log(map);
+    
+    var resp = fetch("/api/connexion/",
+      {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/x-www-form-urlencoded",
+          'X-CSRFToken': csrfToken,
+        }),
+        credentials: "include",
+        // Automatically converted to "username=example&password=password"
+        body: new URLSearchParams(map),
+      }
+    );
   }
 
   return (
     <>
       <Retour />
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
-        <form
-          method="POST"
-          action={handleConnexion}
+        <Form
+          action={handleForm}
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
           <div className="p-8 pb-6">
@@ -62,7 +89,7 @@ export default function connexion() {
                 />
               </div>
 
-              <Button className="w-full">Se connecter</Button>
+              <Button className="w-full" type="submit">Se connecter</Button>
             </div>
           </div>
 
@@ -74,7 +101,7 @@ export default function connexion() {
               </Button>
             </p>
           </div>
-        </form>
+        </Form>
       </section>
     </>
   );

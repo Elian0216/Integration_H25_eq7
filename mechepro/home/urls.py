@@ -11,6 +11,7 @@ urlpatterns = [
     path('connexion/', views.connexion, name='connexion'),
     path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
     path('graphique/', views.afficher_graphique, name='graphique'),
-    path('test', views.test_api, name='test_api'),
+    path('test/', views.test_api, name='test_api'),
     path('csrf/', views.get_csrf_token, name='get_csrf_token'),
+    path('is_auth/', views.is_auth, name='is_auth'),
 ]
