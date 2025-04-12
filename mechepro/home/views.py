@@ -21,7 +21,7 @@ import json
 from .analyseFinanciere.alpha_vantage import *
 from .analyseFinanciere.graphique import generer_graphique
 
-# TODO: HASH PASSWORD
+# TODO: Question database pourquoi pas tout utilisateur django par defaut
 
 # Create your views here.
 @ensure_csrf_cookie
@@ -92,7 +92,9 @@ def inscrire_utilisateur(request):
             #mot_de_passe_hashed = make_password(mot_de_passe)
 
             # Conversion de la date si fournie
-            date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
+            # print("Date de naissance avant conversion : ", date_de_naissance)
+            # date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
+            # print("Date de naissance apres conversion : ", date_de_naissance)
 
             # Vérification de l'existence de l'utilisateur
             if Utilisateur.check(nom_utilisateur=nom_utilisateur):
@@ -108,15 +110,23 @@ def inscrire_utilisateur(request):
             else:
                 print("Création de l'utilisateur")
                 # Création de l'utilisateur
-                usr= User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=timezone.now())
+                try: 
+                    usr = User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=timezone.now())
+                except Exception as e:
+                    messages.error(request, f"Erreur lors de la création de l'utilisateur Django : {e}")
+                    print(f"Erreur lors de la création de l'utilisateur Django : {e}")
+                    return JsonResponse({
+                        "message": "Erreur lors de la création de l'utilisateur Django"
+                    })
+                
                 liste=[] # liste de favoris, initialement vide
 
                 # Notre modele
                 utilisateur = Utilisateur(
-                    utilisateur = usr,  # chaque modele a un objet utilisateur du syteme django,afin d'utilisier l'authentification)
+                    utilisateur = usr,  # chaque modele a un objet utilisateur du syteme django, afin d'utilisier l'authentification)
                     numero_telephone=numero_telephone,
                     date_de_naissance=date_de_naissance,
-                    favoris=json.dumps(liste)
+                    favoris=liste
                 )
                 utilisateur.save()
                 messages.success(request, "Utilisateur enregistré avec succès.")
