@@ -5,7 +5,7 @@ import { ModeToggle } from "@/components/ui/toggler";
 import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import "./globals.css";
-import CsrfUtils from "@/utils/csrf_utils";
+import CsrfUtils from "@/components/utils/csrf_utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

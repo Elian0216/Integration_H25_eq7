@@ -1,22 +1,20 @@
 'use client'
 import Link from "next/link";
 import Form from "next/form";
+import React from "react";
+import Retour from "@/components/retour";
+
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
-import Retour from "@/components/retour";
-import Cookies from "js-cookie"
+
+import postFetch from "@/utils/fetch";
+
 
 
 export default function connexion() {
-  function handleForm(e: any) {
-    const csrfToken = Cookies.get('csrftoken');
-    if (!csrfToken) {
-      alert("An error occured. " + csrfToken);
-      return;
-    }
+  async function handleForm(e: any) {
 
     let inputs = document.getElementsByTagName("input");
     var map: { [key: string]: string } = {}
@@ -26,18 +24,10 @@ export default function connexion() {
     }
     console.log(map);
     
-    var resp = fetch("/api/connexion/",
-      {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/x-www-form-urlencoded",
-          'X-CSRFToken': csrfToken,
-        }),
-        credentials: "include",
-        // Automatically converted to "username=example&password=password"
-        body: new URLSearchParams(map),
-      }
-    );
+    var resp = await postFetch(process.env.API_PATH + "connexion/", map);
+    console.log(resp);
+    const data = await resp?.json();
+    console.log(data);
   }
 
   return (
