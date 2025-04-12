@@ -111,7 +111,21 @@ def inscrire_utilisateur(request):
                 print("Création de l'utilisateur")
                 # Création de l'utilisateur
                 try: 
-                    usr = User.objects.create_user(username=nom_utilisateur,password=mot_de_passe, email=adresse_courriel, first_name=prenom, last_name=nom, date_joined=timezone.now())
+                    if (User.objects.filter(username=nom_utilisateur)):
+                        messages.error(request, "Un utilisateur Django avec ce nom d'utilisateur existe déjà.")
+                        print("L'utilisateur Django existe")
+                        return JsonResponse({
+                            "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà."
+                        })
+                    else :
+                        usr = User.objects.create_user(
+                            username=nom_utilisateur,
+                            password=mot_de_passe,
+                            email=adresse_courriel,
+                            first_name=prenom,
+                            last_name=nom,
+                            date_joined=timezone.now()
+                        )
                 except Exception as e:
                     messages.error(request, f"Erreur lors de la création de l'utilisateur Django : {e}")
                     print(f"Erreur lors de la création de l'utilisateur Django : {e}")
