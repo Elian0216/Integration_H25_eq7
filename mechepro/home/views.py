@@ -32,11 +32,11 @@ def connexion(request):
 
         if utilisateur is not None:
             print("Connexion réussie!")
+            login(request, utilisateur)
             return JsonResponse({
                 "message": "Connexion réussie",
                 "username": nom_utilisateur
             })
-            # login(request, utilisateur)
             # return redirect('/')
             # return render(request, 'home.html')
         else:
