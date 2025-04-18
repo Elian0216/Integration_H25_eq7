@@ -107,17 +107,31 @@ def trouver_minimums(data):
 
 
 
-def k_moyennes(data):
+def k_moyennes(data, n):
     points = trouver_minimums(data) + trouver_maximums(data)
 
     points_seulement_montant=[]
     for point in points:
         points_seulement_montant.append((point.montant, 0))
 
-    modele = KMeans(n_clusters=2, random_state=0).fit(points_seulement_montant)
-    print(modele.cluster_centers_)
+    cluster_k_moyennes = KMeans(n_clusters=n).fit(points_seulement_montant)
+    return cluster_k_moyennes
+    #print(cluster_k_moyennes)#.cluster_centers_
+
+
+#méthode du coude
+def trouver_k(data):
+    n=1
+    resultat_possible=[]
+    while n<6:
+        resultat_possible.append(k_moyennes(data, n))
+        n+=1
+    return resultat_possible
 
 if __name__ == "__main__":
-    k_moyennes(get_donnees_stock("MSFT"))
+    liste= trouver_k(get_donnees_stock("NFLX"))
+    for resultat in liste:
+        print( "eresultat: ", resultat.cluster_centers_)
+    #k_moyennes()
     #print(get_donnees_stock("AAPL"))
 
