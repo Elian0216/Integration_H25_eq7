@@ -71,7 +71,7 @@ export default function accueil() {
               className="absolute inset-0 -z-20"
             >
               <Image
-                src="/bg_accueil.jpg"
+                src="/img_accueil_1.jpg"
                 alt="background"
                 width="3276"
                 height="4095"
