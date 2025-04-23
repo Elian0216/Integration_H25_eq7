@@ -3,13 +3,16 @@ import Link from "next/link";
 import Form from "next/form";
 import React from "react";
 import Retour from "@/components/retour";
-
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { HeroHeader } from "@/components/entete";
+import { FooterSection } from "@/components/basDePage";
+
 
 import postFetch from "@/utils/fetch";
+
 
 
 
@@ -32,7 +35,7 @@ export default function connexion() {
 
   return (
     <>
-      <Retour />
+      <HeroHeader />
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -41,7 +44,7 @@ export default function connexion() {
           <div className="p-8 pb-6">
             <div>
               <Link href="/" aria-label="go home">
-                <Logo />
+                {/* logo ici */}
               </Link>
               <h1 className="text-title mb-1 mt-4 text-xl font-semibold">
                 Connectez vous à votre compte MèchePro
@@ -93,6 +96,7 @@ export default function connexion() {
           </div>
         </Form>
       </section>
+      <FooterSection />
     </>
   );
 }

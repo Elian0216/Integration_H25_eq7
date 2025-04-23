@@ -1,12 +1,14 @@
 'use client'
 import { Logo } from "@/components/logo";
-import Retour from "@/components/retour";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { HeroHeader } from "@/components/entete";
+import { FooterSection } from "@/components/basDePage";
 import Form from "next/form";
 import postFetch from "@/utils/fetch";
+
 
 export default function inscription() {
   async function handleForm(e: any) {
@@ -27,7 +29,7 @@ export default function inscription() {
 
   return (
     <>
-      <Retour />
+    <HeroHeader />
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -36,7 +38,7 @@ export default function inscription() {
           <div className="p-8 pb-6">
             <div>
               <Link href="/" aria-label="go home">
-                <Logo />
+                {/* logo ici */}
               </Link>
               <h1 className="text-title mb-1 mt-4 text-xl font-semibold">
                 Créer un compte MèchePro
@@ -144,6 +146,7 @@ export default function inscription() {
           </div>
         </Form>
       </section>
+      <FooterSection />
     </>
   );
 }
