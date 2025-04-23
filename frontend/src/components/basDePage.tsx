@@ -18,14 +18,14 @@ const links = [
 
 export  const FooterSection = () => {
     return (
-      <footer className="py-16 md:py-32 bg-gray-300">
+      <footer className="py-6 md:py-10 bg-gray-300">
         <div className="mx-auto max-w-5xl px-6">
           <Link
             href="/"
             aria-label="go home"
             className="mx-auto block size-fit"
           >
-            <Logo />
+            {/* ­logo ici */}
           </Link>
 
           <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
@@ -39,7 +39,7 @@ export  const FooterSection = () => {
               </Link>
             ))}
           </div>
-          <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
+          {/* <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
             <Link
               href="#"
               target="_blank"
@@ -165,7 +165,7 @@ export  const FooterSection = () => {
                 ></path>
               </svg>
             </Link>
-          </div>
+          </div> */}
           <span className="text-muted-foreground block text-center text-sm">
             {" "}
             © {new Date().getFullYear()} MèchePro, Tout droits reservés
