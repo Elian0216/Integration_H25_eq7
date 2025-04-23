@@ -1,4 +1,9 @@
+'use client'
 import Link from "next/link";
+import Form from "next/form";
+import React from "react";
+import Retour from "@/components/retour";
+
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,14 +13,35 @@ import Retour from "@/components/retour";
 import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 
+
+import postFetch from "@/utils/fetch";
+
+
+
+
 export default function connexion() {
+  async function handleForm(e: any) {
+
+    let inputs = document.getElementsByTagName("input");
+    var map: { [key: string]: string } = {}
+    for (let index = 0; index < inputs.length; index++) {
+      const element = inputs[index];
+      map[element.name] = element.value;
+    }
+    console.log(map);
+    
+    var resp = await postFetch(process.env.API_PATH + "connexion/", map);
+    console.log(resp);
+    const data = await resp?.json();
+    console.log(data);
+  }
+
   return (
     <>
       <HeroHeader />
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
-        <form
-          method="POST"
-          action=""
+        <Form
+          action={handleForm}
           className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]"
         >
           <div className="p-8 pb-6">
@@ -59,7 +85,7 @@ export default function connexion() {
                 />
               </div>
 
-              <Button className="w-full">Se connecter</Button>
+              <Button className="w-full" type="submit">Se connecter</Button>
             </div>
           </div>
 
@@ -71,7 +97,7 @@ export default function connexion() {
               </Button>
             </p>
           </div>
-        </form>
+        </Form>
       </section>
       <FooterSection />
     </>

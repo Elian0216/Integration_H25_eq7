@@ -181,7 +181,6 @@ export default function accueil() {
         </section>
       
       </main>
-      <FooterSection />
     </>
   );
 }
