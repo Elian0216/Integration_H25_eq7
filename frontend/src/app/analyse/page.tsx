@@ -1,5 +1,6 @@
 "use client";
 
+import Graphique from "@/components/graphique";
 import Retour from "@/components/retour";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { Search } from "lucide-react";
@@ -21,7 +22,7 @@ const Analyse = () => {
     <>
       <AnimatedGroup className="slide">
         <div className="relative h-screen">
-          <div className="absolute top-[25%] left-[10%]  rounded-md">
+          <div className="absolute top-[25%] left-[10%] rounded-md w-[80%] space-y-4">
             <form onSubmit={handleSubmit} className="relative">
               <Search
                 onClick={handleSubmit}
@@ -34,13 +35,15 @@ const Analyse = () => {
                 className="bg-zinc-800 border-zinc-700 pl-9 w-full sm:w-64"
               />
             </form>
+            <div className="text-center">
+              <h1>Graphique for {token}</h1>
+              <div id="graphique" className="border-2 border-zinc-700 rounded-md p-10">
+                <Graphique />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-start justify-center h-screen">
-          <h1>Graphique for {token}</h1>
-          <div id="graphique"></div>
-        </div>
       </AnimatedGroup>
     </>
   );

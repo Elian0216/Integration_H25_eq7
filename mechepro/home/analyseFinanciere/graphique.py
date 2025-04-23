@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from django.shortcuts import render
 
+import json
+
 ensemble_daction = get_all_stock_symbols()
 
 COULEUR_TEXTE = "white"
@@ -19,8 +21,7 @@ def generer_graphique(request):
     stock_data = get_donnees_stock(ticker, "5y")
 
     # Creation du graphique
-    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.15,
-                    subplot_titles=('Candlestick Chart', ''), row_heights=[0.7, 0.3])
+    fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.15, row_heights=[0.7, 0.3])
     
 
     # Création du sous-graphique pour les bougies
@@ -62,7 +63,6 @@ def generer_graphique(request):
 
     # Configuration du graphique
     fig.update_layout(
-        title=f"{ticker} Stock Price (1 Year)",
         yaxis_title="Price (USD)",
         dragmode="pan", # Mode de déplacement dans le graphique
         xaxis=dict(
@@ -106,14 +106,24 @@ def generer_graphique(request):
     #     )
     # )
 
-    # Convertir le graphique en HTML
-    graph_html = fig.to_html(
-            full_html=False,
-            config={
-                "scrollZoom": True,
-                "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
-            }
-        )
+    fig_json = json.loads(fig.to_json())
+    fig_json["config"] = {
+        "scrollZoom": True,
+        "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
+    }
 
-    return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": ensemble_daction})
+    return fig_json
+
+
+    # === Ancien code Django ===
+    # Convertir le graphique en HTML
+    # graph_html = fig.to_html(
+    #         full_html=False,
+    #         config={
+    #             "scrollZoom": True,
+    #             "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
+    #         }
+    #     )
+
+    # return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": ensemble_daction})
 

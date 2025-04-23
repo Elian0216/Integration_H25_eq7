@@ -159,8 +159,8 @@ def inscrire_utilisateur(request):
     # return render(request, 'inscription.html')
 
 
-def afficher_graphique(request):
-    return generer_graphique(request)
+def get_graphique(request):
+    return JsonResponse({"graph_json": generer_graphique(request)})
 
 
 @csrf_exempt
