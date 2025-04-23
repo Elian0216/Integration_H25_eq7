@@ -44,7 +44,7 @@ export default function inscription() {
                 Créer un compte MèchePro
               </h1>
               <p className="text-sm">
-                Bienvenue! Créer un compte pour commencer à analyser!
+                Bienvenue! Créez un compte pour commencer à analyser!
               </p>
             </div>
 

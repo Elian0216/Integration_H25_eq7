@@ -9,8 +9,8 @@ import Image from 'next/image'
 import { ModeToggle } from './ui/toggler'
 
 const menuItems = [
-    { name: 'Favoris', href: '#link' },
-    { name: 'Analyse', href: '#link' },
+    { name: 'Favoris', href: '/favoris' },
+    { name: 'Analyse', href: '/analyse' },
     { name: 'À propos', href: '/a-propos' },
 ]
 
