@@ -1,8 +1,8 @@
 import Graphique from '@/components/graphique';
 import React from 'react'
 
-const StockPage = ({ params }: any ) => {
-    const { stock } = params;
+const StockPage = async ({ params }: any ) => {
+    const { stock } = await params;
   return (
     <section className="min-h-screen flex items-center justify-center">
       Page for the stock : {stock}

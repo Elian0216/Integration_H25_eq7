@@ -46,11 +46,12 @@ def generer_graphique(request):
     
     # Création du sous-graphique pour le RSI
     RSI_data = calculer_RSI(stock_data)
+
     fig.add_trace(
         go.Scatter(
-            x=RSI_data["index"],
-            y=RSI_data["RSI"],
-            # mode="lines",
+            x=RSI_data["index"].tolist(),
+            y=RSI_data["RSI"].tolist(),
+            mode="lines",
             name="RSI",
             line=dict(color="blue"),
         ),
@@ -111,6 +112,7 @@ def generer_graphique(request):
         "scrollZoom": True,
         # "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
         "modeBarButtonsToAdd": ["drawline", "drawrect", "eraseshape"],
+        "modeBarOrientation": "h",
     }
 
     return fig_json
