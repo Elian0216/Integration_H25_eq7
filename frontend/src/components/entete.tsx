@@ -11,7 +11,7 @@ import { ModeToggle } from './ui/toggler'
 const menuItems = [
     { name: 'Favoris', href: '#link' },
     { name: 'Analyse', href: '#link' },
-    { name: 'À propos', href: '/a_propos' },
+    { name: 'À propos', href: '/a-propos' },
 ]
 
 export const HeroHeader = () => {

@@ -12,7 +12,7 @@ const links = [
     },
     {
         title: 'À propos',
-        href: '/a_propos',
+        href: '/a-propos',
     },
 ]
 
