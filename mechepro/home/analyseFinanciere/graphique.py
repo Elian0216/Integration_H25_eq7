@@ -10,8 +10,8 @@ import json
 ensemble_daction = get_all_stock_symbols()
 
 COULEUR_TEXTE = "white"
-COULEUR_FOND = '#181C14'
-COULEUR_FOND_GRAPHE ='#3C3D37'
+COULEUR_FOND = 'white'
+COULEUR_FOND_GRAPHE ='white'
 
 
 def generer_graphique(request):
@@ -69,7 +69,7 @@ def generer_graphique(request):
             rangeslider=dict(
                 visible=True,  # Show the range slider
                 thickness=0.05,  # Thickness of the range slider (0 to 1)
-                bgcolor="lightgray",  # Background color
+                bgcolor="white",  # Background color
                 bordercolor="black",  # Border color
                 borderwidth=1,  # Border width
             ),
@@ -92,8 +92,8 @@ def generer_graphique(request):
         font=dict(color=COULEUR_TEXTE),
     )
 
-    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE))
-    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE))
+    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
+    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
     fig.update_layout(legend=dict(font=dict(color=COULEUR_TEXTE)))
 
     # fig.add_trace(
@@ -109,7 +109,8 @@ def generer_graphique(request):
     fig_json = json.loads(fig.to_json())
     fig_json["config"] = {
         "scrollZoom": True,
-        "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
+        # "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
+        "modeBarButtonsToAdd": ["drawline", "drawrect", "eraseshape"],
     }
 
     return fig_json

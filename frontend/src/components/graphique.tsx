@@ -1,9 +1,11 @@
+'use client'
 import React from 'react'
 import Script from 'next/script'
 import { useEffect } from 'react'
+import postFetch from '@/utils/fetch'
 
 
-const Graphique = () => {
+const Graphique = ({ symbol }: {symbol: string}) => {
     useEffect(() => {
         // Access the plot container
         const plotDiv = document.getElementsByClassName('js-plotly-plot')[0]
@@ -50,8 +52,8 @@ const Graphique = () => {
     
         // Optionally, you can initialize your plot here if needed:
         async function fetchAndPlot() {
-          const res = await fetch(process.env.API_PATH + 'graphique/')
-          const res_json = await res.json()
+          const res = await postFetch(process.env.API_PATH + 'graphique/', {symbol: symbol})
+          const res_json = await res?.json()
           const chartJSON = res_json.graph_json
           
           console.log(chartJSON);
