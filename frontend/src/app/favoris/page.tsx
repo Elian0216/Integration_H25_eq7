@@ -1,5 +1,5 @@
 "use client"
-import { Clock } from "lucide-react";
+import { Clock, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import React from "react";
@@ -94,9 +94,7 @@ export default function favoris(){
                     </TextEffect>   
                     <DropdownMenu>
                         <DropdownMenuTrigger>
-                            <Button variant = "outline" size = "lg">
-                                Tier par...
-                            </Button>
+                            Trier par...
                         </DropdownMenuTrigger>
                         <DropdownMenuContent sideOffset={4} className="w-40 p-1">
                             <DropdownMenuRadioGroup
@@ -153,6 +151,11 @@ export default function favoris(){
                                         <p className="text-lg font-semibold">
                                             Prix au moment de sauvegarde: $<span className="underline">{bourse.prixFavori.toFixed(2)}</span>
                                         </p>
+                                        <Button> 
+                                            <Trash>
+                                                Supprimer
+                                            </Trash>
+                                        </Button>
                                     </div>
                                 </Link>
                             ))}
