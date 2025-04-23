@@ -78,85 +78,74 @@ def see_connexion(request):
 
 
 def inscrire_utilisateur(request):
-    if request.method == "POST":
-        try:
-            nom_utilisateur = request.POST['nom_utilisateur']
-            mot_de_passe = request.POST['mot_de_passe']
-            adresse_courriel = request.POST['adresse_courriel']
-            prenom = request.POST['prenom']
-            nom = request.POST['nom']
-            numero_telephone = request.POST['numero_telephone']
-            date_de_naissance = request.POST['date_naissance']
+    if request.method != "POST":
+        return
+    # Conversion de la date si fournie
+    # print("Date de naissance avant conversion : ", date_de_naissance)
+    # date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
+    # print("Date de naissance apres conversion : ", date_de_naissance)
+    try:
+        nom_utilisateur = request.POST['nom_utilisateur']
+        mot_de_passe = request.POST['mot_de_passe']
+        adresse_courriel = request.POST['adresse_courriel']
+        prenom = request.POST['prenom']
+        nom = request.POST['nom']
+        numero_telephone = request.POST['numero_telephone']
+        date_de_naissance = request.POST['date_naissance']
 
-            # Hachage du mot de passe
-            #mot_de_passe_hashed = make_password(mot_de_passe)
 
-            # Conversion de la date si fournie
-            # print("Date de naissance avant conversion : ", date_de_naissance)
-            # date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
-            # print("Date de naissance apres conversion : ", date_de_naissance)
-
-            # Vérification de l'existence de l'utilisateur
-            if Utilisateur.check(nom_utilisateur=nom_utilisateur):
-                messages.error(request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
-                print("L'utilisateur existe")
-                return JsonResponse({
-                    "message": "Un utilisateur avec ce nom d'utilisateur existe déjà."
-                })
-                # return render(request, "inscription.html", {
-                #     "utilisateur_existe": True
-                # })
-
-            else:
-                print("Création de l'utilisateur")
-                # Création de l'utilisateur
-                try: 
-                    if (User.objects.filter(username=nom_utilisateur)):
-                        messages.error(request, "Un utilisateur Django avec ce nom d'utilisateur existe déjà.")
-                        print("L'utilisateur Django existe")
-                        return JsonResponse({
-                            "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà."
-                        })
-                    else :
-                        usr = User.objects.create_user(
-                            username=nom_utilisateur,
-                            password=mot_de_passe,
-                            email=adresse_courriel,
-                            first_name=prenom,
-                            last_name=nom,
-                            date_joined=timezone.now()
-                        )
-                except Exception as e:
-                    messages.error(request, f"Erreur lors de la création de l'utilisateur Django : {e}")
-                    print(f"Erreur lors de la création de l'utilisateur Django : {e}")
-                    return JsonResponse({
-                        "message": "Erreur lors de la création de l'utilisateur Django"
-                    })
-                
-                liste=[] # liste de favoris, initialement vide
-
-                # Notre modele
-                utilisateur = Utilisateur(
-                    utilisateur = usr,  # chaque modele a un objet utilisateur du syteme django, afin d'utilisier l'authentification)
-                    numero_telephone=numero_telephone,
-                    date_de_naissance=date_de_naissance,
-                    favoris=liste
-                )
-                utilisateur.save()
-                messages.success(request, "Utilisateur enregistré avec succès.")
-                return JsonResponse({
-                    "message": "Utilisateur enregistré avec succès.",
-                    "username": nom_utilisateur
-                })
-                # return redirect('connect')
-        except Exception as e:
-            messages.error(request, f"Erreur lors de l'inscription : {e}")
-            print(f"Erreur lors de l'inscription : {e}")
+        # Vérification de l'existence de l'utilisateur
+        if Utilisateur.check(nom_utilisateur=nom_utilisateur):
+            messages.error(request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
+            print("L'utilisateur existe")
             return JsonResponse({
-                "message": "Erreur lors de l'inscription"
+                "message": "Un utilisateur avec ce nom d'utilisateur existe déjà."
             })
 
-    # return render(request, 'inscription.html')
+
+        if User.objects.filter(username=nom_utilisateur):
+            messages.error(request, "Un utilisateur Django avec ce nom d'utilisateur existe déjà.")
+            print("L'utilisateur Django existe")
+
+            return JsonResponse({
+                "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà."
+            })
+         #creation
+        usr = User.objects.create_user(
+            username=nom_utilisateur,
+            password=mot_de_passe,
+            email=adresse_courriel,
+            first_name=prenom,
+            last_name=nom,
+            date_joined=timezone.now()
+        )
+
+    except Exception as e:
+        messages.error(request, f"Erreur lors de la création de l'utilisateur Django : {e}")
+        return JsonResponse({
+            "message": "Erreur lors de la création de l'utilisateur Django"
+        })
+
+    try:
+        # Notre modele
+        utilisateur = Utilisateur(
+            utilisateur = usr, # chaque modele a un objet utilisateur du syteme django, pour l'authentification
+            numero_telephone=numero_telephone,
+            date_de_naissance=date_de_naissance,
+            favoris=[]
+        )
+        utilisateur.save()
+        messages.success(request, "Utilisateur enregistré avec succès.")
+        return JsonResponse({
+            "message": "Utilisateur enregistré avec succès.",
+            "username": nom_utilisateur
+        })
+    except Exception as e:
+        usr.delete()
+        messages.error(request, f"Erreur lors de l'inscription : {e}")
+    return JsonResponse({
+        "message": "Erreur lors de l'inscription"
+    })
 
 
 def afficher_graphique(request):

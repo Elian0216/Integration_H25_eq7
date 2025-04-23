@@ -106,32 +106,59 @@ def trouver_minimums(data):
 
 
 
-
-def k_moyennes(data, n):
+def trouver_k(data):
     points = trouver_minimums(data) + trouver_maximums(data)
 
-    points_seulement_montant=[]
+    points_seulement_montant = []
     for point in points:
         points_seulement_montant.append((point.montant, 0))
-
-    cluster_k_moyennes = KMeans(n_clusters=n).fit(points_seulement_montant)
-    return cluster_k_moyennes
-    #print(cluster_k_moyennes)#.cluster_centers_
-
-
-#méthode du coude
-def trouver_k(data):
+    # méthode du coude
     n=1
     resultat_possible=[]
     while n<6:
-        resultat_possible.append(k_moyennes(data, n))
+        resultat_possible.append(KMeans(n_clusters=n, max_iter=300).fit(points_seulement_montant))
         n+=1
-    return resultat_possible
+
+    #pente: diff inertie / diff k(tjrs 1)
+    #comparaison des différences d'inertie. Le plus grand est le coude
+    i=0
+    difference_pente=[]
+    max =i
+
+    while i< resultat_possible.__len__()-1:
+        difference_pente.append(resultat_possible[i+1].inertia_ - resultat_possible[i].inertia_)
+        if difference_pente[i]>difference_pente[max]:
+            max=i
+        i+=1
+
+    liste = resultat_possible[max].cluster_centers_
+    clusters_seul=[]
+    k_opt = liste.__len__()
+
+    #associations centroide-liste de fracale
+
+
+    dict_clusters ={
+    }
+
+    for e in liste:
+        clusters_seul.append(float(e[0]))
+        dict_clusters[float(e[0])]=[]
+    print(dict_clusters)
+    print(clusters_seul)
+
+    tag_vers_cluster = resultat_possible[max].labels_.tolist()
+    print(tag_vers_cluster)
+    for cluster in dict_clusters:
+        index_cluster = clusters_seul.index(cluster)
+        for tag in tag_vers_cluster:
+            if  tag == index_cluster:
+                dict_clusters[cluster].append( points[(tag_vers_cluster.index(tag))])
+
+    return dict_clusters
+
 
 if __name__ == "__main__":
-    liste= trouver_k(get_donnees_stock("NFLX"))
-    for resultat in liste:
-        print( "eresultat: ", resultat.cluster_centers_)
-    #k_moyennes()
-    #print(get_donnees_stock("AAPL"))
+    liste= trouver_k(get_donnees_stock("AAPL"))
+    print( "resultat: ", liste)
 
