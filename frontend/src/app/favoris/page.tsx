@@ -1,4 +1,6 @@
 "use client"
+import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import React from "react";
 import Link from "next/link";
 import { useState, useMemo } from 'react'
@@ -78,35 +80,44 @@ export default function favoris(){
         <HeroHeader />
         <section className="min-h-screen py-16 md:py-32">
             <div className="container mx-auto py-8 px-4">
-                <TextEffect
-                    per="line"
-                    preset="fade-in-blur"
-                    speedSegment={0.3}
-                    delay={0}
-                    as="h1"
-                    className="text-3xl font-bold mb-6"
-                    >
-                    Mes Actions Favoris
-                </TextEffect>   
-                {/* <DropdownMenu>
-                    <DropdownMenuTrigger className="px-3 py-1 border rounded">
-                        Trier par…
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent sideOffset={4} className="w-40 p-1">
-                        <DropdownMenuRadioGroup
-                        value={sortBy}
-                        onValueChange={(v) => setSortBy(v as any)}
+                <div className="flex justify-between w-full px-4">
+                    <TextEffect
+                        per="line"
+                        preset="fade-in-blur"
+                        speedSegment={0.3}
+                        delay={0}
+                        as="h1"
+                        className="text-3xl font-bold mb-6"
                         >
-                        <DropdownMenuRadioItem value="date">
-                            Date (récent → ancien)
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem value="price">
-                            Prix (haut → bas)
-                        </DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                    </DropdownMenu> */}
-
+                        Mes Actions Favoris
+                    </TextEffect>   
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Button variant = "outline" size = "lg">
+                                Tier par...
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent sideOffset={4} className="w-40 p-1">
+                            <DropdownMenuRadioGroup
+                            value={sortBy}
+                            onValueChange={(v) => setSortBy(v as any)}
+                            >
+                            <DropdownMenuRadioItem value="recent">
+                                Récent<Clock></Clock>
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="ancien">
+                                Ancien <Clock></Clock>
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="haut">
+                                Haute valeur $
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="bas">
+                                Basse valeur $
+                            </DropdownMenuRadioItem>    
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu> 
+                </div>
                 <AnimatedGroup
                     variants={{
                         container: {
