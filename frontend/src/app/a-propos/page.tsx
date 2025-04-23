@@ -76,7 +76,7 @@ export default function ContentSection() {
                 
                     <div className="relative mt-6 sm:mt-0">
                         <div className="bg-linear-to-b aspect-67/34 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
-                            <Image src="/demo_graphique.jpg" className="rounded-[15px] shadow dark:hidden" alt="image démo de graphique" width={1206} height={612} />
+                            <Image src="/demo_graphique.jpg" className="rounded-[15px] shadow " alt="image démo de graphique" width={1206} height={612} />
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ export default function ContentSection() {
                 <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
                     <div className="relative mt-6 sm:mt-0">
                         <div className="bg-linear-to-b aspect-67/34 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
-                            <Image src="/img_equipe.jpg" className="rounded-[15px] shadow dark:hidden" alt="image démo de graphique" width={1206} height={612} />
+                            <Image src="/img_equipe.jpg" className="rounded-[15px] shadow " alt="image démo de graphique" width={1206} height={612} />
                         </div>
                     </div>
                     <div className="relative space-y-4">
