@@ -28,6 +28,7 @@ def calculer_RSI(data, period=14):
     df['RS'] = df['MoyenneGain'] / df['MoyennePerte']
     df['RSI'] = 100 - (100 / (1 + df['RS']))
 
+
     # Afficher et retourner les dernières valeurs du RSI
 
     # 1253 2025-03-14  20.920586 EXEMPLE D'UNE SORTIE

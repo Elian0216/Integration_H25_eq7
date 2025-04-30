@@ -1,5 +1,6 @@
 import { Logo } from '@/components/logo'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const links = [
     {
@@ -14,6 +15,10 @@ const links = [
         title: 'À propos',
         href: '/a-propos',
     },
+    {
+      title: 'Paramètres',
+      href: '/parametres',
+  },
 ]
 
 export  const FooterSection = () => {
@@ -25,7 +30,15 @@ export  const FooterSection = () => {
             aria-label="go home"
             className="mx-auto block size-fit"
           >
-            {/* ­logo ici */}
+            
+                  <Image
+                    src="/logoMechePro.jpg"
+                    alt="logo"
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />
+                
           </Link>
 
           <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
