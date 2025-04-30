@@ -8,11 +8,8 @@ const StockPage = async ({ params }: any ) => {
   
   return (
     <>
-    <section className="min-h-screen flex items-center justify-center">
-      <div className='w-7/8 text-center mt-12 text-2xl'>
-        <h1>Page for the stock : {stock}</h1>
+    <section className="min-h-screen flex items-center justify-center W-full">
         <Graphique symbol={stock} />
-      </div>
     </section>
     </>
   )

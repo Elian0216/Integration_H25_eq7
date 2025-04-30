@@ -81,7 +81,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
   return (
     <div>
       <Script src="https://cdn.plot.ly/plotly-latest.min.js" strategy="beforeInteractive" />
-      <div className="js-plotly-plot w-full h-100 flex items-center justify-center">
+      <div className="js-plotly-plot mt-12 w-[90vw] h-[90vh] flex items-center justify-center">
         {/* Chargement */}
         { !loaded && 
           <div className="flex justify-center items-center h-full">
