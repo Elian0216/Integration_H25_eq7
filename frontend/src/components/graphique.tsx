@@ -3,9 +3,12 @@ import React from 'react'
 import Script from 'next/script'
 import { useEffect } from 'react'
 import postFetch from '@/utils/fetch'
+import { useState } from 'react'
 
 
 const Graphique = ({ symbol }: {symbol: string}) => {
+    const [loaded, setLoaded] = useState(false);
+
     useEffect(() => {
         // Access the plot container
         const plotDiv = document.getElementsByClassName('js-plotly-plot')[0]
@@ -59,6 +62,8 @@ const Graphique = ({ symbol }: {symbol: string}) => {
           console.log(chartJSON);
           console.log("as;lkdfjaslkfdj");
           await Plotly.newPlot(plotDiv, chartJSON.data, chartJSON.layout, chartJSON.config)
+          setLoaded(true);
+
 
           if (plotDiv.on) {
             plotDiv.on('plotly_relayout', function (eventData) {
@@ -68,7 +73,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
               })
           }
         }
-
+        
         fetchAndPlot()
     
       }, [])
@@ -76,7 +81,14 @@ const Graphique = ({ symbol }: {symbol: string}) => {
   return (
     <div>
       <Script src="https://cdn.plot.ly/plotly-latest.min.js" strategy="beforeInteractive" />
-      <div className="js-plotly-plot"></div>
+      <div className="js-plotly-plot w-full h-100 flex items-center justify-center">
+        {/* Chargement */}
+        { !loaded && 
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        }
+      </div>
     </div>
   )
 }
