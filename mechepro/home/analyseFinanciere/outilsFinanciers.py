@@ -7,7 +7,7 @@ from home.analyseFinanciere.Fractale import Fractale
 from home.analyseFinanciere.yahooFinance import get_donnees_stock
 
 
-#les paramètres data représentent la sortie de la fonctions get_donnees_stock dans yahooFinance.py
+#les paramètres data représentent la sortie de la fonction get_donnees_stock dans yahooFinance.py
 #c'est dans con appel où la période de temps sera définie.
 def calculer_RSI(data, period=14):
     # Convertir la liste de dictionnaires en DataFrame
@@ -94,9 +94,7 @@ def trouver_minimums(data):
     dates = data['index']
     fractales_min=[]
     for min in minimums:
-        if (min == minimums[0] ) or  (min == minimums[1]) or (min == minimums[minimums.__len__()-1]) or (min ==minimums[minimums.__len__()-2]):
-            pass #rien faire si c'est le premier, le dernier, le deuxieme, ou l'avant dernier
-        else:
+        if (min != minimums[0] ) and (min != minimums[1]) and (min != minimums[minimums.__len__()-1]) and (min !=minimums[minimums.__len__()-2]):
             pos = minimums.index(min)
             if min<minimums[pos+1] and min<minimums[pos+2] and min<minimums[pos-1] and min<minimums[pos-2]:
                 date=dates[pos]
@@ -108,7 +106,6 @@ def trouver_minimums(data):
 
 def trouver_k(data):
     points = trouver_minimums(data) + trouver_maximums(data)
-
     points_seulement_montant = []
     for point in points:
         points_seulement_montant.append((point.montant, 0))
@@ -123,7 +120,7 @@ def trouver_k(data):
     #comparaison des différences d'inertie. Le plus grand est le coude
     i=0
     difference_pente=[]
-    max =i
+    max =i # pos de la difference max, nb optimal de k
 
     while i< resultat_possible.__len__()-1:
         difference_pente.append(resultat_possible[i+1].inertia_ - resultat_possible[i].inertia_)
@@ -132,11 +129,9 @@ def trouver_k(data):
         i+=1
 
     liste = resultat_possible[max].cluster_centers_
+
     clusters_seul=[]
-    k_opt = liste.__len__()
-
-    #associations centroide-liste de fracale
-
+    #associations centroide a une liste de fracale
 
     dict_clusters ={
     }
@@ -144,21 +139,36 @@ def trouver_k(data):
     for e in liste:
         clusters_seul.append(float(e[0]))
         dict_clusters[float(e[0])]=[]
-    print(dict_clusters)
-    print(clusters_seul)
 
-    tag_vers_cluster = resultat_possible[max].labels_.tolist()
-    print(tag_vers_cluster)
-    for cluster in dict_clusters:
-        index_cluster = clusters_seul.index(cluster)
-        for tag in tag_vers_cluster:
-            if  tag == index_cluster:
-                dict_clusters[cluster].append( points[(tag_vers_cluster.index(tag))])
+
+    etiquette = resultat_possible[max].labels_.tolist()
+    for i in range(etiquette.__len__()):
+        dict_clusters[clusters_seul[etiquette[i]]].append(points[i])
 
     return dict_clusters
 
+def cree_rectangle(liste_fractales):
+    ymax= -5
+    ymin=1000000
+    xmin=liste_fractales[0].date
+    xmax=xmin
+    for fractale in liste_fractales: # trouver prix plus bas et plus haut, trouver date plus ancienne et plsu récencte
+        ymin = min(ymin, fractale.montant)
+        ymax = max(ymax, fractale.montant)
+        xmin= min(xmin, fractale.date)
+        xmax = max(xmax, fractale.date)
+    return [(xmin, xmax), (ymin, ymax)]
+
+
+
+def preparer_grapique(data):
+    premiere_liste = trouver_k(data)
+    resultat=[]
+    for element in premiere_liste:
+        resultat.append((element, cree_rectangle(premiere_liste[element])))
+    return resultat
 
 if __name__ == "__main__":
-    liste= trouver_k(get_donnees_stock("AAPL"))
-    print( "resultat: ", liste)
-
+    data=get_donnees_stock("AAPL")
+    #liste= trouver_k(get_donnees_stock("AAPL"))
+    print(preparer_grapique(data))
