@@ -66,14 +66,10 @@ return (
                     <button
                         onClick={() => setSelected("Mon compte")}
                         className="
-                        flex items-center 
-                        mt-5
-                        w-full text-left 
-                        cursor-pointer 
-                        px-2 py-1 
-                        rounded
-                        hover:bg-gray-100
-                        "
+                            flex items-center mt-5 w-full text-left 
+                            px-2 py-1 rounded
+                            text-gray-900 dark:text-gray-100
+                            hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                         <User /> 
 
@@ -84,7 +80,10 @@ return (
 
                     <button
                         onClick={() => setSelected("Sécurité")}
-                        className="mt-5 flex items-center w-full text-left px-2 py-1 rounded hover:bg-gray-100"
+                        className=" flex items-center mt-5 w-full text-left 
+                            px-2 py-1 rounded
+                            text-gray-900 dark:text-gray-100
+                            hover:bg-gray-100 dark:hover:bg-gray-700"
                         >
                         <KeyRound />
                         <span className="pl-2">Sécurité</span>
@@ -95,7 +94,9 @@ return (
                 </AnimatedGroup>
                 </div>
                 
-                <Button asChild variant="destructive" size="sm">
+                <Button asChild variant="destructive" size="sm" 
+                className="mt-5 flex items-center w-full text-left px-2 py-1 rounded
+                     hover:bg-red-400 dark:hover:bg-red-700" >
                         <span>Déconnexion</span>
                 </Button>
         
