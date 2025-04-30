@@ -12,6 +12,7 @@ const menuItems = [
     { name: 'Favoris', href: '/favoris' },
     { name: 'Analyse', href: '/analyse' },
     { name: 'À propos', href: '/a-propos' },
+    { name: 'Paramètres', href: '/parametres' },
 ]
 
 export const HeroHeader = () => {
@@ -109,7 +110,7 @@ export const HeroHeader = () => {
                   <Button
                     asChild
                     size="sm"
-                    className={cn(isScrolled && "lg:hidden")}
+                    className={cn(isScrolled)}
                   >
                     <Link href="/inscription">
                       <span>Inscription</span>
@@ -120,9 +121,6 @@ export const HeroHeader = () => {
                     size="sm"
                     className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
                   >
-                    <Link href="#">
-                      <span>Analyser</span>
-                    </Link>
                   </Button>
                   <ModeToggle />
                 </div>
