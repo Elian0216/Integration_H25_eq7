@@ -169,10 +169,10 @@ def get_csrf_token(request):
 def is_auth(request):
     if (request.user.is_authenticated):
         print("L'utilisateur est auth")
-        return JsonResponse({"message": "L'utilisateur est auth"})   
+        return JsonResponse({"message": "L'utilisateur est auth", "bool": True})   
     else:
         print("L'utilisatateur n'est pas auth")
-        return JsonResponse({"message": "L'utilisatateur n'est pas auth"})
+        return JsonResponse({"message": "L'utilisatateur n'est pas auth", "bool": False})
     
 @ensure_csrf_cookie
 @login_required
