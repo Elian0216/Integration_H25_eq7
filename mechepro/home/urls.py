@@ -22,4 +22,6 @@ urlpatterns = [
     path('is-auth/', views.is_auth, name='is_auth'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
     path('obtenirFavoris/', views.obtenir_favoris, name='obtenir_favoris'),
+    path('ajouterFavoris/', views.ajouter_favoris, name='ajouter_favoris'),
+    path('supprimerFavori/', views.enlever_favoris, name='enlever_favoris'),
 ]

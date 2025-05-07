@@ -205,3 +205,54 @@ def obtenir_favoris(request):
         return JsonResponse({
             "message": f"Erreur lors de l'obtention des favoris: {str(e)}"
         }, status=500)
+
+@ensure_csrf_cookie
+@login_required
+def ajouter_favoris(request):
+    if request.method == 'POST':
+        try:
+            ticker = request.POST.get('ticker')
+            utilisateur = Utilisateur.objects.get(utilisateur=request.user)
+
+            # Vérifier si le ticker est déjà dans les favoris
+            if ticker in utilisateur.favoris:
+                return JsonResponse({"message": "Ticker déjà dans les favoris"}, status=400)
+
+            # Ajouter le ticker aux favoris
+            utilisateur.ajouter_favoris(ticker)
+            utilisateur.save()
+
+            return JsonResponse({"message": "Ticker ajouté aux favoris"}, status=200)
+        except Exception as e:
+            print(f"Erreur lors de l'ajout des favoris: {str(e)}")
+            return JsonResponse({
+                "message": f"Erreur lors de l'ajout des favoris: {str(e)}"
+            }, status=500)
+    else:
+        return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
+    
+@ensure_csrf_cookie
+@login_required
+def enlever_favoris(request):
+    if request.method == 'POST':
+        try:
+            ticker = request.POST.get('ticker')
+            utilisateur = Utilisateur.objects.get(utilisateur=request.user)
+
+            # Vérifier si le ticker est dans les favoris
+            if ticker not in utilisateur.favoris:
+                return JsonResponse({"message": "Ticker non trouvé dans les favoris"}, status=400)
+
+            # Enlever le ticker des favoris
+            utilisateur.enlever_favoris(ticker)
+            utilisateur.save()
+
+            return JsonResponse({"message": "Ticker enlevé des favoris"}, status=200)
+        except Exception as e:
+            print(f"Erreur lors de l'enlèvement des favoris: {str(e)}")
+            return JsonResponse({
+                "message": f"Erreur lors de l'enlèvement des favoris: {str(e)}"
+            }, status=500)
+    else:
+        return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
+
