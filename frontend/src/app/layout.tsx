@@ -6,7 +6,7 @@ import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import "./globals.css";
 import CsrfUtils from "@/components/utils/csrf_utils";
-import checkAuth from "@/utils/fetch"
+import { checkAuth } from "@/utils/fetch"
 import React from "react";
 
 const geistSans = Geist({

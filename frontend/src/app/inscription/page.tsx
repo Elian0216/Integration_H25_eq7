@@ -7,7 +7,7 @@ import Link from "next/link";
 import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import Form from "next/form";
-import postFetch from "@/utils/fetch";
+import { postFetch } from "@/utils/fetch";
 
 
 export default function inscription() {

@@ -42,6 +42,15 @@ async function checkAuth() {
     return data.bool;
   }
 
-export default postFetch; checkAuth;
+function authProtection() {
+  checkAuth().then((bool) => {
+    console.log(bool);
+    if (!bool) {
+      window.location.href = "/";
+    }
+  });
+}
+
+export { postFetch, checkAuth, authProtection };
 
 

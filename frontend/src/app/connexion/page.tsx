@@ -11,7 +11,7 @@ import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 
 
-import postFetch from "@/utils/fetch";
+import { postFetch } from "@/utils/fetch";
 
 
 

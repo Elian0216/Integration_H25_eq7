@@ -2,7 +2,7 @@
 import React from 'react'
 import Script from 'next/script'
 import { useEffect } from 'react'
-import postFetch from '@/utils/fetch'
+import { postFetch } from '@/utils/fetch'
 import { useState } from 'react'
 
 
