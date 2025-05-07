@@ -21,5 +21,5 @@ urlpatterns = [
 
     path('is-auth/', views.is_auth, name='is_auth'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
-
+    path('obtenirFavoris/', views.obtenir_favoris, name='obtenir_favoris'),
 ]

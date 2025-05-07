@@ -13,7 +13,7 @@ export default function Favoris() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(process.env.API_PATH + "obtenirFavoris")
+    fetch(process.env.API_PATH + "obtenirFavoris/")
       .then((res) => res.json())
       .then((data) => {
         setTickersFavoris(data.tickersFavoris);
@@ -62,9 +62,9 @@ export default function Favoris() {
           </TextEffect>
 
           {loading ? (
-            <p>Chargement...</p>
+            <p className="font-bold">Chargement...</p>
           ) : tickersFavoris.length === 0 ? (
-            <p>Aucun favori trouvé.</p>
+            <p className="font-bold">Aucun favori trouvé.</p>
           ) : (
             <AnimatedGroup
               variants={{
