@@ -23,4 +23,25 @@ function postFetch(url: string, data: any) {
     return res;
 }
 
-export default postFetch;
+async function checkAuth() {
+  var data= null;
+    try {
+      const response = await fetch("/api/is-auth/", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      });
+       data = await response.json();
+    } catch (error) {
+      console.error("Errur lors de la vérification de l'authentification:", error);
+      return error;
+    }
+    return data.bool;
+  }
+
+export default postFetch; checkAuth;
+
+

@@ -12,9 +12,12 @@ class Utilisateur(models.Model):
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     numero_telephone = models.CharField(max_length=10)
     date_de_naissance = models.DateField(null=True)
-    favoris=models.JSONField(null=True) # un string encodé en JSON
+    favoris=models.JSONField(default=list, null=True) # un string encodé en JSON
     # Pour convertir json.dumps(liste). Pour désérializer, uilisier json.loads(obj)
 
+    def obtenir_favoris(self):
+        liste_favoris = json.loads(self.favoris)
+        return liste_favoris
     def ajouter_favoris(self, ticker):
         liste_favoris = json.loads(self.favoris) #convertis le JSON en liste avec laquelle nous pouvons travailler
         liste_favoris.append(ticker)

@@ -1,6 +1,7 @@
 from .yahooFinance import get_donnees_stock
 from .yahooFinance import get_all_stock_symbols
-from .outilsFinanciers import calculer_RSI
+from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from django.shortcuts import render
@@ -64,6 +65,7 @@ def generer_graphique(request):
 
     # Configuration du graphique
     fig.update_layout(
+        title=dict(text="Graphique pour " + ticker, font_size=18, font_color="black", x=0.5, y=0.95, xanchor="center", yanchor="top", pad=dict(t=10)),
         yaxis_title="Price (USD)",
         dragmode="pan", # Mode de déplacement dans le graphique
         xaxis=dict(
@@ -106,6 +108,70 @@ def generer_graphique(request):
     #         line=dict(color="blue"),
     #     )
     # )
+
+    # ANALYSE DU GRAHPIQUE
+    ## Fractales
+    ### Maximums
+    maximums = trouver_maximums(stock_data)
+    fractale_maximums = {"x":[], "y":[]}
+    for fractale in maximums:
+        fractale_maximums["x"].append(fractale.date)
+        fractale_maximums["y"].append(fractale.montant)
+    fig.add_trace(
+        go.Scatter(
+            x=fractale_maximums["x"],
+            y=fractale_maximums["y"],
+            mode="markers",
+            name="Fractales",
+            line=dict(color="purple"),
+        )
+    )
+    ### Minimums
+    minimums = trouver_minimums(stock_data)
+    fractale_minimums = {"x":[], "y":[]}
+    for fractale in minimums:
+        fractale_minimums["x"].append(fractale.date)
+        fractale_minimums["y"].append(fractale.montant)
+    fig.add_trace(
+        go.Scatter(
+            x=fractale_minimums["x"],
+            y=fractale_minimums["y"],
+            mode="markers",
+            name="Fractales",
+            line=dict(color="#FE9000"),
+        )
+    )
+
+    ## Supports et Résistances
+    # Draw a rectangle for supports and resistances
+    supports_resistances = preparer_grapique(stock_data)
+    
+    for i in range(len(supports_resistances)):
+        fig.add_shape(
+            type="rect",
+            x0=supports_resistances[i][1][0][0],
+            x1=supports_resistances[i][1][0][1],
+            # y0=supports_resistances[i][1][1][0],
+            # y1=supports_resistances[i][1][1][1],
+            y0=supports_resistances[i][0] + (supports_resistances[i][1][1][0] - supports_resistances[i][0]) * 0.25,
+            y1=supports_resistances[i][0] + (supports_resistances[i][1][1][1] - supports_resistances[i][0]) * 0.25,
+            line=dict(color="RoyalBlue"),
+            fillcolor="LightSkyBlue",
+            opacity=0.3,
+            layer="below",
+        )
+    # fig.add_shape(
+    #     type="rect",
+    #     x0=supports_resistances[0][1][0][0],
+    #     x1=supports_resistances[0][1][0][1],
+    #     y0=supports_resistances[0][1][1][0],
+    #     y1=supports_resistances[0][1][1][1],
+    #     line=dict(color="RoyalBlue"),
+    #     fillcolor="LightSkyBlue",
+    #     opacity=0.3,
+    #     layer="below",
+    # )        
+        
 
     fig_json = json.loads(fig.to_json())
     fig_json["config"] = {

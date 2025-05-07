@@ -73,33 +73,40 @@ def moyenne_mobile(data):
         somme+=jour
     return round(somme/prix_fermeture.__len__(), 3)
 
-def trouver_maximums(data):
+def trouver_maximums(data, n=10):
 #cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
+    """
+    Cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante.
+
+    Parameters:
+    data (pandas.DataFrame): les données du stock avec les colonnes 'High' et 'index'
+    n (int): le nombre de bougies à vérifier avant et après la bougie en cours
+
+    Returns:
+    list: une liste de Fractale contenant les maximums trouvés
+    """
     maximums = data["High"] #liste de max quotidiens
     dates = data['index']
     fractales_max=[]
-    for max in maximums:
-        if (max == maximums[0] ) or  (max == maximums[1]) or (max == maximums[maximums.__len__()-1]) or (max == maximums[maximums.__len__()-2]):
-            pass #rien faire si c'est le premier, le dernier, le deuxieme, ou l'avant dernier
-        else:
-            pos = maximums.index(max)
-            if max>maximums[pos+1] and max>maximums[pos+2] and max>maximums[pos-1] and max>maximums[pos-2]:
-                date=dates[pos]
-                fractales_max.append(Fractale(date, max))
+    
+    for i in range(n, len(maximums) - n):
+        max = maximums[i]
+        if all(max > maximums[j] for j in range(i - n, i + n + 1) if j != i):
+            date = dates[i]
+            fractales_max.append(Fractale(date, max))
     return fractales_max
 
 
-def trouver_minimums(data):
-#cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
-    minimums = data["Low"] #liste de max quotidiens
+def trouver_minimums(data, n=10):
+#cherche les bougies à la fin d'une suite décroissante et au début d'une suite croissante
+    minimums = data["Low"] #liste de min quotidiens
     dates = data['index']
     fractales_min=[]
-    for min in minimums:
-        if (min != minimums[0] ) and (min != minimums[1]) and (min != minimums[minimums.__len__()-1]) and (min !=minimums[minimums.__len__()-2]):
-            pos = minimums.index(min)
-            if min<minimums[pos+1] and min<minimums[pos+2] and min<minimums[pos-1] and min<minimums[pos-2]:
-                date=dates[pos]
-                fractales_min.append(Fractale(date, min, est_max=False))
+    for i in range(n, len(minimums) - n):
+        min = minimums[i]
+        if all(min < minimums[j] for j in range(i - n, i + n + 1) if j != i):
+            date = dates[i]
+            fractales_min.append(Fractale(date, min, est_max=False))
     return fractales_min
 
 
