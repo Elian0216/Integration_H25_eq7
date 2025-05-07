@@ -53,7 +53,7 @@ return (
     
         <div className = "flex min-h-screen">
             
-            <aside className = "flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
+            <aside className = "mt-20 flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
             <div className="space-y-6">
                 <h2 className="font-medium lg:text-3xl ">
                     Paramètres
