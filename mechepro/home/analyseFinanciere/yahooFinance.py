@@ -12,7 +12,7 @@ def get_donnees_stock(ticker, period="1y"):
 
     stock_data_formatte["index"] = stock_data.index
 
-    # print(stock_data_formatte)
+    #print(stock_data_formatte)
 
     return stock_data_formatte
 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 def get_all_stock_symbols():
     # lire les symboles et leur description du fichier
-    fichier = open("home/analyseFinanciere/yahoo_tickers.csv")#changer le nom pour elargir
+    fichier = open("home/analyseFinanciere/yahoo_tickers.csv")
 
     # Vérifier que les symboles sont valides avec yfinance
     valid_symbols = []
