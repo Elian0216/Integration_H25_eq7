@@ -1,6 +1,6 @@
 from .yahooFinance import get_donnees_stock
 from .yahooFinance import get_all_stock_symbols
-from .outilsFinanciers import calculer_RSI, trouver_maximums ,trouver_minimums
+from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -108,6 +108,7 @@ def generer_graphique(request):
     #         line=dict(color="blue"),
     #     )
     # )
+
     # ANALYSE DU GRAHPIQUE
     ## Fractales
     ### Maximums
@@ -141,7 +142,22 @@ def generer_graphique(request):
         )
     )
 
-        
+    ## Supports et Résistances
+    # Draw a rectangle for supports and resistances
+    supports_resistances = preparer_grapique(stock_data)
+    print(supports_resistances)
+    print(supports_resistances[0][1][0])
+    fig.add_shape(
+        type="rect",
+        x0=supports_resistances[0][1][0][0],
+        x1=supports_resistances[0][1][0][1],
+        y0=supports_resistances[1][1][1][0],
+        y1=supports_resistances[1][1][1][1],
+        line=dict(color="RoyalBlue"),
+        fillcolor="LightSkyBlue",
+        opacity=0.3,
+        layer="below",
+    )        
         
 
     fig_json = json.loads(fig.to_json())
