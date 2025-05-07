@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MèchePro",
-  description: "Donnos aux gens la mèche dont ils ont besoin",
+  title: "Mèchepro",
+  description: "Donnons aux gens la mèche dont ils ont besoin",
 };
 
 export default function RootLayout({
