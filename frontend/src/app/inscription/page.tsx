@@ -25,11 +25,15 @@ export default function inscription() {
     console.log(resp);
     const data = await resp?.json();
     console.log(data);
+    
+    if (data.bool) {
+      window.location.href = "/connexion";
+    }
   }
 
   return (
     <>
-    <HeroHeader />
+    
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -146,7 +150,6 @@ export default function inscription() {
           </div>
         </Form>
       </section>
-      <FooterSection />
     </>
   );
 }

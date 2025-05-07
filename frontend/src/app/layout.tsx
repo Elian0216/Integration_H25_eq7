@@ -45,6 +45,7 @@ export default function RootLayout({
           >
             <HeroHeader />
             {children}
+            <FooterSection />
           </ThemeProvider>
         </body>
       </html>

@@ -37,14 +37,16 @@ def connexion(request):
             login(request, utilisateur)
             return JsonResponse({
                 "message": "Connexion réussie",
-                "username": nom_utilisateur
+                "username": nom_utilisateur,
+                "bool": True
             })
             # return redirect('/')
             # return render(request, 'home.html')
         else:
             print("Échec de la connexion.")
             return JsonResponse({
-                "message": "Échec de la connexion"
+                "message": "Échec de la connexion",
+                "bool": False
             })
             # return render(request,"connexion.html",{
             #         "log_in_faux" : True
@@ -52,7 +54,7 @@ def connexion(request):
         #return render(request, 'home.html')
     else:
         print("Pas de post")
-        return JsonResponse({"message": "Mauvais type d'appel"})
+        return JsonResponse({"message": "Mauvais type d'appel", "bool": False})
 
 
 def see_user(request):
@@ -99,7 +101,8 @@ def inscrire_utilisateur(request):
             messages.error(request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
             print("L'utilisateur existe")
             return JsonResponse({
-                "message": "Un utilisateur avec ce nom d'utilisateur existe déjà."
+                "message": "Un utilisateur avec ce nom d'utilisateur existe déjà.",
+                "bool": False
             })
 
 
@@ -108,7 +111,8 @@ def inscrire_utilisateur(request):
             print("L'utilisateur Django existe")
 
             return JsonResponse({
-                "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà."
+                "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà.",
+                "bool": False
             })
          #creation
         usr = User.objects.create_user(
@@ -123,7 +127,8 @@ def inscrire_utilisateur(request):
     except Exception as e:
         messages.error(request, f"Erreur lors de la création de l'utilisateur Django : {e}")
         return JsonResponse({
-            "message": "Erreur lors de la création de l'utilisateur Django"
+            "message": "Erreur lors de la création de l'utilisateur Django",
+            "bool": False
         })
 
     try:
@@ -138,13 +143,15 @@ def inscrire_utilisateur(request):
         messages.success(request, "Utilisateur enregistré avec succès.")
         return JsonResponse({
             "message": "Utilisateur enregistré avec succès.",
-            "username": nom_utilisateur
+            "username": nom_utilisateur,
+            "bool": True
         })
     except Exception as e:
         usr.delete()
         messages.error(request, f"Erreur lors de l'inscription : {e}")
     return JsonResponse({
-        "message": "Erreur lors de l'inscription"
+        "message": "Erreur lors de l'inscription",
+        "bool": False
     })
 
 

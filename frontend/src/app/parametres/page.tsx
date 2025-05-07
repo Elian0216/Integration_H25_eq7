@@ -55,7 +55,7 @@ export default function parametres(){
 return (
         <>  
         
-        <HeroHeader />      
+              
     
         <div className = "flex min-h-screen">
             
@@ -116,8 +116,6 @@ return (
                         </p>
                     </main>
         </div>
-        
-        <FooterSection />
         </>
     )
 }

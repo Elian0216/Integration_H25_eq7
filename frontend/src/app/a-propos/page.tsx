@@ -7,7 +7,7 @@ import { AnimatedGroup } from "@/components/ui/animated-group";
 export default function ContentSection() {
     return (
         <>  
-        <HeroHeader />      
+              
         <section className="py-16 md:py-32">     
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">       
                 <TextEffect
@@ -102,8 +102,6 @@ export default function ContentSection() {
             
                
         </section>
-        
-        <FooterSection />
         </>
     )
 }

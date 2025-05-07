@@ -78,7 +78,7 @@ export default function favoris(){
 
     return(
         <>
-        <HeroHeader />
+        
         <section className="min-h-screen py-16 md:py-32">
             <div className="container mx-auto py-8 px-4">
                 <div className="flex justify-between w-full px-4">
