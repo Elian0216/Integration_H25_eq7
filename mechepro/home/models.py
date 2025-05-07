@@ -12,24 +12,26 @@ class Utilisateur(models.Model):
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     numero_telephone = models.CharField(max_length=10)
     date_de_naissance = models.DateField(null=True)
-    favoris=models.JSONField(default=list, null=True) # un string encodé en JSON
+    favoris=models.TextField(null=True) # un string encodé en JSON
     # Pour convertir json.dumps(liste). Pour désérializer, uilisier json.loads(obj)
 
     def obtenir_favoris(self):
-        liste_favoris = json.loads(self.favoris)
-        return liste_favoris
+        return json.loads(self.favoris)
+
     def ajouter_favoris(self, ticker):
-        liste_favoris = json.loads(self.favoris) #convertis le JSON en liste avec laquelle nous pouvons travailler
-        liste_favoris.append(ticker)
-        self.favoris = json.dumps(liste_favoris)
+        liste_favoris = self.obtenir_favoris() #convertis le JSON en liste avec laquelle nous pouvons travailler
+        if not self.est_favoris(ticker):
+            liste_favoris.append(ticker)
+            self.favoris = json.dumps(liste_favoris)
+
 
     def enlever_favoris(self, ticker):
-        liste_favoris = json.loads(self.favoris)
+        liste_favoris = self.obtenir_favoris
         liste_favoris.remove(ticker)
         self.favoris = json.dumps(liste_favoris)
 
     def est_favoris(self, ticker):
-        liste_favoris = json.loads(self.favoris)
+        liste_favoris = self.obtenir_favoris()
         if ticker in liste_favoris:
             return True
         else:
