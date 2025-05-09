@@ -137,7 +137,7 @@ def inscrire_utilisateur(request):
             utilisateur=usr,
             numero_telephone=numero_telephone,
             date_de_naissance=date_de_naissance,
-            favoris=[]
+            favoris=json.dumps([])
         )
         utilisateur.save()
         messages.success(request, "Utilisateur enregistré avec succès.")
@@ -195,10 +195,9 @@ def deconnexion(request):
 def obtenir_favoris(request):
     try:
         utilisateur = Utilisateur.objects.get(utilisateur=request.user)
-
         # Supposons que 'favoris' est un champ List ou JSONField
-        tickers = utilisateur.favoris or ['AAPL']  # ex: ['AAPL', 'GOOG']
-
+        tickers = utilisateur.obtenir_favoris() # ex: ['AAPL', 'GOOG']
+        #tickers=utilisateur.obtenir_favoris()
         return JsonResponse({"tickersFavoris": tickers}, status=200)
     except Exception as e:
         print(f"Erreur lors de l'obtention des favoris: {str(e)}")
@@ -213,11 +212,7 @@ def ajouter_favoris(request):
         try:
             ticker = request.POST.get('ticker')
             utilisateur = Utilisateur.objects.get(utilisateur=request.user)
-
             # Vérifier si le ticker est déjà dans les favoris
-            if ticker in utilisateur.favoris:
-                return JsonResponse({"message": "Ticker déjà dans les favoris"}, status=400)
-
             # Ajouter le ticker aux favoris
             utilisateur.ajouter_favoris(ticker)
             utilisateur.save()
