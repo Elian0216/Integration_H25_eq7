@@ -27,7 +27,7 @@ export default function Favoris() {
 
   const supprimerFavori = async (ticker: string) => {
     try {
-      const res = await fetch(process.env.API_PATH + "supprimerFavori", {
+      const res = await fetch(process.env.API_PATH + "supprimerFavori/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,6 @@ export default function Favoris() {
             Mes Actions Favoris
           </TextEffect>
 
-<<<<<<< HEAD
           {loading ? (
             <p className="font-bold">Chargement...</p>
           ) : tickersFavoris.length === 0 ? (
@@ -108,79 +107,6 @@ export default function Favoris() {
                     <Button
                       variant="destructive"
                       onClick={() => supprimerFavori(ticker)}
-=======
-export default function favoris(){
-    const [sortBy, setSortBy] = useState<"date" | "price">("date")
-    const favorites = mockFavorites  // ← swap in your real fetch or props
-
-    const sortedFavorites = useMemo(() => {
-        return [...favorites].sort((a, b) => {
-            if (sortBy === "price") {
-                return b.prixFavori - a.prixFavori
-            }
-            // date: newest first
-            return (
-                new Date(b.dateFavori).getTime() -
-                new Date(a.dateFavori).getTime()
-            )
-        })
-    }, [favorites, sortBy])
-
-    return(
-        <>
-        
-        <section className="min-h-screen py-16 md:py-32">
-            <div className="container mx-auto py-8 px-4">
-                <div className="flex justify-between w-full px-4">
-                    <TextEffect
-                        per="line"
-                        preset="fade-in-blur"
-                        speedSegment={0.3}
-                        delay={0}
-                        as="h1"
-                        className="text-3xl font-bold mb-6"
-                        >
-                        Mes Actions Favoris
-                    </TextEffect>   
-                    <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            Trier par...
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent sideOffset={4} className="w-40 p-1">
-                            <DropdownMenuRadioGroup
-                            value={sortBy}
-                            onValueChange={(v) => setSortBy(v as any)}
-                            >
-                            <DropdownMenuRadioItem value="recent">
-                                Récent<Clock></Clock>
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="ancien">
-                                Ancien <Clock></Clock>
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="haut">
-                                Haute valeur $
-                            </DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="bas">
-                                Basse valeur $
-                            </DropdownMenuRadioItem>    
-                            </DropdownMenuRadioGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu> 
-                </div>
-
-                <AnimatedGroup
-                    variants={{
-                        container: {
-                            visible: {
-                                transition: {
-                                    staggerChildren: 0.05,
-                                    delayChildren: 0.75,
-                                },
-                            },
-                        },
-                        ...transitionVariants,
-                    }}
->>>>>>> valere
                     >
                       <Trash className="mr-2" size={16} />
                       Supprimer
@@ -192,7 +118,6 @@ export default function favoris(){
           )}
         </div>
       </section>
-      <FooterSection />
     </>
   );
 }

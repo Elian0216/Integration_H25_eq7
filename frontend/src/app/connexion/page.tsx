@@ -83,7 +83,7 @@ export default function connexion() {
                 />
               </div>
 
-              <Button className="w-full" type="submit">Se connecter</Button>
+              <Button className="w-full cursor-pointer" type="submit">Se connecter</Button>
             </div>
           </div>
 
