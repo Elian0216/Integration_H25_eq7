@@ -1,4 +1,3 @@
-from .yahooFinance import get_donnees_stock
 from .yahooFinance import get_all_stock_symbols
 from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique
 
@@ -15,12 +14,7 @@ COULEUR_FOND = 'white'
 COULEUR_FOND_GRAPHE ='white'
 
 
-def generer_graphique(request):
-    # Test avec AAPL
-    ticker = request.POST.get("symbol", "AAPL")
-    print(ticker)
-    stock_data = get_donnees_stock(ticker, "5y")
-
+def generer_graphique(stock_data, ticker):
     # Creation du graphique
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.15, row_heights=[0.7, 0.3])
     

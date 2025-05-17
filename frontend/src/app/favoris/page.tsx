@@ -7,6 +7,7 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
+import { postFetch } from "@/utils/fetch";
 
 export default function Favoris() {
   const [tickersFavoris, setTickersFavoris] = useState<string[]>([]);
@@ -27,15 +28,9 @@ export default function Favoris() {
 
   const supprimerFavori = async (ticker: string) => {
     try {
-      const res = await fetch(process.env.API_PATH + "supprimerFavori/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ticker }),
-      });
+      const res = await postFetch(process.env.API_PATH + "supprimerFavori/", {ticker: ticker});
 
-      if (res.ok) {
+      if (res?.ok) {
         setTickersFavoris((prev) =>
           prev.filter((t) => t.toUpperCase() !== ticker.toUpperCase())
         );
@@ -105,6 +100,7 @@ export default function Favoris() {
                       <p className="text-xl font-medium underline">{ticker}</p>
                     </Link>
                     <Button
+                      className="cursor-pointer"
                       variant="destructive"
                       onClick={() => supprimerFavori(ticker)}
                     >

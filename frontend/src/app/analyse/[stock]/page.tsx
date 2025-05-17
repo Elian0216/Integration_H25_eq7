@@ -8,9 +8,9 @@ const StockPage = async ({ params }: any ) => {
   
   return (
     <>
-    <section className="min-h-screen flex items-center justify-center W-full">
+      <section className="min-h-screen flex items-center justify-center W-full">
         <Graphique symbol={stock} />
-    </section>
+      </section>
     </>
   )
 }

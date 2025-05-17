@@ -20,6 +20,7 @@ import json
 
 from .analyseFinanciere.alpha_vantage import *
 from .analyseFinanciere.graphique import generer_graphique
+from .analyseFinanciere.yahooFinance import get_donnees_stock
 
 # TODO: Question database pourquoi pas tout utilisateur django par defaut
 
@@ -162,7 +163,15 @@ def inscrire_utilisateur(request):
 
 def get_graphique(request):
     # return generer_graphique(request)
-    return JsonResponse({"graph_json": generer_graphique(request)})
+    # Test avec AAPL
+    ticker = request.POST.get("symbol", "AAPL")
+    print(ticker)
+    stock_data = get_donnees_stock(ticker, "5y")
+    if stock_data['Close'] == []:
+        return JsonResponse({"graph_json": None, "bool": False})
+
+
+    return JsonResponse({"graph_json": generer_graphique(stock_data=stock_data, ticker=ticker), "bool": True})
 
 
 @csrf_exempt
@@ -255,6 +264,27 @@ def enlever_favoris(request):
             print(f"Erreur lors de l'enlèvement des favoris: {str(e)}")
             return JsonResponse({
                 "message": f"Erreur lors de l'enlèvement des favoris: {str(e)}"
+            }, status=500)
+    else:
+        return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
+    
+@ensure_csrf_cookie
+@login_required
+def est_favori(request):
+    if request.method == 'POST':
+        try:
+            ticker = request.POST.get('ticker')
+            utilisateur = Utilisateur.objects.get(utilisateur=request.user)
+
+            # Vérifier si le ticker est dans les favoris
+            if ticker in utilisateur.favoris:
+                return JsonResponse({"message": "Ticker trouvé dans les favoris", "bool": True}, status=200)
+            else:
+                return JsonResponse({"message": "Ticker non trouvé dans les favoris", "bool": False}, status=400)
+        except Exception as e:
+            print(f"Erreur lors de la vérification des favoris: {str(e)}")
+            return JsonResponse({
+                "message": f"Erreur lors de la vérification des favoris: {str(e)}"
             }, status=500)
     else:
         return JsonResponse({"message": "Mauvais type d'appel"}, status=400)

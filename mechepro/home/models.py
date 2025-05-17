@@ -26,7 +26,7 @@ class Utilisateur(models.Model):
 
 
     def enlever_favoris(self, ticker):
-        liste_favoris = self.obtenir_favoris
+        liste_favoris = self.obtenir_favoris()
         liste_favoris.remove(ticker)
         self.favoris = json.dumps(liste_favoris)
 
