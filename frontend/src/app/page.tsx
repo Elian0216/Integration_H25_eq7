@@ -31,7 +31,7 @@ const transitionVariants = {
 export default function accueil() {
   return (
     <>
-      <HeroHeader />
+      
       <main className="overflow-hidden">
         <div
           aria-hidden
@@ -181,7 +181,6 @@ export default function accueil() {
         </section>
       
       </main>
-      <FooterSection />
     </>
   );
 }

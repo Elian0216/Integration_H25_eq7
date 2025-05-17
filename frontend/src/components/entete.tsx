@@ -7,24 +7,42 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { ModeToggle } from './ui/toggler'
+import { checkAuth } from '@/utils/fetch'
+import { set } from 'date-fns'
 
-const menuItems = [
-    { name: 'Favoris', href: '/favoris' },
-    { name: 'Analyse', href: '/analyse' },
-    { name: 'À propos', href: '/a-propos' },
-    { name: 'Paramètres', href: '/parametres' },
-]
 
 export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
     const [isScrolled, setIsScrolled] = React.useState(false)
+    const [menuItems, setMenuItems] = React.useState<{ name: string; href: string }[]>([]);
+    const [loaded, setLoaded] = React.useState(false);
 
+    
     React.useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50)
+      async function loadMenuItems() {
+        if (await checkAuth()) {
+          setMenuItems([
+            { name: 'Favoris', href: '/favoris' },
+            { name: 'Analyse', href: '/analyse' },
+            { name: 'À propos', href: '/a-propos' },
+            { name: 'Paramètres', href: '/parametres'},
+          ]);
+        } else {
+          setMenuItems([
+            { name: 'Analyse', href: '/analyse' },
+            { name: 'À propos', href: '/a-propos' },
+          ]);
         }
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
+        setLoaded(true);
+      }
+
+      loadMenuItems();
+
+      const handleScroll = () => {
+          setIsScrolled(window.scrollY > 50)
+      }
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
     }, [])
     
     return (
@@ -68,7 +86,7 @@ export const HeroHeader = () => {
 
               <div className="absolute inset-0 m-auto hidden size-fit lg:block">
                 <ul className="flex gap-14 text-sm">
-                  {menuItems.map((item, index) => (
+                  {loaded && menuItems.map((item, index) => (
                     <li key={index}>
                       <Link
                         href={item.href}
@@ -84,7 +102,7 @@ export const HeroHeader = () => {
               <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
                 <div className="lg:hidden">
                   <ul className="space-y-6 text-base">
-                    {menuItems.map((item, index) => (
+                    {loaded && menuItems.map((item, index) => (
                       <li key={index}>
                         <Link
                           href={item.href}
@@ -103,6 +121,7 @@ export const HeroHeader = () => {
                     size="sm"
                     className={cn(isScrolled && "lg:hidden")}
                   >
+                    
                     <Link href="/connexion">
                       <span>Connexion</span>
                     </Link>

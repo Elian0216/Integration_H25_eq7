@@ -2,16 +2,13 @@
 import Link from "next/link";
 import Form from "next/form";
 import React from "react";
-import Retour from "@/components/retour";
-import { Logo } from "@/components/logo";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HeroHeader } from "@/components/entete";
-import { FooterSection } from "@/components/basDePage";
 
 
-import postFetch from "@/utils/fetch";
+import { postFetch } from "@/utils/fetch";
 
 
 
@@ -31,11 +28,15 @@ export default function connexion() {
     console.log(resp);
     const data = await resp?.json();
     console.log(data);
+    
+    if (data.bool) {
+      window.location.href = "/analyse";
+    }
   }
 
   return (
     <>
-      <HeroHeader />
+      {/*  */}
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -96,7 +97,6 @@ export default function connexion() {
           </div>
         </Form>
       </section>
-      <FooterSection />
     </>
   );
 }

@@ -4,13 +4,14 @@ import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu"
 import { format } from 'date-fns'
 import {User, KeyRound } from "lucide-react";
 
+import { postFetch, authProtection } from '@/utils/fetch';
 
 const transitionVariants = {
     item: {
@@ -46,10 +47,15 @@ const transitionVariants = {
 
 export default function parametres(){
     const [selected, setSelected] = React.useState<"Mon compte"|"Sécurité">("Mon compte")
+
+    useEffect(() => {
+      authProtection();
+    }, []);
+
 return (
         <>  
         
-        <HeroHeader />      
+              
     
         <div className = "flex min-h-screen">
             
@@ -94,9 +100,12 @@ return (
                 </AnimatedGroup>
                 </div>
                 
-                <Button asChild variant="destructive" size="sm" 
+                <Button onClick={() => {
+                  postFetch(process.env.API_PATH + "deconnexion/", {});
+                  window.location.reload();
+                }} asChild variant="destructive" size="sm" 
                 className="mt-5 flex items-center w-full text-left px-2 py-1 rounded
-                     hover:bg-red-400 dark:hover:bg-red-700" >
+                     hover:bg-red-400 dark:hover:bg-red-700 hover:cursor-pointer" >
                         <span>Déconnexion</span>
                 </Button>
         
@@ -107,8 +116,6 @@ return (
                         </p>
                     </main>
         </div>
-        
-        <FooterSection />
         </>
     )
 }
