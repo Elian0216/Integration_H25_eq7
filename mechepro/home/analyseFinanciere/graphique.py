@@ -9,7 +9,7 @@ import json
 
 ensemble_daction = get_all_stock_symbols()
 
-COULEUR_TEXTE = "white"
+COULEUR_TEXTE = "black"
 COULEUR_FOND = 'white'
 COULEUR_FOND_GRAPHE ='white'
 
@@ -87,11 +87,17 @@ def generer_graphique(stock_data, ticker):
         paper_bgcolor=COULEUR_FOND, 
         plot_bgcolor=COULEUR_FOND_GRAPHE,
         font=dict(color=COULEUR_TEXTE),
+        hovermode="x unified",
+        hoverdistance=10,
+        hoverlabel=dict(
+            bgcolor="rgba(255, 255, 255, 0.8)",
+        )
     )
 
-    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
-    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
+    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=True, gridcolor="lightgrey", gridwidth=0.5, nticks=20, zeroline=False, showspikes=True, spikemode='across', spikesnap='cursor', spikedash='solid', spikethickness=1, tickformat="%Y-%m-%d", tickangle=0)
+    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=True, tickformat=".2f", gridcolor="lightgrey", gridwidth=0.5, nticks=25, showspikes=True, spikemode='across', spikesnap='cursor', showline=False, spikedash='solid', zeroline=False)
     fig.update_layout(legend=dict(font=dict(color=COULEUR_TEXTE)))
+
 
     # fig.add_trace(
     #     go.Scatter(

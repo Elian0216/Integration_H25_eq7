@@ -8,6 +8,9 @@ import Link from 'next/link'
 import { Button } from './ui/button'
 import { AnimatedGroup } from './ui/animated-group'
 import { ArrowBigLeft, ArrowLeftCircle, ArrowLeftFromLineIcon, ArrowLeftIcon, CircleArrowLeftIcon, CircleArrowOutUpLeftIcon, StarIcon } from 'lucide-react'
+import { get } from 'http'
+import { text } from 'stream/consumers'
+import { filter } from 'motion/react-client'
 
 
 const Graphique = ({ symbol }: {symbol: string}) => {
@@ -99,6 +102,117 @@ const Graphique = ({ symbol }: {symbol: string}) => {
       }
       
       fetchAndPlot()
+
+      function getLegendValues(element: HTMLElement): string[] {
+        const values: (string[] | string[][])[] = [];
+
+        Array.from(element.children).forEach(child => {
+          if (child.children.length > 0) {
+            values.push(getLegendValues(child as HTMLElement));
+          } else {
+            values.push(child.textContent);
+          }
+        });
+
+        return values;
+      }
+
+      function createLegendElement2(values: string[] | string[][], indentLevel = 0): HTMLElement {
+        const element = document.createElement('div');
+        element.className = 'space-y-2';
+        element.style.marginLeft = `${indentLevel * 1}px`; // adjust the indent level
+
+        values.forEach(value => {
+          if (Array.isArray(value)) {
+            const childElement = createLegendElement(value, indentLevel + 1);
+            element.appendChild(childElement);
+          } else {
+            const textElement = document.createElement('span');
+            textElement.textContent = value;
+            textElement.style.display = 'block'; // make each value appear on a new line
+            element.appendChild(textElement);
+          }
+        });
+
+        return element;
+      }
+
+      function createLegendElement(values: string[]): HTMLElement {
+        function removeEmptyStringsDeep(arr: (string | string[])[]): (string | string[])[] {
+          return arr.flatMap(item => {
+            if (Array.isArray(item)) {
+              const filteredSubarray = removeEmptyStringsDeep(item);
+              return filteredSubarray.length > 0 ? [filteredSubarray] : [];
+            } else {
+              return item !== '' ? [item] : [];
+            }
+          });
+        }
+
+        function filterOutDatedInfoDeep(arr: (string | string[])[]): (string | string[])[] {
+          return arr.flatMap(item => {
+            if (Array.isArray(item)) {
+              if (item.length > 0 && typeof item[0] === 'string' && item[0].startsWith("Candlestick :") && item[0].includes(',')) {
+                return []; // Discard the entire Candlestick array if the first element has a date
+              } else {
+                const filteredSubarray = filterOutDatedInfoDeep(item).filter(subItem => {
+                  if (typeof subItem === 'string') {
+                    return !subItem.includes(',');
+                  }
+                  return true; // Keep nested arrays that don't get filtered down to empty
+                });
+                return filteredSubarray.length > 0 ? [filteredSubarray] : [];
+              }
+            } else if (typeof item === 'string') {
+              return !item.includes(',') ? [item] : [];
+            }
+            return [item]; // Keep non-string, non-array items as is (though your example doesn't have any)
+          });
+        }
+
+        const cleanArray = removeEmptyStringsDeep(values);
+        const date = values[0];
+        console.log("Clean array:", cleanArray);
+        
+        let processedArray = filterOutDatedInfoDeep(cleanArray);
+        console.log("Processed array:", processedArray);
+        
+
+        const element = document.createElement('div');
+        element.className = 'whitespace-normal break-words';
+        return element;
+      }
+
+      let previousLegendElement;
+      const legendObserver = new MutationObserver((mutations) => {
+        const newElement = document.getElementById('legendElement');
+        const legendElement = document.getElementsByClassName('legend')[1];
+        if (legendElement && legendElement !== previousLegendElement) {
+          previousLegendElement = legendElement;
+
+          console.log('Legend element found:', legendElement);
+          
+          const legendValues = getLegendValues(legendElement as HTMLElement);
+          console.log('Legend values:', legendValues);
+          const newLegendElement = createLegendElement(legendValues[1]);
+          // const legendContent = legendElement.innerHTML;
+          // const newLegendElement = document.createElement('div');
+          // newLegendElement.className = 'whitespace-normal break-words';
+          // newLegendElement.innerHTML = legendContent;
+          
+          if (newElement && newElement.firstChild) {
+            newElement.replaceChild(newLegendElement, newElement.firstChild);
+          }
+      
+          // Hide the original legend element
+          legendElement.remove();
+        }
+      });
+      
+      legendObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
   
   }, [])
 
@@ -131,10 +245,15 @@ const Graphique = ({ symbol }: {symbol: string}) => {
         <IconeFavoris estFavori={estFavori} />
       </div>}
       {loaded && validTicker && <div className="absolute top-[10vh] left-[2vw] z-10 cursor-pointer transition-all hover:scale-120 text-gray-500 hover:text-gray-700">
-          <Link href="/analyse"><CircleArrowLeftIcon className='h-10 w-10' /></Link>
+        <Link href="/analyse"><CircleArrowLeftIcon className='h-10 w-10' /></Link>
+      </div>}
+      {loaded && validTicker && <div className="absolute top-[40vh] right-[1vw] z-10 border-2 border-gray-500 rounded-md bg-white p-2 w-[10vw]">
+        <div id="legendElement" className='block'>
+          <div></div>
+        </div>
       </div>}
 
-      <div className="js-plotly-plot mt-12 w-[90vw] h-[90vh] flex items-center justify-center">
+      <div className="js-plotly-plot mt-12 w-[70vw] h-[90vh] flex items-center justify-center">
         {/* Chargement */}
         { !loaded && 
           <div className="flex justify-center items-center h-full">
