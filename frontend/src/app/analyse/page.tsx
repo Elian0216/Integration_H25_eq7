@@ -144,6 +144,7 @@ const Analyse = () => {
         text-sm font-medium
         text-gray-900 dark:text-gray-100
         transition-colors duration-150
+        cursor-pointer
       "
     >
       Analyser
