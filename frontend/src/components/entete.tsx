@@ -9,6 +9,8 @@ import Image from 'next/image'
 import { ModeToggle } from './ui/toggler'
 import { checkAuth } from '@/utils/fetch'
 import { set } from 'date-fns'
+import { TextEffect } from './ui/text-effect'
+import { AnimatedGroup } from './ui/animated-group'
 
 
 export const HeroHeader = () => {
@@ -16,6 +18,7 @@ export const HeroHeader = () => {
     const [isScrolled, setIsScrolled] = React.useState(false)
     const [menuItems, setMenuItems] = React.useState<{ name: string; href: string }[]>([]);
     const [loaded, setLoaded] = React.useState(false);
+    const [isAuth, setIsAuth] = React.useState(false);
 
     
     React.useEffect(() => {
@@ -27,6 +30,7 @@ export const HeroHeader = () => {
             { name: 'À propos', href: '/a-propos' },
             { name: 'Paramètres', href: '/parametres'},
           ]);
+          setIsAuth(true);
         } else {
           setMenuItems([
             { name: 'Analyse', href: '/analyse' },
@@ -92,7 +96,7 @@ export const HeroHeader = () => {
                         href={item.href}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
                       >
-                        <span>{item.name}</span>
+                        <TextEffect>{item.name}</TextEffect>
                       </Link>
                     </li>
                   ))}
@@ -114,7 +118,7 @@ export const HeroHeader = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+                {(!isAuth && loaded) && <AnimatedGroup><div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
                   <Button
                     asChild
                     variant="outline"
@@ -142,7 +146,7 @@ export const HeroHeader = () => {
                   >
                   </Button>
                   <ModeToggle />
-                </div>
+                </div></AnimatedGroup>}
               </div>
             </div>
           </div>
