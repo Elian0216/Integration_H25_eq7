@@ -2,13 +2,10 @@
 import Link from "next/link";
 import Form from "next/form";
 import React from "react";
-import Retour from "@/components/retour";
-import { Logo } from "@/components/logo";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HeroHeader } from "@/components/entete";
-import { FooterSection } from "@/components/basDePage";
 
 
 import { postFetch } from "@/utils/fetch";
