@@ -103,10 +103,12 @@ const Graphique = ({ symbol }: {symbol: string}) => {
       
       fetchAndPlot()
 
+
       function getLegendValues(element: HTMLElement): string[] {
         const values: (string[] | string[][])[] = [];
 
-        // Pour chaque enfant de l'élément, on vérifie s'il a des enfants
+        // Pour chaque enfant de l'élément, on vérifie s'il a des enfants ET si celui-ci ne contient pas de date
+        // puisqu'on ne veut que les éléments les plus proche de la date du curseur (logique Plotly un peu bizarre)
         Array.from(element.children).forEach(child => {
           if (child.children.length > 0) {
             // Si l'enfant a des enfants, on traite l'enfant récursivement pour ne qu'avoir les enfants sans enfants
@@ -117,7 +119,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
             }
           } else {
             // Si l'enfant est l'enfant du plus bas degré, on ajoute son contenu à la liste des valeurs, s'il n'est pas vide
-            if (child.textContent && child.textContent.trim() !== '') {
+            if (child.textContent && child.textContent.trim() !== '' && !(child.textContent.includes(',') && child.textContent.includes(':') && !child.textContent.includes('Candlestick'))) {
               values.push(child.textContent);
             }
           }
@@ -126,74 +128,51 @@ const Graphique = ({ symbol }: {symbol: string}) => {
         return values;
       }
 
-      function createLegendElement2(values: string[] | string[][], indentLevel = 0): HTMLElement {
-        const element = document.createElement('div');
-        element.className = 'space-y-2';
-        element.style.marginLeft = `${indentLevel * 1}px`; // adjust the indent level
+      function getProcessedLegendValues(valuesInArray: (string[] | string[][])[]): (string[] | string[][])[] {
+        // Les valeurs viennent dans un tableau, on les extrait
+        const values = valuesInArray[0];
+        console.log('Values:', values);
 
-        values.forEach(value => {
-          if (Array.isArray(value)) {
-            const childElement = createLegendElement(value, indentLevel + 1);
-            element.appendChild(childElement);
-          } else {
-            const textElement = document.createElement('span');
-            textElement.textContent = value;
-            textElement.style.display = 'block'; // make each value appear on a new line
-            element.appendChild(textElement);
-          }
+        // On enlève les valeurs de candlestick avec plus de 4 valeurs (soit celles avec des dates)
+        values[1] = values[1].filter((value) => {
+          if (Array.isArray(value[0]) && value[0].length > 4) return false;
+          console.log('- ', value[0]);
+          return true;
         });
 
-        return element;
-      }
+        // On formatte les valeurs pour qu'elles soient plus faciles à lire
+        const processedValues = []
+        processedValues[0] = values[0]
 
-      function createLegendElement(values: string[]): HTMLElement {
-        // function removeEmptyStringsDeep(arr: (string | string[])[]): (string | string[])[] {
-        //   // Crée un nouveau tableau où les chaînes vides sont supprimées	
-        //   return arr.flatMap(item => {
-        //     if (Array.isArray(item)) {
-        //       // Si l'élément est un tableau, on le traite récursivement
-        //       const filteredSubarray = removeEmptyStringsDeep(item);
-        //       // Si on voit que le tableau filtré est vide, on le supprime, sinon on le garde
-        //       return filteredSubarray.length > 0 ? [filteredSubarray] : [];
-        //     } else {
-        //       // Si l'élément n'est pas un tableau, mais une chaîne vide, car il était le résultat d'
-        //       return item !== '' ? [item] : [];
-        //     }
-        //   });
-        // }
+        for (const value of values[1]) {
+          if (Array.isArray(value[0])) {
+            // On sépare le titre candlestick de ses valeurs
+            const splitString = value[0][0].split(' : ');
+            console.log('Split string:', splitString);
 
-        function filterOutDatedInfoDeep(arr: (string | string[])[]): (string | string[])[] {
-          return arr.flatMap(item => {
-            if (Array.isArray(item)) {
-              if (item.length > 0 && typeof item[0] === 'string' && item[0].startsWith("Candlestick :") && item[0].includes(',')) {
-                return []; // Discard the entire Candlestick array if the first element has a date
-              } else {
-                const filteredSubarray = filterOutDatedInfoDeep(item).filter(subItem => {
-                  if (typeof subItem === 'string') {
-                    return !subItem.includes(',');
-                  }
-                  return true; // Keep nested arrays that don't get filtered down to empty
-                });
-                return filteredSubarray.length > 0 ? [filteredSubarray] : [];
-              }
-            } else if (typeof item === 'string') {
-              return !item.includes(',') ? [item] : [];
+            // On crée un tableau secondaire pour les valeurs du candlestick
+            const newCandlestickArray = [];
+            newCandlestickArray[0] = splitString[0];
+            newCandlestickArray[1] = [splitString[1]];
+            for (let i = 1; i < value[0].length; i++) {
+              newCandlestickArray[1].push(value[0][i]);
             }
-            return [item]; // Keep non-string, non-array items as is (though your example doesn't have any)
-          });
+
+            // On ajoute le tableau secondaire au tableau principal
+            processedValues.push(newCandlestickArray);
+
+          } else {
+            processedValues.push(value[0]);
+          }
         }
 
-        // const cleanArray = removeEmptyStringsDeep(values);
-        const date = values[0];
-        // console.log("Clean array:", cleanArray);
-        
-        let processedArray = filterOutDatedInfoDeep(cleanArray);
-        console.log("Processed array:", processedArray);
-        
+        return processedValues;
+      }
 
-        const element = document.createElement('div');
-        element.className = 'whitespace-normal break-words';
-        return element;
+      function createLegendElement(values: string[]) {
+        const newLegendElement = document.createElement('div');
+        newLegendElement.className = 'whitespace-normal break-words';
+        return newLegendElement;
       }
 
       let previousLegendElement;
@@ -207,6 +186,8 @@ const Graphique = ({ symbol }: {symbol: string}) => {
           
           const legendValues = getLegendValues(legendElement as HTMLElement);
           console.log('Legend values:', legendValues);
+          const processedLegendValues = getProcessedLegendValues(legendValues);
+          console.log('Processed legend values:', processedLegendValues);
           const newLegendElement = createLegendElement(legendValues);
           // const legendContent = legendElement.innerHTML;
           // const newLegendElement = document.createElement('div');
