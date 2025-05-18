@@ -304,19 +304,22 @@ const Graphique = ({ symbol }: {symbol: string}) => {
     <div>
       <Script src="https://cdn.plot.ly/plotly-latest.min.js" strategy="beforeInteractive" />
 
+      {/* Favoris */}
       {loaded && validTicker && <div className="absolute top-[10vh] right-[15vw] mt-2 mr-2 z-10">
         <IconeFavoris estFavori={estFavori} />
       </div>}
+      {/* Retour */}
       {loaded && validTicker && <div className="absolute top-[10vh] left-[2vw] z-10 cursor-pointer transition-all hover:scale-120 text-gray-500 hover:text-gray-700">
         <Link href="/analyse"><CircleArrowLeftIcon className='h-10 w-10' /></Link>
       </div>}
-      {loaded && validTicker && <div className="absolute top-[40vh] right-[1vw] z-10 border-2 border-gray-500 rounded-md bg-white p-2 w-[10vw]">
+      {/* Informations */}
+      {loaded && validTicker && <div className="absolute top-[40vh] right-[5vw] z-10 border-2 border-gray-500 rounded-md bg-white p-2 w-[10vw] md:text-sm sm:text-xs">
         <div id="legendElement" className='block'>
           <div></div>
         </div>
       </div>}
 
-      <div className="js-plotly-plot mt-12 w-[90vw] h-[90vh] flex items-center justify-center">
+      <div className="js-plotly-plot mt-12 w-[80vw] h-[90vh] flex items-center justify-center">
         {/* Chargement */}
         { !loaded && 
           <div className="flex justify-center items-center h-full">

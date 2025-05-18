@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from django.shortcuts import render
 
+import pandas as pd
 import json
 
 ensemble_daction = get_all_stock_symbols()
@@ -98,16 +99,40 @@ def generer_graphique(stock_data, ticker):
     fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=True, tickformat=".2f", gridcolor="lightgrey", gridwidth=0.5, nticks=25, showspikes=True, spikemode='across', spikesnap='cursor', showline=False, spikedash='solid', zeroline=False)
     fig.update_layout(legend=dict(font=dict(color=COULEUR_TEXTE)))
 
+    # Moyennes mobiles
+    # Moyenne mobile exponentielle de 20 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=20, adjust=False).mean().to_list(),  # Exponential Moving Average de 20 jours
+            mode="lines",
+            name="MME (20)",
+            line=dict(color="#4cc9f0"),
+        )
+    )
 
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=stock_data.index,
-    #         y=stock_data["Close"].rolling(window=20).mean(),  # Moyenne mobile de 20 jours
-    #         mode="lines",
-    #         name="Moyenne mobile (20)",
-    #         line=dict(color="blue"),
-    #     )
-    # )
+    # Moyenne mobile exponentielle de 50 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=50, adjust=False).mean().to_list(),
+            mode="lines",
+            name="MME (50)",
+            line=dict(color="#4361ee"),
+        )
+    )
+
+    # Moyenne mobile exponentielle de 200 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=200, adjust=False).mean().to_list(),
+            mode="lines",
+            name="MME (200)",
+            line=dict(color="#3a0ca3"),
+        )
+    )
+
 
     # ANALYSE DU GRAHPIQUE
     ## Fractales
