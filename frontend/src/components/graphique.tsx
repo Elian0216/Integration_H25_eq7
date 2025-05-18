@@ -103,9 +103,9 @@ const Graphique = ({ symbol }: {symbol: string}) => {
       
       fetchAndPlot()
 
-
-      function getLegendValues(element: HTMLElement): string[] {
-        const values: (string[] | string[][])[] = [];
+      // Prend les valeurs de la légende qui serait normalement créee sur le graphique lors du passage du curseur afin de les afficher quelque part d'autre
+      function getLegendValues(element: HTMLElement): string[][][] {
+        const values: any[] = [];
 
         // Pour chaque enfant de l'élément, on vérifie s'il a des enfants ET si celui-ci ne contient pas de date
         // puisqu'on ne veut que les éléments les plus proche de la date du curseur (logique Plotly un peu bizarre)
@@ -128,14 +128,58 @@ const Graphique = ({ symbol }: {symbol: string}) => {
         return values;
       }
 
-      function getProcessedLegendValues(valuesInArray: (string[] | string[][])[]): (string[] | string[][])[] {
+      /*
+        FORMATAGE : Transforme 
+        [
+            "Jan 2, 2024",
+            [
+                [
+                    [
+                        "Candlestick : Jan 12, 2024",
+                        "open: 52.50",
+                        "high: 52.59",
+                        "low: 48.10",
+                        "close: 48.55  ▼"
+                    ]
+                ],
+                [
+                    [
+                        "Candlestick : open: 69.25",
+                        "high: 72.78",
+                        "low: 68.00",
+                        "close: 68.51  ▼"
+                    ]
+                ],
+                [
+                    "Fractales : 72.78"
+                ]
+            ]
+        ]
+        en
+        [
+          "Jan 2, 2024",
+            [
+              "Candlestick",
+                [
+                  open: 69.25",
+                  "high: 72.78",
+                  "low: 68.00",
+                  "close: 68.51  ▼"
+                ]
+            ],
+          "Fractales : 72.78"
+        ]
+      */
+      function getProcessedLegendValues(valuesInArray: string[][][]): (any)[] {
         // Les valeurs viennent dans un tableau, on les extrait
         const values = valuesInArray[0];
-        console.log('Values:', values);
+        console.log('Values :', values);
 
         // On enlève les valeurs de candlestick avec plus de 4 valeurs (soit celles avec des dates)
         values[1] = values[1].filter((value) => {
-          if (Array.isArray(value[0]) && value[0].length > 4) return false;
+          if (Array.isArray(value[0]) && value[0].length > 4) {
+            return false;
+          };
           console.log('- ', value[0]);
           return true;
         });
@@ -169,18 +213,43 @@ const Graphique = ({ symbol }: {symbol: string}) => {
         return processedValues;
       }
 
-      function createLegendElement(values: string[]) {
+      function createLegendElement(values: (string[][])) {
         const newLegendElement = document.createElement('div');
         newLegendElement.className = 'whitespace-normal break-words';
+        for (const value of values) {
+          if (Array.isArray(value)) {
+            const divNode = document.createElement('div');
+
+            const titleNode = document.createElement('span');
+            titleNode.className = 'font-bold';
+            titleNode.textContent = value[0];
+
+            divNode.appendChild(titleNode);
+
+            for (const subValue of value[1]) {
+              const textNode = document.createElement('span');
+              textNode.className = 'block';
+              textNode.textContent = subValue;
+              divNode.appendChild(textNode);
+            }
+
+            newLegendElement.appendChild(divNode);
+          } else {
+            const textNode = document.createElement('span');
+            textNode.className = 'font-bold block';
+            textNode.textContent = value;
+            newLegendElement.appendChild(textNode);
+          }
+        }
         return newLegendElement;
       }
 
-      let previousLegendElement;
+      let previousLegendElement: HTMLElement | null = null;
       const legendObserver = new MutationObserver((mutations) => {
         const newElement = document.getElementById('legendElement');
         const legendElement = document.getElementsByClassName('legend')[1];
         if (legendElement && legendElement !== previousLegendElement) {
-          previousLegendElement = legendElement;
+          previousLegendElement = legendElement as HTMLElement;
 
           console.log('Legend element found:', legendElement);
           
@@ -188,7 +257,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
           console.log('Legend values:', legendValues);
           const processedLegendValues = getProcessedLegendValues(legendValues);
           console.log('Processed legend values:', processedLegendValues);
-          const newLegendElement = createLegendElement(legendValues);
+          const newLegendElement = createLegendElement(processedLegendValues);
           // const legendContent = legendElement.innerHTML;
           // const newLegendElement = document.createElement('div');
           // newLegendElement.className = 'whitespace-normal break-words';
@@ -247,7 +316,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
         </div>
       </div>}
 
-      <div className="js-plotly-plot mt-12 w-[70vw] h-[90vh] flex items-center justify-center">
+      <div className="js-plotly-plot mt-12 w-[90vw] h-[90vh] flex items-center justify-center">
         {/* Chargement */}
         { !loaded && 
           <div className="flex justify-center items-center h-full">
