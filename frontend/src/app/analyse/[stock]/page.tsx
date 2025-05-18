@@ -4,7 +4,6 @@ import React from 'react'
 
 const StockPage = async ({ params }: any ) => {
   const { stock } = await params;
-
   
   return (
     <>

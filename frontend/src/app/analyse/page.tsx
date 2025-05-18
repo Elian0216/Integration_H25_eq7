@@ -7,8 +7,9 @@ import Favoris from "@/components/ui/favoris";
 import { Plus, Search } from "lucide-react";
 import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FooterSection } from "@/components/basDePage";
+import { checkAuth } from "@/utils/fetch";
 
 const transitionVariants = {
   item: {
@@ -31,22 +32,28 @@ const transitionVariants = {
 };
 
 
-
 const Analyse = () => {
   const [query, setQuery] = useState("");
+  let isAuth = true;
+  checkAuth().then((bool) => {
+    console.log("ABCD " + bool);
+    isAuth = bool;
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Si le champ de recherche est vide, ne rien faire
     if (!query) return;
-    // TODO: implement your search logic here (e.g., API call or router push)
-    window.location.href = `/analyse/${query.toUpperCase()}`;
+    if (!isAuth)
+      window.location.href = "/connexion";
+    else
+      window.location.href = `/analyse/${query.toUpperCase()}`;
   };
 
   const handleAjouterFavoris = () => {
     // Logique pour ajouter le token aux favoris
     // console.log(`Ajouter ${token} aux favoris`);
   };
-
 
 
   return (

@@ -2,7 +2,7 @@
 import React from 'react'
 import Script from 'next/script'
 import { useEffect } from 'react'
-import { postFetch } from '@/utils/fetch'
+import { postFetch, authProtection } from '@/utils/fetch'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from './ui/button'
@@ -19,6 +19,10 @@ const Graphique = ({ symbol }: {symbol: string}) => {
   const [estFavori, setEstFavori] = useState(false);
 
   useEffect(() => {
+      // Check authentication
+      authProtection("/connexion");
+
+
       // Access the plot container
       const plotDiv = document.getElementsByClassName('js-plotly-plot')[0]
       if (!plotDiv) {
