@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 
 
 import { postFetch } from "@/utils/fetch";
+import { AnimatedGroup } from "@/components/ui/animated-group";
 
 
 
@@ -37,6 +38,7 @@ export default function connexion() {
   return (
     <>
       {/*  */}
+      <AnimatedGroup>
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -97,6 +99,7 @@ export default function connexion() {
           </div>
         </Form>
       </section>
+      </AnimatedGroup>
     </>
   );
 }

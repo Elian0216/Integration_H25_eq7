@@ -8,6 +8,7 @@ import { HeroHeader } from "@/components/entete";
 import { FooterSection } from "@/components/basDePage";
 import Form from "next/form";
 import { postFetch } from "@/utils/fetch";
+import { AnimatedGroup } from "@/components/ui/animated-group";
 
 
 export default function inscription() {
@@ -33,7 +34,7 @@ export default function inscription() {
 
   return (
     <>
-    
+      <AnimatedGroup>
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
           action={handleForm}
@@ -150,6 +151,7 @@ export default function inscription() {
           </div>
         </Form>
       </section>
+      </AnimatedGroup>
     </>
   );
 }

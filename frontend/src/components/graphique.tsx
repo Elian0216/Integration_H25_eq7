@@ -11,6 +11,7 @@ import { ArrowBigLeft, ArrowLeftCircle, ArrowLeftFromLineIcon, ArrowLeftIcon, Ci
 import { get } from 'http'
 import { text } from 'stream/consumers'
 import { filter } from 'motion/react-client'
+import FlammeChargement from './FlammeChargement'
 
 
 const Graphique = ({ symbol }: {symbol: string}) => {
@@ -20,7 +21,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
 
   useEffect(() => {
       // Check authentication
-      authProtection("/connexion");
+      authProtection("connexion");
 
 
       // Access the plot container
@@ -32,8 +33,8 @@ const Graphique = ({ symbol }: {symbol: string}) => {
   
       // Debounce function (antiRebond)
       function antiRebond(func, wait) {
-        let timeout;
-        return function(...args) {
+        let timeout: any;
+        return function(...args: any[]) {
           clearTimeout(timeout)
           timeout = setTimeout(() => func.apply(this, args), wait)
         }
@@ -325,10 +326,11 @@ const Graphique = ({ symbol }: {symbol: string}) => {
 
       <div className="js-plotly-plot mt-12 w-[80vw] h-[90vh] flex items-center justify-center">
         {/* Chargement */}
-        { !loaded && 
-          <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+        {!loaded && 
+          // <div className="flex justify-center items-center h-full">
+          //   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+          // </div>
+          <FlammeChargement />      
         }
         {loaded && !validTicker &&
           <AnimatedGroup className="space-y-4 text-center">
