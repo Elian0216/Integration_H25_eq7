@@ -106,11 +106,20 @@ const Graphique = ({ symbol }: {symbol: string}) => {
       function getLegendValues(element: HTMLElement): string[] {
         const values: (string[] | string[][])[] = [];
 
+        // Pour chaque enfant de l'élément, on vérifie s'il a des enfants
         Array.from(element.children).forEach(child => {
           if (child.children.length > 0) {
-            values.push(getLegendValues(child as HTMLElement));
+            // Si l'enfant a des enfants, on traite l'enfant récursivement pour ne qu'avoir les enfants sans enfants
+            const childValues = getLegendValues(child as HTMLElement);
+            if (childValues.length > 0) {
+              // On ajoute que l'enfant traité récursivement si ce n'est pas un tableau vide
+              values.push(childValues);
+            }
           } else {
-            values.push(child.textContent);
+            // Si l'enfant est l'enfant du plus bas degré, on ajoute son contenu à la liste des valeurs, s'il n'est pas vide
+            if (child.textContent && child.textContent.trim() !== '') {
+              values.push(child.textContent);
+            }
           }
         });
 
@@ -138,16 +147,20 @@ const Graphique = ({ symbol }: {symbol: string}) => {
       }
 
       function createLegendElement(values: string[]): HTMLElement {
-        function removeEmptyStringsDeep(arr: (string | string[])[]): (string | string[])[] {
-          return arr.flatMap(item => {
-            if (Array.isArray(item)) {
-              const filteredSubarray = removeEmptyStringsDeep(item);
-              return filteredSubarray.length > 0 ? [filteredSubarray] : [];
-            } else {
-              return item !== '' ? [item] : [];
-            }
-          });
-        }
+        // function removeEmptyStringsDeep(arr: (string | string[])[]): (string | string[])[] {
+        //   // Crée un nouveau tableau où les chaînes vides sont supprimées	
+        //   return arr.flatMap(item => {
+        //     if (Array.isArray(item)) {
+        //       // Si l'élément est un tableau, on le traite récursivement
+        //       const filteredSubarray = removeEmptyStringsDeep(item);
+        //       // Si on voit que le tableau filtré est vide, on le supprime, sinon on le garde
+        //       return filteredSubarray.length > 0 ? [filteredSubarray] : [];
+        //     } else {
+        //       // Si l'élément n'est pas un tableau, mais une chaîne vide, car il était le résultat d'
+        //       return item !== '' ? [item] : [];
+        //     }
+        //   });
+        // }
 
         function filterOutDatedInfoDeep(arr: (string | string[])[]): (string | string[])[] {
           return arr.flatMap(item => {
@@ -170,9 +183,9 @@ const Graphique = ({ symbol }: {symbol: string}) => {
           });
         }
 
-        const cleanArray = removeEmptyStringsDeep(values);
+        // const cleanArray = removeEmptyStringsDeep(values);
         const date = values[0];
-        console.log("Clean array:", cleanArray);
+        // console.log("Clean array:", cleanArray);
         
         let processedArray = filterOutDatedInfoDeep(cleanArray);
         console.log("Processed array:", processedArray);
@@ -194,7 +207,7 @@ const Graphique = ({ symbol }: {symbol: string}) => {
           
           const legendValues = getLegendValues(legendElement as HTMLElement);
           console.log('Legend values:', legendValues);
-          const newLegendElement = createLegendElement(legendValues[1]);
+          const newLegendElement = createLegendElement(legendValues);
           // const legendContent = legendElement.innerHTML;
           // const newLegendElement = document.createElement('div');
           // newLegendElement.className = 'whitespace-normal break-words';
