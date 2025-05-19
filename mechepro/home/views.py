@@ -288,4 +288,30 @@ def est_favori(request):
             }, status=500)
     else:
         return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
+    
+@ensure_csrf_cookie
+@login_required
+def changer_mot_de_passe(request):
+    if request.method == 'POST':
+        try:
+            ancien_mot_de_passe = request.POST.get('ancien_mot_de_passe')
+            nouveau_mot_de_passe = request.POST.get('nouveau_mot_de_passe')
+            utilisateur = Utilisateur.objects.get(utilisateur=request.user)
+
+            # Vérifier si l'ancien mot de passe est correct
+            if not utilisateur.check_password(ancien_mot_de_passe):
+                return JsonResponse({"message": "Ancien mot de passe incorrect"}, status=400)
+
+            # Changer le mot de passe
+            utilisateur.set_password(nouveau_mot_de_passe)
+            utilisateur.save()
+
+            return JsonResponse({"message": "Mot de passe changé avec succès"}, status=200)
+        except Exception as e:
+            print(f"Erreur lors du changement de mot de passe: {str(e)}")
+            return JsonResponse({
+                "message": f"Erreur lors du changement de mot de passe: {str(e)}"
+            }, status=500)
+    else:
+        return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
 
