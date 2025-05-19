@@ -40,7 +40,7 @@ class Utilisateur(models.Model):
             return False
 
     def __str__(self):
-         return f"{self.utilisateur_django}"
+         return f"{self.utilisateur}"
     
 
 

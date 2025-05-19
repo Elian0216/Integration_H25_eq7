@@ -117,11 +117,11 @@ export default function Parametres() {
           <Button
             onClick={() => {
               postFetch(process.env.API_PATH + "deconnexion/", {});
-              window.location.reload();
+              window.location.href = "/";
             }}
             variant="destructive"
             size="sm"
-            className="mt-5 w-full"
+            className="mt-5 w-full cursor-pointer"
           >
             Déconnexion
           </Button>
