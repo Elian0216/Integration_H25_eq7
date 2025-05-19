@@ -313,7 +313,7 @@ def get_utilisateur(request):
     }
     """
     try:
-        profil = Utilisateur.objects.get(utilisateur_django=request.user)
+        profil = Utilisateur.objects.get(utilisateur=request.user)
         user_data = {
             "nom_utilisateur":   request.user.username,
             "prenom":            request.user.first_name,

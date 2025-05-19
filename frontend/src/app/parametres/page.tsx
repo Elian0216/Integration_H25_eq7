@@ -42,13 +42,14 @@ export default function Parametres() {
     setLoadingUser(true);
     try {
       const data = await postFetch(
-        `${process.env.API_PATH}get_utilisateur/`,
+        `${process.env.API_PATH}donneesUtilisateur/`,
         {}
       );
-      if (data.success) {
-        setDonnees(data.utilisateur);
+      const res = await data?.json();
+      if (res && res.success) {
+        setDonnees(res.utilisateur);
       } else {
-        console.error("Erreur fetchUserData:", data.message);
+        console.error("Erreur fetchUserData:", res.message);
         setDonnees(null);
       }
     } catch (err: any) {

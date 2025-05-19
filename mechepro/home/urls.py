@@ -25,6 +25,7 @@ urlpatterns = [
     path('ajouterFavori/', views.ajouter_favoris, name='ajouter_favoris'),
     path('supprimerFavori/', views.enlever_favoris, name='enlever_favoris'),
     path('estFavori/', views.est_favori, name='est_favori'),
+    
     path('changerMotDePasse/', views.changer_mot_de_passe, name='changer_mot_de_passe'),
     path('donneesUtilisateur/', views.get_utilisateur, name='donnees_utilisateur'),
 ]
