@@ -46,13 +46,13 @@ export default function Parametres() {
         `${process.env.API_PATH}donneesUtilisateur/`,
         {}
       );
-      if (data.success) {
-        setDonnees(data.user);
+      if (data != null) {
+        setDonnees(data.utilisateur);
       } else {
-        console.error("Erreur fetchUserData:", data.message);
+        console.error("Erreur fetchUserData: null");
       }
     } catch (err: any) {
-      console.error("Erreur fetchUserData:", err);
+      console.error("Erreur fetchUserData: ", err);
     } finally {
       setLoadingUser(false);
     }
@@ -71,13 +71,13 @@ export default function Parametres() {
         }
       );
 
-      if (data.success) {
+      if (data != null) {
         setStatus("success");
-        setMessage(data.message || "Mot de passe mis à jour avec succès.");
+        setMessage("Mot de passe mis à jour avec succès.");
         setAncienMotDePasse("");
         setNouveauMotDePasse("");
       } else {
-        throw new Error(data.message || "Échec de la mise à jour.");
+        throw new Error("Échec de la mise à jour.");
       }
     } catch (err: any) {
       setStatus("error");

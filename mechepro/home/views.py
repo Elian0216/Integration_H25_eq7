@@ -341,16 +341,17 @@ def get_utilisateur(request):
     }
     """
     try:
-        profil = Utilisateur.objects.get(utilisateur_django=request.user)
-        user_data = {
+        profil = Utilisateur.objects.get(utilisateur=request.user)
+        utilisateur = {
+            "utilisateur": {
             "nom_utilisateur":   request.user.username,
             "prenom":            request.user.first_name,
             "nom":               request.user.last_name,
             "adresse_courriel":  request.user.email,
             "numero_telephone":  profil.numero_telephone,
             "date_de_naissance": profil.date_de_naissance.isoformat(),
-        }
-        return JsonResponse({"success": True, "user": user_data}, status=200)
+            }}
+        return JsonResponse({"success": True, "utilisateur": utilisateur}, status=200)
     except Exception as e:
         return JsonResponse(
             {"success": False, "message": str(e)},
