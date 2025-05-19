@@ -166,8 +166,10 @@ def get_graphique(request):
     # return generer_graphique(request)
     # Test avec AAPL
     ticker = request.POST.get("symbol", "AAPL")
+    timeframe = request.POST.get("timeframe", "5y")
+    interval = request.POST.get("interval", "1d")
     print(ticker)
-    stock_data = get_donnees_stock(ticker, "5y")
+    stock_data = get_donnees_stock(ticker, timeframe, interval)
     if stock_data['Close'] == []:
         return JsonResponse({"graph_json": None, "bool": False})
 
