@@ -11,7 +11,8 @@ export default function Parametres() {
   const [selected, setSelected] = useState<"Mon compte" | "Sécurité">(
     "Mon compte"
   );
-  const [password, setPassword] = useState("");
+  const [ancienMotDePasse, setAncienMotDePasse] = useState("");
+  const [nouveauMotDePasse, setNouveauMotDePasse] = useState("");
   const [status, setStatus] = useState<null | "success" | "error">(null);
   const [message, setMessage] = useState("");
 
@@ -25,13 +26,19 @@ export default function Parametres() {
 
     try {
       const data = await postFetch(
-        process.env.API_PATH + "changer-mot-de-passe/",
-        { mot_de_passe: password }
+        `${process.env.API_PATH}changerMotDePasse/`,
+        {
+          ancien_mot_de_passe: ancienMotDePasse,
+        
+          mot_de_passe: nouveauMotDePasse,
+        }
       );
+
       if (data.success) {
         setStatus("success");
         setMessage(data.message || "Mot de passe mis à jour avec succès.");
-        setPassword("");
+        setAncienMotDePasse("");
+        setNouveauMotDePasse("");
       } else {
         throw new Error(data.message || "Échec de la mise à jour.");
       }
@@ -46,7 +53,6 @@ export default function Parametres() {
       <aside className="mt-20 flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
         <div className="space-y-6">
           <h2 className="font-medium lg:text-3xl">Paramètres</h2>
-
           <AnimatedGroup
             variants={fadeInSpring}
             className="flex flex-col flex-1 mt-6 space-y-3"
@@ -57,7 +63,6 @@ export default function Parametres() {
             >
               <User /> <span className="pl-2">Mon compte</span>
             </button>
-
             <button
               onClick={() => setSelected("Sécurité")}
               className="flex items-center px-2 py-1 rounded text-gray-900 hover:bg-gray-100"
@@ -66,7 +71,6 @@ export default function Parametres() {
             </button>
           </AnimatedGroup>
         </div>
-
         <Button
           onClick={() => {
             postFetch(process.env.API_PATH + "deconnexion/", {});
@@ -93,13 +97,12 @@ export default function Parametres() {
             >
               Mon compte
             </TextEffect>
-            {/* Contenu “Mon compte” ici */}
             <p>Affiche ici les informations de l’utilisateur.</p>
           </div>
         ) : (
           <form
             onSubmit={handlePasswordChange}
-            className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 max-w-md w-full"
+            className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 max-w-md w-full space-y-4"
           >
             <TextEffect
               per="line"
@@ -116,31 +119,31 @@ export default function Parametres() {
               Changement de mot de passe 🔒
             </p>
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
-              <Input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Nouveau mot de passe"
-                className="flex-1"
-              />
-              <Button
-                type="submit"
-                variant="default"
-                className="w-full sm:w-auto"
-              >
-                Mettre à jour
-              </Button>
-            </div>
+            <Input
+              type="password"
+              required
+              value={ancienMotDePasse}
+              onChange={(e) => setAncienMotDePasse(e.target.value)}
+              placeholder="Ancien mot de passe"
+            />
+            <Input
+              type="password"
+              required
+              value={nouveauMotDePasse}
+              onChange={(e) => setNouveauMotDePasse(e.target.value)}
+              placeholder="Nouveau mot de passe"
+            />
+            <Button type="submit" variant="default" className="w-full">
+              Mettre à jour
+            </Button>
 
             {status === "success" && (
-              <div className="p-3 bg-green-100 text-green-800 rounded mb-2">
+              <div className="p-3 bg-green-100 text-green-800 rounded">
                 {message}
               </div>
             )}
             {status === "error" && (
-              <div className="p-3 bg-red-100 text-red-800 rounded mb-2">
+              <div className="p-3 bg-red-100 text-red-800 rounded">
                 {message}
               </div>
             )}

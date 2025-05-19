@@ -14,7 +14,10 @@ class Utilisateur(models.Model):
     date_de_naissance = models.DateField(null=True)
     favoris=models.TextField(null=True) # un string encodé en JSON
     # Pour convertir json.dumps(liste). Pour désérializer, uilisier json.loads(obj)
-
+   
+    def valider_mot_de_passe(self, mot_de_passe):
+        return self.utilisateur.check_password(mot_de_passe)
+    
     def obtenir_favoris(self):
         return json.loads(self.favoris)
 
@@ -23,7 +26,6 @@ class Utilisateur(models.Model):
         if not self.est_favoris(ticker):
             liste_favoris.append(ticker)
             self.favoris = json.dumps(liste_favoris)
-
 
     def enlever_favoris(self, ticker):
         liste_favoris = self.obtenir_favoris()
@@ -38,7 +40,7 @@ class Utilisateur(models.Model):
             return False
 
     def __str__(self):
-         return f"{self.utilisateur}"
+         return f"{self.utilisateur_django}"
     
 
 
