@@ -14,7 +14,7 @@ import { filter } from 'motion/react-client'
 import FlammeChargement from './FlammeChargement'
 
 
-const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) => {
+const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: string, interval: string}) => {
   const [loaded, setLoaded] = useState(false);
   const [validTicker, setValidTicker] = useState(false);
   const [estFavori, setEstFavori] = useState(false);
@@ -82,7 +82,7 @@ const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) =
   
       // Optionally, you can initialize your plot here if needed:
       async function fetchAndPlot() {
-        const res = await postFetch(process.env.API_PATH + 'graphique/', {symbol: symbol})
+        const res = await postFetch(process.env.API_PATH + 'graphique/', {symbol: symbol, timeframe: timeframe, interval: interval})
         const res_json = await res?.json()
 
         if (!res_json.bool) {
@@ -181,7 +181,9 @@ const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) =
         console.log('Values :', values);
 
         // On enlève les valeurs de candlestick avec plus de 4 valeurs (soit celles avec des dates)
-        values[1] = values[1].filter((value) => {
+        // Des fois, la date n'est pas présente, on vérifie cela
+        const index = values.length > 1 ? 1 : 0;
+        values[index] = values[index].filter((value) => {
           if (Array.isArray(value[0]) && value[0].length > 4) {
             return false;
           };
@@ -193,7 +195,7 @@ const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) =
         const processedValues = []
         processedValues[0] = values[0]
 
-        for (const value of values[1]) {
+        for (const value of values[index]) {
           if (Array.isArray(value[0])) {
             // On sépare le titre candlestick de ses valeurs
             const splitString = value[0][0].split(' : ');
@@ -306,7 +308,7 @@ const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) =
   }
 
   return (
-    <div>
+    <div className="block">
       <Script src="https://cdn.plot.ly/plotly-latest.min.js" strategy="beforeInteractive" />
 
       {/* Favoris */}
@@ -324,7 +326,7 @@ const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) =
         </div>
       </div>}
 
-      <div className="js-plotly-plot mt-12 w-[80vw] h-[90vh] flex items-center justify-center">
+      <div className="js-plotly-plot mt-12 w-[80vw] h-[80vh] flex items-center justify-center">
         {/* Chargement */}
         {!loaded && 
           // <div className="flex justify-center items-center h-full">
