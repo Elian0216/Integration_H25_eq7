@@ -7,10 +7,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { postFetch, authProtection } from "@/utils/fetch";
 
+type DonneesUtilisateur = {
+  nom_utilisateur: string;
+  prenom: string;
+  nom: string;
+  adresse_courriel: string;
+  numero_telephone: string;
+  date_de_naissance: string; // ISO
+};
+
 export default function Parametres() {
   const [selected, setSelected] = useState<"Mon compte" | "Sécurité">(
     "Mon compte"
   );
+  const [donnees, setDonnees] = useState<DonneesUtilisateur | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
   const [ancienMotDePasse, setAncienMotDePasse] = useState("");
   const [nouveauMotDePasse, setNouveauMotDePasse] = useState("");
   const [status, setStatus] = useState<null | "success" | "error">(null);
@@ -19,6 +31,32 @@ export default function Parametres() {
   useEffect(() => {
     authProtection();
   }, []);
+
+  // on appelle au montage et chaque fois qu'on revient sur "Mon compte"
+  useEffect(() => {
+    if (selected === "Mon compte") {
+      fetchUserData();
+    }
+  }, [selected]);
+
+  async function fetchUserData() {
+    setLoadingUser(true);
+    try {
+      const data = await postFetch(
+        `${process.env.API_PATH}donneesUtilisateur/`,
+        {}
+      );
+      if (data.success) {
+        setDonnees(data.user);
+      } else {
+        console.error("Erreur fetchUserData:", data.message);
+      }
+    } catch (err: any) {
+      console.error("Erreur fetchUserData:", err);
+    } finally {
+      setLoadingUser(false);
+    }
+  }
 
   async function handlePasswordChange(e: React.FormEvent) {
     e.preventDefault();
@@ -29,7 +67,6 @@ export default function Parametres() {
         `${process.env.API_PATH}changerMotDePasse/`,
         {
           ancien_mot_de_passe: ancienMotDePasse,
-        
           mot_de_passe: nouveauMotDePasse,
         }
       );
@@ -52,34 +89,21 @@ export default function Parametres() {
     <div className="flex min-h-screen">
       <aside className="mt-20 flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
         <div className="space-y-6">
-          {/* Garde “Paramètres” à sa taille d’origine */}
           <h2 className="font-medium text-3xl">Paramètres</h2>
-
           <AnimatedGroup
             variants={fadeInSpring}
             className="flex flex-col flex-1 mt-6 space-y-4"
           >
             <button
               onClick={() => setSelected("Mon compte")}
-              className={`
-        flex items-center px-3 py-2 rounded-lg 
-        text-xl font-bold text-gray-900 dark:text-gray-100 
-        hover:bg-gray-200 dark:hover:bg-gray-700 
-        transition-colors duration-200
-      `}
+              className="flex items-center px-3 py-2 rounded-lg text-xl font-bold text-gray-900 dark:text-gray-100 hover:bg-gray-200 transition-colors duration-200"
             >
               <User className="w-5 h-5" />
               <span className="pl-3">Mon compte</span>
             </button>
-
             <button
               onClick={() => setSelected("Sécurité")}
-              className={`
-        flex items-center px-3 py-2 rounded-lg 
-        text-xl font-bold text-gray-900 dark:text-gray-100 
-        hover:bg-gray-200 dark:hover:bg-gray-700 
-        transition-colors duration-200
-      `}
+              className="flex items-center px-3 py-2 rounded-lg text-xl font-bold text-gray-900 dark:text-gray-100 hover:bg-gray-200 transition-colors duration-200"
             >
               <KeyRound className="w-5 h-5" />
               <span className="pl-3">Sécurité</span>
@@ -100,25 +124,60 @@ export default function Parametres() {
         </Button>
       </aside>
 
-      <main className="flex-1 flex items-center justify-center p-6">
+      <main className="flex-1 p-6 overflow-auto">
         {selected === "Mon compte" ? (
-          <div className="text-center">
+          <div className="max-w-lg mx-auto space-y-6">
             <TextEffect
               per="line"
               preset="fade-in-blur"
               speedSegment={0.3}
               delay={0}
               as="h1"
-              className="text-3xl font-bold mb-6"
+              className="text-3xl font-bold mb-4 text-center"
             >
               Mon compte
             </TextEffect>
-            <p>Affiche ici les informations de l’utilisateur.</p>
+
+            {loadingUser ? (
+              <p className="text-center">Chargement des informations…</p>
+            ) : donnees ? (
+              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-3">
+                <p>
+                  <span className="font-semibold">Nom d’utilisateur :</span>{" "}
+                  {donnees.nom_utilisateur}
+                </p>
+                <p>
+                  <span className="font-semibold">Prénom :</span>{" "}
+                  {donnees.prenom}
+                </p>
+                <p>
+                  <span className="font-semibold">Nom :</span> {donnees.nom}
+                </p>
+                <p>
+                  <span className="font-semibold">Email :</span>{" "}
+                  {donnees.adresse_courriel}
+                </p>
+                <p>
+                  <span className="font-semibold">Téléphone :</span>{" "}
+                  {donnees.numero_telephone}
+                </p>
+                <p>
+                  <span className="font-semibold">Date de naissance :</span>{" "}
+                  {new Date(donnees.date_de_naissance).toLocaleDateString(
+                    "fr-CA"
+                  )}
+                </p>
+              </div>
+            ) : (
+              <p className="text-center text-red-600">
+                Impossible de charger vos données.
+              </p>
+            )}
           </div>
         ) : (
           <form
             onSubmit={handlePasswordChange}
-            className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 max-w-md w-full space-y-4"
+            className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 max-w-md w-full mx-auto space-y-4"
           >
             <TextEffect
               per="line"

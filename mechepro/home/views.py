@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 
 from django.contrib.auth.models import User
@@ -320,3 +321,38 @@ def changer_mot_de_passe(request):
             }, status=500)
     else:
         return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
+
+
+@ensure_csrf_cookie
+@login_required
+def get_utilisateur(request):
+    """
+    Renvoie les données de l'utilisateur au format attendu par le front :
+    {
+      "success": true,
+      "user": {
+        "nom_utilisateur": "...",
+        "prenom": "...",
+        "nom": "...",
+        "adresse_courriel": "...",
+        "numero_telephone": "...",
+        "date_de_naissance": "YYYY-MM-DD"
+      }
+    }
+    """
+    try:
+        profil = Utilisateur.objects.get(utilisateur_django=request.user)
+        user_data = {
+            "nom_utilisateur":   request.user.username,
+            "prenom":            request.user.first_name,
+            "nom":               request.user.last_name,
+            "adresse_courriel":  request.user.email,
+            "numero_telephone":  profil.numero_telephone,
+            "date_de_naissance": profil.date_de_naissance.isoformat(),
+        }
+        return JsonResponse({"success": True, "user": user_data}, status=200)
+    except Exception as e:
+        return JsonResponse(
+            {"success": False, "message": str(e)},
+            status=500
+        )
