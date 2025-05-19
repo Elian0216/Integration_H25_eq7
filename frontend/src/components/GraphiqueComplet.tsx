@@ -57,9 +57,9 @@ const GraphiqueComplet = ({ stock }: { stock: string}) => {
                 <h2 className="text-xl">RSI (Relative Strength Index)</h2>
                   <p>
                     Cet oscillateur mesure la <strong>vitesse</strong> et <strong>l'ampleur</strong> des <strong>variations récentes de prix</strong> sur une échelle de 0 à 100.
-                    Des valeurs en dessous de 30 suggèrent un marché survendu (potentiel rebond), tandis qu'au-dessus de 70, un marché suracheté (potentiel repli).
+                    Des valeurs en dessous de 30 suggèrent un marché survendu (potentiel rebond), tandis qu'au-dessus de 70, un marché suracheté (potentiel repli).<br />
                     Le RSI peut également signaler des <strong>divergences</strong>, indiquant un possible renversement de tendance lorsque l'évolution du prix diffère de celle
-                    de l'indicateur.
+                    de l'indicateur. Les exemples de divergences haussières sont indiquées avec des <span className='text-green-500'>lignes vertes</span> et les divergences baissières avec des <span className='text-red-500'>lignes rouges</span>.
                   </p>
                 <h2 className="text-xl">Fractales</h2>
                   <p>
@@ -69,7 +69,7 @@ const GraphiqueComplet = ({ stock }: { stock: string}) => {
                   </p>
                 <h2 className="text-xl">Zones de Supports et Résistances (K-Moyennes)</h2>
                   <p>
-                    <strong>Les rectangles bleus représentent des zones de supports et de résistances identifiées statistiquement à l'aide de l'algorithme des K-Moyennes. </strong>
+                    <strong>Les rectangles <span className='text-blue-500'>bleus</span> représentent des zones de supports et de résistances identifiées statistiquement à l'aide de l'algorithme des K-Moyennes. </strong>
                     Cette méthode regroupe des périodes de prix similaires pour délimiter des zones où le prix a historiquement montré une forte probabilité de
                     trouver un support (et rebondir à la hausse) ou une résistance (et rebondir à la baisse).
                     L'intérêt de ces zones est qu'elles ne sont pas basées sur des points uniques mais sur des agrégations de prix,
