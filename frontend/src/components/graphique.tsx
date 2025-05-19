@@ -14,7 +14,7 @@ import { filter } from 'motion/react-client'
 import FlammeChargement from './FlammeChargement'
 
 
-const Graphique = ({ symbol }: {symbol: string}) => {
+const Graphique = ({ symbol, timeframe }: {symbol: string, timeframe: string}) => {
   const [loaded, setLoaded] = useState(false);
   const [validTicker, setValidTicker] = useState(false);
   const [estFavori, setEstFavori] = useState(false);

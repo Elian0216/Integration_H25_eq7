@@ -32,6 +32,8 @@ export default function connexion() {
     
     if (data.bool) {
       window.location.href = "/analyse";
+    } else {
+      alert("Nom d'utilisateur ou mot de passe incorrect");
     }
   }
 
