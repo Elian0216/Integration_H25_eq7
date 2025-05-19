@@ -363,6 +363,13 @@ def changer_mot_de_passe(request):
         user.set_password(nouveau)
         user.save()
 
+        # Re-authentification de l'utilisateur
+        user = authenticate(request, username=user.username, password=nouveau)
+        if user:
+            login(request, user)
+        else:
+            return JsonResponse({"success": False, "message": "Erreur de ré-authentification"}, status=500)
+
         return JsonResponse({"success": True, "message": "Mot de passe mis à jour avec succès."}, status=200)
     except Utilisateur.DoesNotExist:
         return JsonResponse({"success": False, "message": "Profil utilisateur introuvable."}, status=404)

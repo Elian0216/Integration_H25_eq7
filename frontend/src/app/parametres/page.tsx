@@ -66,7 +66,7 @@ export default function Parametres() {
 
     try {
       const data = await postFetch(
-        `${process.env.API_PATH}changer_mot_de_passe/`,
+        `${process.env.API_PATH}changerMotDePasse/`,
         {
           ancien_mot_de_passe: ancienMotDePasse,
           mot_de_passe: nouveauMotDePasse,
@@ -79,6 +79,7 @@ export default function Parametres() {
         setMessage(res.message || "Mot de passe mis à jour avec succès.");
         setAncienMotDePasse("");
         setNouveauMotDePasse("");
+        // window.location.reload();
       } else {
         throw new Error(res.message || "Échec de la mise à jour.");
       }
