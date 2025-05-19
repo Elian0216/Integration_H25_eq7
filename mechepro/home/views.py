@@ -295,42 +295,12 @@ def est_favori(request):
 
 @ensure_csrf_cookie
 @login_required
-def changer_mot_de_passe(request):
-    if request.method == 'POST':
-        try:
-            ancien_mot_de_passe = request.POST.get('ancien_mot_de_passe')
-            nouveau_mot_de_passe = request.POST.get('mot_de_passe')
-            utilisateur = Utilisateur.objects.get(utilisateur=request.user)
-
-            # Vérifier si l'ancien mot de passe est correct
-            if not utilisateur.valider_mot_de_passe(ancien_mot_de_passe):
-                return JsonResponse({"message": "Ancien mot de passe incorrect"}, status=400)
-
-            # Changer le mot de passe
-            utilisateur.set_password(nouveau_mot_de_passe)
-            utilisateur.save()
-
-            return JsonResponse(
-                {"succes": {
-                "message": "Mot de passe changé avec succès"
-                }}, status=200)
-        except Exception as e:
-            print(f"Erreur lors du changement de mot de passe: {str(e)}")
-            return JsonResponse({
-                "message": f"Erreur lors du changement de mot de passe: {str(e)}"
-            }, status=500)
-    else:
-        return JsonResponse({"message": "Mauvais type d'appel"}, status=400)
-
-
-@ensure_csrf_cookie
-@login_required
 def get_utilisateur(request):
     """
-    Renvoie les données de l'utilisateur au format attendu par le front :
+    Renvoie :
     {
       "success": true,
-      "user": {
+      "utilisateur": {
         "nom_utilisateur": "...",
         "prenom": "...",
         "nom": "...",
@@ -341,19 +311,58 @@ def get_utilisateur(request):
     }
     """
     try:
-        profil = Utilisateur.objects.get(utilisateur=request.user)
-        utilisateur = {
-            "utilisateur": {
+        profil = Utilisateur.objects.get(utilisateur_django=request.user)
+        user_data = {
             "nom_utilisateur":   request.user.username,
             "prenom":            request.user.first_name,
             "nom":               request.user.last_name,
             "adresse_courriel":  request.user.email,
             "numero_telephone":  profil.numero_telephone,
             "date_de_naissance": profil.date_de_naissance.isoformat(),
-            }}
-        return JsonResponse({"success": True, "utilisateur": utilisateur}, status=200)
+        }
+        return JsonResponse({"success": True, "utilisateur": user_data}, status=200)
+    except Utilisateur.DoesNotExist:
+        return JsonResponse(
+            {"success": False, "message": "Profil utilisateur introuvable."},
+            status=404
+        )
     except Exception as e:
         return JsonResponse(
             {"success": False, "message": str(e)},
             status=500
         )
+
+
+@ensure_csrf_cookie
+@login_required
+def changer_mot_de_passe(request):
+    """
+    Attend un POST avec:
+      ancien_mot_de_passe
+      mot_de_passe
+    Renvoie :
+      {"success": True, "message": "..."}  ou
+      {"success": False, "message": "..."}
+    """
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Mauvais type d'appel"}, status=400)
+
+    ancien = request.POST.get("ancien_mot_de_passe", "")
+    nouveau = request.POST.get("mot_de_passe", "")
+
+    try:
+        profil = Utilisateur.objects.get(utilisateur=request.user)
+        # validation de l'ancien mot de passe
+        if not profil.valider_mot_de_passe(ancien):
+            return JsonResponse({"success": False, "message": "Ancien mot de passe incorrect"}, status=400)
+
+        # mise à jour du mot de passe dans l'objet User Django
+        user = request.user
+        user.set_password(nouveau)
+        user.save()
+
+        return JsonResponse({"success": True, "message": "Mot de passe mis à jour avec succès."}, status=200)
+    except Utilisateur.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Profil utilisateur introuvable."}, status=404)
+    except Exception as e:
+        return JsonResponse({"success": False, "message": str(e)}, status=500)

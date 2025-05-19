@@ -32,7 +32,6 @@ export default function Parametres() {
     authProtection();
   }, []);
 
-  // on appelle au montage et chaque fois qu'on revient sur "Mon compte"
   useEffect(() => {
     if (selected === "Mon compte") {
       fetchUserData();
@@ -43,16 +42,18 @@ export default function Parametres() {
     setLoadingUser(true);
     try {
       const data = await postFetch(
-        `${process.env.API_PATH}donneesUtilisateur/`,
+        `${process.env.API_PATH}get_utilisateur/`,
         {}
       );
-      if (data != null) {
+      if (data.success) {
         setDonnees(data.utilisateur);
       } else {
-        console.error("Erreur fetchUserData: null");
+        console.error("Erreur fetchUserData:", data.message);
+        setDonnees(null);
       }
     } catch (err: any) {
-      console.error("Erreur fetchUserData: ", err);
+      console.error("Erreur fetchUserData:", err);
+      setDonnees(null);
     } finally {
       setLoadingUser(false);
     }
@@ -64,20 +65,20 @@ export default function Parametres() {
 
     try {
       const data = await postFetch(
-        `${process.env.API_PATH}changerMotDePasse/`,
+        `${process.env.API_PATH}changer_mot_de_passe/`,
         {
           ancien_mot_de_passe: ancienMotDePasse,
           mot_de_passe: nouveauMotDePasse,
         }
       );
 
-      if (data != null) {
+      if (data.success) {
         setStatus("success");
-        setMessage("Mot de passe mis à jour avec succès.");
+        setMessage(data.message || "Mot de passe mis à jour avec succès.");
         setAncienMotDePasse("");
         setNouveauMotDePasse("");
       } else {
-        throw new Error("Échec de la mise à jour.");
+        throw new Error(data.message || "Échec de la mise à jour.");
       }
     } catch (err: any) {
       setStatus("error");
