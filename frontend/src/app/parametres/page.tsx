@@ -72,14 +72,15 @@ export default function Parametres() {
           mot_de_passe: nouveauMotDePasse,
         }
       );
+      const res = await data?.json();
 
-      if (data.success) {
+      if (res.success) {
         setStatus("success");
-        setMessage(data.message || "Mot de passe mis à jour avec succès.");
+        setMessage(res.message || "Mot de passe mis à jour avec succès.");
         setAncienMotDePasse("");
         setNouveauMotDePasse("");
       } else {
-        throw new Error(data.message || "Échec de la mise à jour.");
+        throw new Error(res.message || "Échec de la mise à jour.");
       }
     } catch (err: any) {
       setStatus("error");
