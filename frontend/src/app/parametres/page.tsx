@@ -87,7 +87,7 @@ export default function Parametres() {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="mt-20 flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
+      <aside className="mt-20 flex flex-col justify-between w-1/5 border-r-2 p-6">
         <div className="space-y-6">
           <h2 className="font-medium text-3xl">Paramètres</h2>
           <AnimatedGroup
@@ -110,18 +110,19 @@ export default function Parametres() {
             </button>
           </AnimatedGroup>
         </div>
-
-        <Button
-          onClick={() => {
-            postFetch(process.env.API_PATH + "deconnexion/", {});
-            window.location.reload();
-          }}
-          variant="destructive"
-          size="sm"
-          className="mt-5 w-full"
-        >
-          Déconnexion
-        </Button>
+        <div className="flex flex-col items-center">
+          <Button
+            onClick={() => {
+              postFetch(process.env.API_PATH + "deconnexion/", {});
+              window.location.reload();
+            }}
+            variant="destructive"
+            size="sm"
+            className="mt-5 w-full"
+          >
+            Déconnexion
+          </Button>
+        </div>
       </aside>
 
       <main className="flex-1 p-6 overflow-auto">
