@@ -128,9 +128,9 @@ export default function Parametres() {
         </div>
       </aside>
 
-      <main className="flex-1 p-6 overflow-auto">
+      <main className="flex-1 p-6 overflow-auto flex items-center justify-center">
         {selected === "Mon compte" ? (
-          <div className="max-w-lg mx-auto space-y-6">
+          <div className="max-w-lg mx-auto space-y-6 bg-white dark:bg-gray-800 shadow rounded-lg p-8">
             <TextEffect
               per="line"
               preset="fade-in-blur"
@@ -145,7 +145,8 @@ export default function Parametres() {
             {loadingUser ? (
               <p className="text-center">Chargement des informations…</p>
             ) : donnees ? (
-              <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 space-y-3">
+              <AnimatedGroup variants={fadeInSpring}>
+              <div className="space-y-3 text-xl p-8">
                 <p>
                   <span className="font-semibold">Nom d’utilisateur :</span>{" "}
                   {donnees.nom_utilisateur}
@@ -172,6 +173,7 @@ export default function Parametres() {
                   )}
                 </p>
               </div>
+              </AnimatedGroup>
             ) : (
               <p className="text-center text-red-600">
                 Impossible de charger vos données.
