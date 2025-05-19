@@ -1,5 +1,5 @@
 from .yahooFinance import get_all_stock_symbols
-from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique
+from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique, detect_divergences
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -186,7 +186,45 @@ def generer_graphique(stock_data, ticker):
     #     fillcolor="LightSkyBlue",
     #     opacity=0.3,
     #     layer="below",
-    # )        
+    # )
+
+    ### DIVERGENCES
+    divergences = detect_divergences(maximums + minimums, RSI_data)
+    # print("Divergences détectées : ", divergences)
+
+    # Dessiner les lignes de divergence
+    for div in divergences:
+        # Price line
+        fig.add_shape(
+            type="line",
+            x0=div['points'][0][0],
+            y0=div['points'][0][1],
+            x1=div['points'][1][0],
+            y1=div['points'][1][1],
+            line=dict(
+                color="#003924" if div['type'] == 'bullish' else "#650000",
+                width=3,
+                dash="solid",
+            ),
+            row=1,
+            col=1
+        )
+        
+        # RSI line
+        fig.add_shape(
+            type="line",
+            x0=div['rsi_points'][0][0],
+            y0=div['rsi_points'][0][1],
+            x1=div['rsi_points'][1][0],
+            y1=div['rsi_points'][1][1],
+            line=dict(
+                color="#003924" if div['type'] == 'bullish' else "#650000",
+                width=3,
+                dash="solid",
+            ),
+            row=2,
+            col=1
+        )
         
 
     fig_json = json.loads(fig.to_json())
