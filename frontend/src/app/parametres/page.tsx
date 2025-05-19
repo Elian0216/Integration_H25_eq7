@@ -52,25 +52,41 @@ export default function Parametres() {
     <div className="flex min-h-screen">
       <aside className="mt-20 flex flex-col justify-between w-1/5 h-screen border-r-2 p-6">
         <div className="space-y-6">
-          <h2 className="font-medium lg:text-3xl">Paramètres</h2>
+          {/* Garde “Paramètres” à sa taille d’origine */}
+          <h2 className="font-medium text-3xl">Paramètres</h2>
+
           <AnimatedGroup
             variants={fadeInSpring}
-            className="flex flex-col flex-1 mt-6 space-y-3"
+            className="flex flex-col flex-1 mt-6 space-y-4"
           >
             <button
               onClick={() => setSelected("Mon compte")}
-              className="flex items-center px-2 py-1 rounded text-gray-900 hover:bg-gray-100"
+              className={`
+        flex items-center px-3 py-2 rounded-lg 
+        text-xl font-bold text-gray-900 dark:text-gray-100 
+        hover:bg-gray-200 dark:hover:bg-gray-700 
+        transition-colors duration-200
+      `}
             >
-              <User /> <span className="pl-2">Mon compte</span>
+              <User className="w-5 h-5" />
+              <span className="pl-3">Mon compte</span>
             </button>
+
             <button
               onClick={() => setSelected("Sécurité")}
-              className="flex items-center px-2 py-1 rounded text-gray-900 hover:bg-gray-100"
+              className={`
+        flex items-center px-3 py-2 rounded-lg 
+        text-xl font-bold text-gray-900 dark:text-gray-100 
+        hover:bg-gray-200 dark:hover:bg-gray-700 
+        transition-colors duration-200
+      `}
             >
-              <KeyRound /> <span className="pl-2">Sécurité</span>
+              <KeyRound className="w-5 h-5" />
+              <span className="pl-3">Sécurité</span>
             </button>
           </AnimatedGroup>
         </div>
+
         <Button
           onClick={() => {
             postFetch(process.env.API_PATH + "deconnexion/", {});
