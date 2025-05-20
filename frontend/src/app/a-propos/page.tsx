@@ -75,15 +75,36 @@ export default function ContentSection() {
                     </div>
                 
                     <div className="relative mt-6 sm:mt-0">
-                        <div className="bg-linear-to-b aspect-67/34 relative rounded-2xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
-                            <Image src="/demo_graphique.jpg" className="rounded-[15px] shadow " alt="image démo de graphique" width={1206} height={612} />
+                        <div className="bg-linear-to-b aspect-67/34 relative rounded-3xl from-zinc-300 to-transparent p-px dark:from-zinc-700">
+                            <Image src="/demo-graphique.jpg" className="rounded-[15px] shadow " alt="image démo de graphique" width={1206} height={612} />
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3 className="text-xl font-medium">Technique d'analyse de MèchePro</h3>   
-                    <p className="text-muted-foreground text-sm">ENTRER DESCRIPTION DES TECHNIQUES D'ANALYSE ICI
-                    </p>   
+                <div className="space-y-3">
+                    <TextEffect
+                        per="line"
+                        preset="fade-in-blur"
+                        speedSegment={0.3}
+                        delay={3}
+                        as="h3"
+                        className="text-xl font-medium"
+                        >
+                        Technique d'analyse de MèchePro
+                    </TextEffect>    
+                    <TextEffect
+                        per="line"
+                        preset="fade-in-blur"
+                        speedSegment={0.3}
+                        delay={3.5}
+                        as="p"
+                        className="text-muted-foreground"
+                        >
+                        Ce projet combine : des moyennes mobiles exponentielles pour détecter les tendance et les croisements ;
+                         le RSI pour évaluer le surachat, la survente et les divergences ;
+                          les fractales pour repérer les sommets et les creux ;
+                         et des zones K-Means de support et résistance basées sur l’historique des prix. 
+                         Pour en apprendre plus, créez un compte et commencez à analyser!
+                    </TextEffect>    
                 </div>            
                 <h2 className="relative z-10 max-w-xl text-4xl font-medium lg:text-5xl mt-16">Notre équipe</h2>
                 <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:gap-24">
