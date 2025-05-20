@@ -1,0 +1,48 @@
+# render.yaml at the root of your Git repository
+
+services:
+  - type: web
+    name: django-backend
+    env: python
+    dockerfilePath: ./mechepro/Dockerfile # Path to your Django Dockerfile
+    plan: starter # or whatever plan suits your needs
+    envVars:
+      - key: DATABASE_URL
+        value: ${DATABASE_URL} # Link to your Render PostgreSQL or external DB
+      - key: SECRET_KEY
+        generateValue: true # Render can generate secrets for you
+      - key: ALLOWED_HOSTS
+        value: https://django-backend.onrender.com,localhost # Add your Render URL
+    # command: gunicorn your_project_name.wsgi:application --bind 0.0.0.0:8000 # This would be inferred from your Dockerfile CMD
+
+  - type: web
+    name: nextjs-frontend
+    env: node
+    dockerfilePath: ./frontend/Dockerfile # Path to your Next.js Dockerfile
+    healthCheckPath: / # A simple health check for Next.js
+    plan: free
+    envVars:
+      - key: NEXT_PUBLIC_DJANGO_API_URL
+        value: https://django-backend.onrender.com/api/ # Link to your Django service
+
+  - type: web
+    name: nginx-proxy
+    env: docker # Use 'docker' for a generic Docker service
+    dockerfilePath: ./nginx/Dockerfile # Path to your Nginx Dockerfile
+    healthCheckPath: /
+    plan: free
+    ports:
+      - 80
+    envVars:
+      # Nginx needs to know the internal service names Render assigns
+      # Render automatically sets up internal DNS for services
+      - key: DJANGO_INTERNAL_URL
+        value: http://django-backend:8000 # Use service name as hostname
+      - key: NEXTJS_INTERNAL_URL
+        value: http://nextjs-frontend:3000
+    # Command would be `nginx -g 'daemon off;'` in your Nginx Dockerfile
+
+# Optional: if you want a managed PostgreSQL database
+#  - type: pserv
+#    name: my-database
+#    plan: free # or other
