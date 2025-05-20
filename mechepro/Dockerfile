@@ -1,6 +1,6 @@
 FROM python:3.13.2
 
-WORKDIR /app
+WORKDIR /app/mechepro
 
 # Install system dependencies (optional, depending on your needs, e.g., for psycopg2)
 RUN apt-get update && apt-get install -y --no-install-recommends \
