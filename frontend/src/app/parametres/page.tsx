@@ -236,7 +236,7 @@ export default function Parametres() {
   );
 }
 
-export const fadeInSpring = {
+const fadeInSpring = {
   container: { visible: { transition: { delayChildren: 1 } } },
   item: {
     hidden: { opacity: 0 },

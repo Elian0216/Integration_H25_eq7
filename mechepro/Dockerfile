@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY mechepro/requirements.txt /app/
+COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt --no-deps --no-cache-dir
 
-COPY mechepro/* /app/
+COPY * /app/
 
 EXPOSE 8000
 

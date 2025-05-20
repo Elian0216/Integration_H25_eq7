@@ -32,7 +32,7 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
       }
   
       // Debounce function (antiRebond)
-      function antiRebond(func, wait) {
+      function antiRebond(func: any, wait: any) {
         let timeout: any;
         return function(...args: any[]) {
           clearTimeout(timeout)
