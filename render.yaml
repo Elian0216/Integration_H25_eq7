@@ -18,9 +18,7 @@ services:
 
   - type: web
     name: nextjs-frontend
-    env: node
-    buildCommand: cd frontend && npm i && npm run build
-    startCommand: cd frontend && npm run start
+    env: docker
     healthCheckPath: / # A simple health check for Next.js
     plan: free
     envVars:
