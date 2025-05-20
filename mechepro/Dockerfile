@@ -1,6 +1,6 @@
 FROM python:3.13.2
 
-WORKDIR /app/mechepro
+WORKDIR /app
 
 # Install system dependencies (optional, depending on your needs, e.g., for psycopg2)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
+COPY mechepro/requirements.txt /app/
 
 RUN pip install -r requirements.txt --no-deps --no-cache-dir
 
-COPY . /
+COPY . /app/
 
 EXPOSE 8000
 
