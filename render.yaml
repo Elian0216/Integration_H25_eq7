@@ -5,7 +5,7 @@ services:
     name: django-backend
     env: docker
     dockerfilePath: ./mechepro/Dockerfile # Path to your Django Dockerfile
-    plan: starter # or whatever plan suits your needs
+    plan: free # or whatever plan suits your needs
     envVars:
       - key: DATABASE_URL
         value: ${DATABASE_URL} # Link to your Render PostgreSQL or external DB
