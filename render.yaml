@@ -38,9 +38,9 @@ services:
       # Nginx needs to know the internal service names Render assigns
       # Render automatically sets up internal DNS for services
       - key: DJANGO_INTERNAL_URL
-        value: http://django-backend:8000 # Use service name as hostname
+        value: django-backend # Use service name as hostname
       - key: NEXTJS_INTERNAL_URL
-        value: http://nextjs-frontend:3000
+        value: nextjs-frontend # Use service name as hostname
     # Command would be `nginx -g 'daemon off;'` in your Nginx Dockerfile
 
 # Optional: if you want a managed PostgreSQL database
