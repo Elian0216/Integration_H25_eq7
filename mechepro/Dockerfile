@@ -12,7 +12,7 @@ COPY mechepro/requirements.txt /app/
 
 RUN pip install -r requirements.txt --no-deps --no-cache-dir
 
-COPY . /app/
+COPY mechepro/* /app/
 
 EXPOSE 8000
 
