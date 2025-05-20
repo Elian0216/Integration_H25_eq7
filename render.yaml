@@ -31,8 +31,6 @@ services:
     dockerfilePath: ./nginx/Dockerfile # Path to your Nginx Dockerfile
     healthCheckPath: /
     plan: free
-    ports:
-      - 80
     envVars:
       # Nginx needs to know the internal service names Render assigns
       # Render automatically sets up internal DNS for services
