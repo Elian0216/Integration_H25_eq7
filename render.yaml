@@ -31,6 +31,7 @@ services:
     name: mechepro
     env: docker # Use 'docker' for a generic Docker service
     dockerfilePath: ./nginx/Dockerfile # Path to your Nginx Dockerfile
+    dockerContext: ./nginx # Context for the Nginx service
     healthCheckPath: /
     plan: free
     envVars:
