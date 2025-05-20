@@ -3,8 +3,9 @@
 services:
   - type: web
     name: django-backend
-    env: docker
-    dockerfilePath: ./mechepro/Dockerfile # Path to your Django Dockerfile
+    env: python
+    buildCommand: pip install -r requirements.txt --no-deps --no-cache-dir
+    startCommand: gunicorn mechepro.wsgi:application --bind 0.0.0.0:8000
     plan: free # or whatever plan suits your needs
     envVars:
       - key: DATABASE_URL
@@ -18,7 +19,8 @@ services:
   - type: web
     name: nextjs-frontend
     env: docker
-    dockerfilePath: ./frontend/Dockerfile # Path to your Next.js Dockerfile
+    buildCommand: npm install
+    startCommand: npm start
     healthCheckPath: / # A simple health check for Next.js
     plan: free
     envVars:
