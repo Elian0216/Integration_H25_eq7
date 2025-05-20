@@ -28,7 +28,7 @@ services:
         value: https://django-backend.onrender.com/api/ # Link to your Django service
 
   - type: web
-    name: nginx-proxy
+    name: mechepro
     env: docker # Use 'docker' for a generic Docker service
     dockerfilePath: ./nginx/Dockerfile # Path to your Nginx Dockerfile
     healthCheckPath: /
