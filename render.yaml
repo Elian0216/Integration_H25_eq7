@@ -3,7 +3,7 @@
 services:
   - type: web
     name: django-backend
-    env: python
+    env: docker
     dockerfilePath: ./mechepro/Dockerfile # Path to your Django Dockerfile
     plan: starter # or whatever plan suits your needs
     envVars:
@@ -17,7 +17,7 @@ services:
 
   - type: web
     name: nextjs-frontend
-    env: node
+    env: docker
     dockerfilePath: ./frontend/Dockerfile # Path to your Next.js Dockerfile
     healthCheckPath: / # A simple health check for Next.js
     plan: free
