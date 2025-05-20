@@ -1,5 +1,3 @@
-# nginx/entrypoint.sh
-
 #!/bin/sh
 
 # Substitute environment variables into the Nginx template and write to the final config
