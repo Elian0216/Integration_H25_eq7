@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^-4--3d*ib7ywg^me=be91iiynracx^s_yiznf2@m&ehg=)%&h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', "mechepro-backend.onrender.com"]
 
@@ -175,15 +175,15 @@ CSRF_TRUSTED_ORIGINS = [
     'https://mechepro.onrender.com',
 ]
 
-CSRF_COOKIE_SECURE = False # à changer en prod
+CSRF_COOKIE_SECURE = True # à changer en prod
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = True
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 
-SESSION_COOKIE_SECURE = False # à changer en prod
+SESSION_COOKIE_SECURE = True # à changer en prod
 SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = True
 #SESSION_COOKIE_SAMESITE = 'Strict'
 
 # # Enable CORS for all domains
