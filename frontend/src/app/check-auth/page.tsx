@@ -9,7 +9,7 @@ export default function CheckAuth() {
 
   async function checkAuth() {
     try {
-      const response = await fetch("/api/is-auth/", {
+      const response = await fetch(process.env.API_PATH + "is-auth/", {
         method: "GET",
         credentials: "include",
         headers: {
