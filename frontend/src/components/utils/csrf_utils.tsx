@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 const CsrfUtils = () => {
   useEffect(() => {
     const getCsrfToken = async () => {
+        return;
         if (!Cookies.get('csrftoken')) {
           console.log('CSRF token non trouvé');
           try {

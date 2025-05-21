@@ -7,6 +7,7 @@ function postFetch(url: string, data: any) {
       alert("An error occured. " + csrfToken);
       return;
     }
+    console.log(csrfToken);
 
     var res = fetch(url,
         {
