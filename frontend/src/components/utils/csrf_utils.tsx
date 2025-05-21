@@ -16,8 +16,8 @@ const CsrfUtils = () => {
               throw new Error('Erreur lors de la récupération du CSRF token');
             }
             const data = await response.json();
-            console.log(data);
-            Cookies.set('csrftoken', data.csrfToken);
+            // console.log(data);
+            // Cookies.set('csrftoken', data.csrfToken);
 
             console.log('CSRF token trouvé, cookie envoyé :', data.csrfToken);
           } catch (error) {
