@@ -25,7 +25,9 @@ export default function connexion() {
     }
     console.log(map);
     
-    var resp = await postFetch(process.env.API_PATH + "connexion/", map);
+    const url = process.env.API_PATH + "connexion/";
+    console.log(url);
+    var resp = await postFetch(url, map);
     console.log(resp);
     const data = await resp?.json();
     console.log(data);
