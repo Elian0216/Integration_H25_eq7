@@ -162,7 +162,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = False
+# CORS_ALLOW_ALL_ORIGINS = False
 
 # CSRF settings
 CSRF_TRUSTED_ORIGINS = [
@@ -176,12 +176,14 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CSRF_COOKIE_SECURE = False # à changer en prod
-CSRF_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 
 SESSION_COOKIE_SECURE = False # à changer en prod
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_HTTPONLY = False
 #SESSION_COOKIE_SAMESITE = 'Strict'
 
 # # Enable CORS for all domains
@@ -203,6 +205,3 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Uncomment and modify if needed
-# CSRF_COOKIE_DOMAIN = 'localhost'
-CSRF_COOKIE_SAMESITE = 'Lax'

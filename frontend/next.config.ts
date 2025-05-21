@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   env: {
     API_PATH: "https://mechepro-backend.onrender.com/",
+    // API_PATH: "http://localhost:8000/",
   },
   images: {
     domains: ['www.youtube.com'],
