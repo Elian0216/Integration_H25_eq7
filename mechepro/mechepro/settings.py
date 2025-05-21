@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^-4--3d*ib7ywg^me=be91iiynracx^s_yiznf2@m&ehg=)%&h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', "https://mechepro-backend.onrender.com"]
 
 # Alpha vantage API Key
 ALPHA_VANTAGE_API_KEY = 'JLZLZ8M7908MFPY5'
