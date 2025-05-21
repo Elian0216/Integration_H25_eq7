@@ -11,8 +11,15 @@ const CsrfUtils = () => {
           console.log('CSRF token non trouvé');
           try {
             
-            await fetch(process.env.API_PATH + 'csrf/', { method: 'GET' });
-            console.log('CSRF token trouvé, cookie envoyé.');
+            const response = await fetch(process.env.API_PATH + 'csrf/', { method: 'GET' });
+            if (!response.ok) {
+              throw new Error('Erreur lors de la récupération du CSRF token');
+            }
+            const data = await response.json();
+            console.log(data);
+            Cookies.set('csrftoken', data.csrfToken);
+
+            console.log('CSRF token trouvé, cookie envoyé :', data.csrfToken);
           } catch (error) {
             console.error('Erreur lors de la recherche du CSRF token:', error);
           }
