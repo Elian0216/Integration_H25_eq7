@@ -1,26 +1,21 @@
-from .yahooFinance import get_donnees_stock
 from .yahooFinance import get_all_stock_symbols
-from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique
+from .outilsFinanciers import calculer_RSI, trouver_maximums, trouver_minimums, preparer_grapique, detect_divergences
 
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from django.shortcuts import render
 
+import pandas as pd
 import json
 
 ensemble_daction = get_all_stock_symbols()
 
-COULEUR_TEXTE = "white"
+COULEUR_TEXTE = "black"
 COULEUR_FOND = 'white'
 COULEUR_FOND_GRAPHE ='white'
 
 
-def generer_graphique(request):
-    # Test avec AAPL
-    ticker = request.POST.get("symbol", "AAPL")
-    print(ticker)
-    stock_data = get_donnees_stock(ticker, "5y")
-
+def generer_graphique(stock_data, ticker):
     # Creation du graphique
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.15, row_heights=[0.7, 0.3])
     
@@ -76,15 +71,6 @@ def generer_graphique(request):
                 bordercolor="black",  # Border color
                 borderwidth=1,  # Border width
             ),
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(step="all", label="All"),
-                ]),
-            ),
         ),
         yaxis=dict(
             # autorange=True,
@@ -93,21 +79,51 @@ def generer_graphique(request):
         paper_bgcolor=COULEUR_FOND, 
         plot_bgcolor=COULEUR_FOND_GRAPHE,
         font=dict(color=COULEUR_TEXTE),
+        hovermode="x unified",
+        hoverdistance=10,
+        hoverlabel=dict(
+            bgcolor="rgba(255, 255, 255, 0.8)",
+        )
     )
 
-    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
-    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=False)
+    fig.update_xaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=True, gridcolor="lightgrey", gridwidth=0.5, nticks=20, zeroline=False, showspikes=True, spikemode='across', spikesnap='cursor', spikedash='solid', spikethickness=1, tickformat="%Y-%m-%d", tickangle=0)
+    fig.update_yaxes(tickfont=dict(color=COULEUR_TEXTE), showgrid=True, tickformat=".2f", gridcolor="lightgrey", gridwidth=0.5, nticks=25, showspikes=True, spikemode='across', spikesnap='cursor', showline=False, spikedash='solid', zeroline=False)
     fig.update_layout(legend=dict(font=dict(color=COULEUR_TEXTE)))
 
-    # fig.add_trace(
-    #     go.Scatter(
-    #         x=stock_data.index,
-    #         y=stock_data["Close"].rolling(window=20).mean(),  # Moyenne mobile de 20 jours
-    #         mode="lines",
-    #         name="Moyenne mobile (20)",
-    #         line=dict(color="blue"),
-    #     )
-    # )
+    # Moyennes mobiles
+    # Moyenne mobile exponentielle de 20 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=20, adjust=False).mean().to_list(),  # Exponential Moving Average de 20 jours
+            mode="lines",
+            name="MME (20)",
+            line=dict(color="#4cc9f0"),
+        )
+    )
+
+    # Moyenne mobile exponentielle de 50 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=50, adjust=False).mean().to_list(),
+            mode="lines",
+            name="MME (50)",
+            line=dict(color="#4361ee"),
+        )
+    )
+
+    # Moyenne mobile exponentielle de 200 jours
+    fig.add_trace(
+        go.Scatter(
+            x=stock_data['index'],
+            y=pd.Series(stock_data["Close"]).ewm(span=200, adjust=False).mean().to_list(),
+            mode="lines",
+            name="MME (200)",
+            line=dict(color="#3a0ca3"),
+        )
+    )
+
 
     # ANALYSE DU GRAHPIQUE
     ## Fractales
@@ -170,7 +186,45 @@ def generer_graphique(request):
     #     fillcolor="LightSkyBlue",
     #     opacity=0.3,
     #     layer="below",
-    # )        
+    # )
+
+    ### DIVERGENCES
+    divergences = detect_divergences(maximums + minimums, RSI_data)
+    # print("Divergences détectées : ", divergences)
+
+    # Dessiner les lignes de divergence
+    for div in divergences:
+        # Price line
+        fig.add_shape(
+            type="line",
+            x0=div['points'][0][0],
+            y0=div['points'][0][1],
+            x1=div['points'][1][0],
+            y1=div['points'][1][1],
+            line=dict(
+                color="#003924" if div['type'] == 'bullish' else "#650000",
+                width=3,
+                dash="solid",
+            ),
+            row=1,
+            col=1
+        )
+        
+        # RSI line
+        fig.add_shape(
+            type="line",
+            x0=div['rsi_points'][0][0],
+            y0=div['rsi_points'][0][1],
+            x1=div['rsi_points'][1][0],
+            y1=div['rsi_points'][1][1],
+            line=dict(
+                color="#003924" if div['type'] == 'bullish' else "#650000",
+                width=3,
+                dash="solid",
+            ),
+            row=2,
+            col=1
+        )
         
 
     fig_json = json.loads(fig.to_json())

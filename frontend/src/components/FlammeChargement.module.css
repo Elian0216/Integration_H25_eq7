@@ -1,0 +1,11 @@
+@keyframes flicker {
+    0% { opacity: 1; transform: translateY(0) scaleX(1); }
+    25% { opacity: 0.75; transform: translateY(-2px) scaleX(0.95); }
+    50% { opacity: 1; transform: translateY(0) scaleX(1); }
+    75% { opacity: 0.75; transform: translateY(-1px) scaleX(0.98); }
+    100% { opacity: 1; transform: translateY(0) scaleX(1); }
+}
+
+.animateFlicker {
+    animation: flicker 1.5s linear infinite;
+}

@@ -2,8 +2,8 @@ import yfinance as yf
 import pandas as pd
 
 
-def get_donnees_stock(ticker, period="1y"):
-    stock_data = yf.download(ticker, period=period) #, rounding=True
+def get_donnees_stock(ticker, period="1y", interval="1d"):
+    stock_data = yf.download(ticker, period=period, interval=interval) #, rounding=True
     stock_data_formatte = {}
 
     for colonne in stock_data.columns:

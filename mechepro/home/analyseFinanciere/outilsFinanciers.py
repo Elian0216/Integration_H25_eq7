@@ -176,6 +176,104 @@ def preparer_grapique(data):
         resultat.append((element, cree_rectangle(premiere_liste[element])))
     return resultat
 
+### DIVERGENCES
+def calculer_pente(x1, y1, x2, y2):
+    """Calculate slope between two points"""
+    if x2 == x1:
+        return float('inf')
+    return (y2 - y1) / (x2 - x1)
+
+def detect_divergences( fractals, rsi_data, min_slope_diff=0.001, min_price_change=0.01, min_candles=5, max_candles=50):
+    """
+    Détecte les divergences entre le prix et le RSI en vérifiant plusieurs fractales suivantes
+    
+    Args:
+        stock_data: Données du stock
+        fractals: Liste des fractales (maximums et minimums)
+        rsi_data: Données RSI
+        min_slope_diff: Différence minimale entre les pentes pour considérer une divergence
+        min_price_change: Changement minimal du prix en pourcentage
+        min_candles: Nombre minimal de bougies entre deux points
+        max_candles: Nombre maximal de bougies entre deux points
+    """
+    divergences = []
+    
+    # Trier les fractales par date
+    fractals = sorted(fractals, key=lambda x: x.date)
+    
+    for i in range(len(fractals)):
+        f1 = fractals[i]
+        
+        # Vérifier les 3 fractales suivantes du même type
+        checked_count = 0
+        for j in range(i + 1, len(fractals)):
+            if checked_count >= 2:  # Arrêter après avoir vérifié 2 fractales suivantes
+                break
+                
+            f2 = fractals[j]
+            
+            # Vérifier si les deux fractales sont du même type (Max ou Min)
+            if f1.est_max != f2.est_max:
+                continue
+                
+            checked_count += 1
+            
+            # Vérifier la fenêtre temporelle
+            candles_between = (f2.date - f1.date).days
+            if not (min_candles <= candles_between <= max_candles):
+                continue
+                
+            try:
+                # Calculer la pente du prix
+                price_slope = calculer_pente(f1.date.timestamp(), f1.montant, 
+                                           f2.date.timestamp(), f2.montant) * 10**6
+                
+                # Obtenir les valeurs RSI correspondantes
+                rsi1 = float(rsi_data[rsi_data['index'] == f1.date]['RSI'].iloc[0])
+                rsi2 = float(rsi_data[rsi_data['index'] == f2.date]['RSI'].iloc[0])
+                
+                # Calculer la pente du RSI
+                rsi_slope = calculer_pente(f1.date.timestamp(), rsi1,
+                                         f2.date.timestamp(), rsi2) * 10**6
+                
+                # Vérifier la différence de pente
+                if abs(price_slope) < min_slope_diff and abs(rsi_slope) < min_slope_diff:
+                    print(f"Price slope: {price_slope}, RSI slope: {rsi_slope}, min slope diff: {min_slope_diff}")
+                    continue
+                
+                # Vérifier le changement de prix
+                price_change = abs(f2.montant - f1.montant) / f1.montant
+                if price_change < min_price_change:
+                    continue
+                    
+                # Détecter divergence haussière (prix baisse mais RSI monte)
+                if (f1.est_max == False and  # Vérifier que ce sont des minimums
+                    price_slope < 0 and rsi_slope > 0 and 
+                    rsi1 < 40):  # RSI en zone de survente
+                    divergences.append({
+                        'type': 'bullish',
+                        'points': [(f1.date, f1.montant), (f2.date, f2.montant)],
+                        'rsi_points': [(f1.date, rsi1), (f2.date, rsi2)]
+                    })
+                    
+                # Détecter divergence baissière (prix monte mais RSI baisse)
+                elif (f1.est_max == True and  # Vérifier que ce sont des maximums
+                      price_slope > 0 and rsi_slope < 0 and 
+                      rsi1 > 60):  # RSI en zone de surachat
+                    divergences.append({
+                        'type': 'bearish',
+                        'points': [(f1.date, f1.montant), (f2.date, f2.montant)],
+                        'rsi_points': [(f1.date, rsi1), (f2.date, rsi2)]
+                    })
+                    
+            except (IndexError, KeyError) as e:
+                print(f"Erreur lors du traitement des fractales: {e}")
+                continue
+                
+    return divergences
+
+
+
 if __name__ == "__main__":
     data=get_donnees_stock("AAPL")
     #liste= trouver_k(get_donnees_stock("AAPL"))
