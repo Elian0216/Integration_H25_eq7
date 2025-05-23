@@ -5,7 +5,6 @@ from djongo.models import CheckConstraint, Q
 from djongo import models
 import json
 
-# Create your models here.
 
 
 class Utilisateur(models.Model):
