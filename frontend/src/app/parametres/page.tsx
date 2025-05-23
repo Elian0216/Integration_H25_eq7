@@ -117,8 +117,13 @@ export default function Parametres() {
         <div className="flex flex-col items-center">
           <Button
             onClick={() => {
-              postFetch(process.env.API_PATH + "deconnexion/", {});
-              window.location.href = "/";
+              postFetch(process.env.API_PATH + "deconnexion/", {})?.then((res) => {
+                if (!res.ok) {
+                  console.error(res);
+                  return;
+                }
+                window.location.href = "/";
+              });
             }}
             variant="destructive"
             size="sm"
