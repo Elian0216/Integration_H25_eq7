@@ -29,6 +29,8 @@ export default function inscription() {
     
     if (data.bool) {
       window.location.href = "/connexion";
+    } else {
+      alert(data.message);
     }
   }
 
