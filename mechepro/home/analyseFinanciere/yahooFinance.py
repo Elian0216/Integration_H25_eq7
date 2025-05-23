@@ -8,22 +8,12 @@ def get_donnees_stock(ticker, period="1y", interval="1d"):
 
     for colonne in stock_data.columns:
         stock_data_formatte[colonne[0]] = stock_data[colonne].to_numpy().tolist()
-        # print(stock_data[colonne].to_numpy().tolist())
-
     stock_data_formatte["index"] = stock_data.index
-
-    #print(stock_data_formatte)
 
     return stock_data_formatte
 
-
-# Pour tester le script directement
-if __name__ == "__main__":
-    print(get_donnees_stock("AAPL"))
-
-
 def get_all_stock_symbols():
-    # lire les symboles et leur description du fichier
+    # lire les symboles et leur description à  partir du fichier
     fichier = open("home/analyseFinanciere/yahoo_tickers.csv")
 
     # Vérifier que les symboles sont valides avec yfinance

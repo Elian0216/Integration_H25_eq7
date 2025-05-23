@@ -59,12 +59,6 @@ def calculer_MACD(data, short_period=12, long_period=26, signal_period=9):
 #              index      MACD  Signal_Line
 #       246 2025-03-13 -4.716033    -1.383196
 
-# Exemple d'utilisation
-# if __name__ == "__main__":
-#     data = get_donnees_stock("AAPL")
-#     macd_data = calculer_MACD(data)
-#     print(macd_data)
-
 
 def moyenne_mobile(data):
     prix_fermeture = data['Close']
@@ -74,7 +68,6 @@ def moyenne_mobile(data):
     return round(somme/prix_fermeture.__len__(), 3)
 
 def trouver_maximums(data, n=10):
-#cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante
     """
     Cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante.
 
@@ -99,6 +92,7 @@ def trouver_maximums(data, n=10):
 
 def trouver_minimums(data, n=10):
 #cherche les bougies à la fin d'une suite décroissante et au début d'une suite croissante
+#meme principe que la fonction trouver_maximums
     minimums = data["Low"] #liste de min quotidiens
     dates = data['index']
     fractales_min=[]
@@ -117,14 +111,15 @@ def trouver_k(data):
     points_seulement_montant = []
     for point in points:
         points_seulement_montant.append((point.montant, 0))
+
     # méthode du coude
-    n=1
+    n=1 #nombre de clusters dans l'essai.
     resultat_possible=[]
     while n<6:
         resultat_possible.append(KMeans(n_clusters=n, max_iter=300).fit(points_seulement_montant))
         n+=1
 
-    #pente: diff inertie / diff k(tjrs 1)
+    #pente: diff inertie / diff k(tjrs 1), donc pente = différence d'inertie.
     #comparaison des différences d'inertie. Le plus grand est le coude
     i=0
     difference_pente=[]
@@ -271,10 +266,3 @@ def detect_divergences( fractals, rsi_data, min_slope_diff=0.001, min_price_chan
                 continue
                 
     return divergences
-
-
-
-if __name__ == "__main__":
-    data=get_donnees_stock("AAPL")
-    #liste= trouver_k(get_donnees_stock("AAPL"))
-    print(preparer_grapique(data))

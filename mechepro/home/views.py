@@ -31,14 +31,12 @@ from .analyseFinanciere.yahooFinance import get_donnees_stock
 @ensure_csrf_cookie
 def connexion(request):
     if request.method == 'POST':
-        print("--- " + str(request.POST))
         nom_utilisateur = request.POST['nom_utilisateur']
         mot_de_passe = request.POST['mot_de_passe']
         utilisateur = authenticate(
             request, username=nom_utilisateur, password=mot_de_passe)
 
         if utilisateur is not None:
-            print("Connexion réussie!")
             login(request, utilisateur)
             return JsonResponse({
                 "message": "Connexion réussie",
@@ -48,7 +46,6 @@ def connexion(request):
             # return redirect('/')
             # return render(request, 'home.html')
         else:
-            print("Échec de la connexion.")
             return JsonResponse({
                 "message": "Échec de la connexion",
                 "bool": False
@@ -58,7 +55,6 @@ def connexion(request):
             #     })
         # return render(request, 'home.html')
     else:
-        print("Pas de post")
         return JsonResponse({"message": "Mauvais type d'appel", "bool": False})
 
 
@@ -87,10 +83,6 @@ def see_connexion(request):
 def inscrire_utilisateur(request):
     if request.method != "POST":
         return
-    # Conversion de la date si fournie
-    # print("Date de naissance avant conversion : ", date_de_naissance)
-    # date_de_naissance = parse_date(date_de_naissance) if date_de_naissance else None
-    # print("Date de naissance apres conversion : ", date_de_naissance)
     try:
         nom_utilisateur = request.POST['nom_utilisateur']
         mot_de_passe = request.POST['mot_de_passe']
@@ -101,22 +93,11 @@ def inscrire_utilisateur(request):
         date_de_naissance = request.POST['date_naissance']
 
         # Vérification de l'existence de l'utilisateur
-        if Utilisateur.check(nom_utilisateur=nom_utilisateur):
+        if Utilisateur.check(nom_utilisateur=nom_utilisateur) or User.objects.filter(username=nom_utilisateur):
             messages.error(
                 request, "Un utilisateur avec ce nom d'utilisateur existe déjà.")
-            print("L'utilisateur existe")
             return JsonResponse({
                 "message": "Un utilisateur avec ce nom d'utilisateur existe déjà.",
-                "bool": False
-            })
-
-        if User.objects.filter(username=nom_utilisateur):
-            messages.error(
-                request, "Un utilisateur Django avec ce nom d'utilisateur existe déjà.")
-            print("L'utilisateur Django existe")
-
-            return JsonResponse({
-                "message": "Un utilisateur Django avec ce nom d'utilisateur existe déjà.",
                 "bool": False
             })
          # creation
@@ -190,12 +171,10 @@ def get_csrf_token(request):
 
 @ensure_csrf_cookie
 def is_auth(request):
-    if (request.user.is_authenticated):
+    if request.user.is_authenticated:
         username = request.user.username
-        print("L'utilisateur est auth")
         return JsonResponse({"message": f"L'utilisateur ({username}) est auth", "bool": True})
     else:
-        print("L'utilisatateur n'est pas auth")
         return JsonResponse({"message": "L'utilisatateur n'est pas auth", "bool": False})
 
 
@@ -216,10 +195,8 @@ def obtenir_favoris(request):
         utilisateur = Utilisateur.objects.get(utilisateur=request.user)
         # Supposons que 'favoris' est un champ List ou JSONField
         tickers = utilisateur.obtenir_favoris()  # ex: ['AAPL', 'GOOG']
-        # tickers=utilisateur.obtenir_favoris()
         return JsonResponse({"tickersFavoris": tickers}, status=200)
     except Exception as e:
-        print(f"Erreur lors de l'obtention des favoris: {str(e)}")
         return JsonResponse({
             "message": f"Erreur lors de l'obtention des favoris: {str(e)}"
         }, status=500)
@@ -239,7 +216,6 @@ def ajouter_favoris(request):
 
             return JsonResponse({"message": "Ticker ajouté aux favoris"}, status=200)
         except Exception as e:
-            print(f"Erreur lors de l'ajout des favoris: {str(e)}")
             return JsonResponse({
                 "message": f"Erreur lors de l'ajout des favoris: {str(e)}"
             }, status=500)
@@ -256,16 +232,14 @@ def enlever_favoris(request):
             utilisateur = Utilisateur.objects.get(utilisateur=request.user)
 
             # Vérifier si le ticker est dans les favoris
-            if ticker not in utilisateur.favoris:
+            if utilisateur.est_favoris(ticker):
+                # Enlever le ticker des favoris
+                utilisateur.enlever_favoris(ticker)
+                utilisateur.save()
+                return JsonResponse({"message": "Ticker enlevé des favoris"}, status=200)
+            else:
                 return JsonResponse({"message": "Ticker non trouvé dans les favoris"}, status=400)
-
-            # Enlever le ticker des favoris
-            utilisateur.enlever_favoris(ticker)
-            utilisateur.save()
-
-            return JsonResponse({"message": "Ticker enlevé des favoris"}, status=200)
         except Exception as e:
-            print(f"Erreur lors de l'enlèvement des favoris: {str(e)}")
             return JsonResponse({
                 "message": f"Erreur lors de l'enlèvement des favoris: {str(e)}"
             }, status=500)
@@ -282,7 +256,7 @@ def est_favori(request):
             utilisateur = Utilisateur.objects.get(utilisateur=request.user)
 
             # Vérifier si le ticker est dans les favoris
-            if ticker in utilisateur.favoris:
+            if utilisateur.est_favoris(ticker):
                 return JsonResponse({"message": "Ticker trouvé dans les favoris", "bool": True}, status=200)
             else:
                 return JsonResponse({"message": "Ticker non trouvé dans les favoris", "bool": False}, status=400)
