@@ -180,13 +180,10 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 
 SESSION_COOKIE_SECURE = False # à changer en prod
-#SESSION_COOKIE_SAMESITE = 'Strict'
 
-# # Enable CORS for all domains
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-# # Add CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -198,7 +195,6 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_EXPOSE_HEADERS = ["X-CSRFToken"]
 
-# CORS_ALLOW_HEADERS = '*'
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -207,10 +203,8 @@ CORS_ALLOW_HEADERS = [
     'dnt',
     'origin',
     'user-agent',
-    'x-csrftoken', # Add this line
+    'x-csrftoken',
     'x-requested-with',
 ]
 
-# Uncomment and modify if needed
-# CSRF_COOKIE_DOMAIN = 'localhost'
 CSRF_COOKIE_SAMESITE = 'Lax'
