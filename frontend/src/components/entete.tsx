@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link'
-import { Logo } from './logo'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import React from 'react'
@@ -8,10 +7,24 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { ModeToggle } from './ui/toggler'
 import { checkAuth } from '@/utils/fetch'
-import { set } from 'date-fns'
 import { TextEffect } from './ui/text-effect'
 import { AnimatedGroup } from './ui/animated-group'
 
+
+/**
+ * Composant qui représente l'en-tête de la page.
+ * 
+ * Ce composant gère l'état du menu et l'état de défilement de la page.
+ * Il vérifie l'authentification de l'utilisateur pour afficher les éléments de menu pertinents.
+ * Le menu contient des liens de navigation vers différentes sections du site.
+ * 
+ * États :
+ * - `menuState` : booléen indiquant si le menu est ouvert ou fermé.
+ * - `isScrolled` : booléen indiquant si la page est défilée au-delà d'un certain point.
+ * - `menuItems` : liste des éléments de menu à afficher.
+ * - `loaded` : booléen indiquant si les éléments de menu ont été chargés.
+ * - `isAuth` : booléen indiquant si l'utilisateur est authentifié.
+ */
 
 export const HeroHeader = () => {
     const [menuState, setMenuState] = React.useState(false)
@@ -22,6 +35,16 @@ export const HeroHeader = () => {
 
     
     React.useEffect(() => {
+        /**
+         * Charge les éléments du menu en fonction de l'état d'authentification
+         * de l'utilisateur.
+         * 
+         * Si l'utilisateur est authentifié, charge les éléments de menu
+         * "Favoris", "Analyse", "À propos" et "Paramètres".
+         * Sinon, charge les éléments de menu "Analyse" et "À propos".
+         * 
+         * Une fois les éléments chargés, défini l'état `loaded` à `true`.
+         */
       async function loadMenuItems() {
         if (await checkAuth()) {
           setMenuItems([
@@ -42,6 +65,15 @@ export const HeroHeader = () => {
 
       loadMenuItems();
 
+    /**
+     * Mets à jour l'état `isScrolled` en fonction de la position de défilement
+     * actuelle.
+     * 
+     * Si la position de défilement est supérieure à 50, défini `isScrolled` à
+     * `true`. Sinon, le défini à `false`.
+     * 
+     * Utilisé pour afficher ou masquer le menu en fonction de la position de défilement.
+     */
       const handleScroll = () => {
           setIsScrolled(window.scrollY > 50)
       }

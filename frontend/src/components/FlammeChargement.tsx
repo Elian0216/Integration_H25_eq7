@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './FlammeChargement.module.css'
 
-
+// Icone de chargement lors de la génération du graphique d'analyse
 const FlammeChargement = () => {
   return (
     <div className="relative flex items-center justify-center">

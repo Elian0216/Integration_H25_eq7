@@ -1,8 +1,16 @@
 'use client'
-import React from 'react'
+
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
+
+/**
+ * CsrfUtils est un composant React qui utilise le hook useEffect pour vérifier 
+ * la présence d'un token CSRF dans les cookies lors du montage du composant. 
+ * Si le token n'est pas trouvé, il effectue une requête GET pour obtenir un 
+ * nouveau token CSRF depuis l'API spécifiée, et l'enregistre en tant que cookie. 
+ * Cette opération aide à sécuriser les requêtes POST ultérieures contre les attaques CSRF.
+ */
 
 const CsrfUtils = () => {
   useEffect(() => {
@@ -22,7 +30,7 @@ const CsrfUtils = () => {
       };
   
       getCsrfToken();
-    }, []); // Empty dependency array means run once on mount
+    }, []);
   
   return (
     null

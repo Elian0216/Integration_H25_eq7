@@ -1,4 +1,3 @@
-import { Logo } from '@/components/logo'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -21,7 +20,8 @@ const links = [
   },
 ]
 
-export  const FooterSection = () => {
+// Composant du bas de page
+export const FooterSection = () => {
     return (
       <footer className="py-6 md:py-10 
       bg-gray-300 dark:bg-[#1F1F1F]">
