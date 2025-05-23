@@ -16,6 +16,16 @@ COULEUR_FOND_GRAPHE ='white'
 
 
 def generer_graphique(stock_data, ticker):
+    """
+    Génère un graphique combinant un candlestick chart et un RSI (Relative Strength Index).
+
+    Args:
+        stock_data (pd.DataFrame): Les données boursières contenant les colonnes 'index' (dates), 'Open', 'High', 'Low', 'Close'.
+        ticker (str): Le symbole boursier (ticker) pour le titre.
+
+    Returns:
+        dict: Un dictionnaire contenant la configuration du graphique au format JSON pour Plotly.
+    """
     # Creation du graphique
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.15, row_heights=[0.7, 0.3])
     
@@ -159,7 +169,7 @@ def generer_graphique(stock_data, ticker):
     )
 
     ## Supports et Résistances
-    # Draw a rectangle for supports and resistances
+    # Dessine un rectangle pour les supports et les resistances
     supports_resistances = preparer_grapique(stock_data)
     
     for i in range(len(supports_resistances)):
@@ -167,8 +177,6 @@ def generer_graphique(stock_data, ticker):
             type="rect",
             x0=supports_resistances[i][1][0][0],
             x1=supports_resistances[i][1][0][1],
-            # y0=supports_resistances[i][1][1][0],
-            # y1=supports_resistances[i][1][1][1],
             y0=supports_resistances[i][0] + (supports_resistances[i][1][1][0] - supports_resistances[i][0]) * 0.25,
             y1=supports_resistances[i][0] + (supports_resistances[i][1][1][1] - supports_resistances[i][0]) * 0.25,
             line=dict(color="RoyalBlue"),
@@ -176,21 +184,9 @@ def generer_graphique(stock_data, ticker):
             opacity=0.3,
             layer="below",
         )
-    # fig.add_shape(
-    #     type="rect",
-    #     x0=supports_resistances[0][1][0][0],
-    #     x1=supports_resistances[0][1][0][1],
-    #     y0=supports_resistances[0][1][1][0],
-    #     y1=supports_resistances[0][1][1][1],
-    #     line=dict(color="RoyalBlue"),
-    #     fillcolor="LightSkyBlue",
-    #     opacity=0.3,
-    #     layer="below",
-    # )
 
     ### DIVERGENCES
     divergences = detect_divergences(maximums + minimums, RSI_data)
-    # print("Divergences détectées : ", divergences)
 
     # Dessiner les lignes de divergence
     for div in divergences:
@@ -210,7 +206,7 @@ def generer_graphique(stock_data, ticker):
             col=1
         )
         
-        # RSI line
+        # Ligne RSI
         fig.add_shape(
             type="line",
             x0=div['rsi_points'][0][0],
@@ -230,23 +226,8 @@ def generer_graphique(stock_data, ticker):
     fig_json = json.loads(fig.to_json())
     fig_json["config"] = {
         "scrollZoom": True,
-        # "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
         "modeBarButtonsToAdd": ["drawline", "drawrect", "eraseshape"],
         "modeBarOrientation": "h",
     }
 
     return fig_json
-
-
-    # === Ancien code Django ===
-    # Convertir le graphique en HTML
-    # graph_html = fig.to_html(
-    #         full_html=False,
-    #         config={
-    #             "scrollZoom": True,
-    #             "modeBarButtonsToAdd": ["drawline", "drawopenpath", "drawcircle", "drawrect", "eraseshape"],
-    #         }
-    #     )
-
-    # return render(request, "page_analyse.html", {"graph_html": graph_html, "symbols": ensemble_daction})
-

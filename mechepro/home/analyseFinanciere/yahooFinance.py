@@ -3,6 +3,17 @@ import pandas as pd
 
 
 def get_donnees_stock(ticker, period="1y", interval="1d"):
+    """
+    Récupère les données boursières pour un symbole donné.
+
+    Args:
+        ticker (str): Le symbole boursier à chercher.
+        period (str): La période de temps à récupérer (par exemple 1y, 2y, etc.). Par défaut 1 année.
+        interval (str): L'intervalle de temps entre chaque donnée (par exemple 1d, 1w, etc.). Par défaut 1 jour.
+
+    Returns:
+        dict: Un dictionnaire contenant les données boursières formatées.
+    """
     stock_data = yf.download(ticker, period=period, interval=interval) #, rounding=True
     stock_data_formatte = {}
 

@@ -7,8 +7,8 @@ from home.analyseFinanciere.Fractale import Fractale
 from home.analyseFinanciere.yahooFinance import get_donnees_stock
 
 
-#les paramètres data représentent la sortie de la fonction get_donnees_stock dans yahooFinance.py
-#c'est dans con appel où la période de temps sera définie.
+# Les paramètres data représentent la sortie de la fonction get_donnees_stock dans yahooFinance.py
+# C'est dans con appel où la période de temps sera définie.
 def calculer_RSI(data, period=14):
     # Convertir la liste de dictionnaires en DataFrame
     df = pd.DataFrame(data)
@@ -72,11 +72,11 @@ def trouver_maximums(data, n=10):
     Cherche les bougies à la fin d'une suite croissante et au début d'une suite décroissante.
 
     Parameters:
-    data (pandas.DataFrame): les données du stock avec les colonnes 'High' et 'index'
-    n (int): le nombre de bougies à vérifier avant et après la bougie en cours
+        data (pandas.DataFrame): les données du stock avec les colonnes 'High' et 'index'
+        n (int): le nombre de bougies à vérifier avant et après la bougie en cours
 
     Returns:
-    list: une liste de Fractale contenant les maximums trouvés
+        list: une liste de Fractale contenant les maximums trouvés
     """
     maximums = data["High"] #liste de max quotidiens
     dates = data['index']
@@ -107,6 +107,19 @@ def trouver_minimums(data, n=10):
 
 
 def trouver_k(data):
+    """
+    Identifie le nombre optimal de clusters dans les données de fractales et regroupe les fractales en clusters.
+
+    Cette fonction utilise la méthode du coude pour déterminer le nombre optimal de clusters (k) en fonction des points de fractales de maximums et minimums trouvés dans les données. 
+    Une fois k déterminé, elle regroupe les fractales en clusters et renvoie un dictionnaire associant chaque centre de cluster à la liste des fractales qui lui sont assignées.
+
+    Parameters:
+        data (pandas.DataFrame): Les données du stock contenant les colonnes 'High', 'Low' et 'index'.
+
+    Returns:
+        dict: Un dictionnaire où les clés sont les centres des clusters et les valeurs sont des listes de fractales appartenant à chaque cluster.
+    """
+
     points = trouver_minimums(data) + trouver_maximums(data)
     points_seulement_montant = []
     for point in points:
@@ -151,6 +164,15 @@ def trouver_k(data):
     return dict_clusters
 
 def cree_rectangle(liste_fractales):
+    """
+    Crée un rectangle qui entoure les points de la liste_fractales.
+
+    Retourne un tuple de deux tuples. Le premier tuple contient les bornes de la date, le deuxième les bornes du montant.
+
+    :param liste_fractales: une liste de Fractale
+    :return: un tuple de deux tuples
+    :rtype: ( (datetime.date, datetime.date), (float, float) )
+    """
     ymax= -5
     ymin=1000000
     xmin=liste_fractales[0].date
@@ -165,6 +187,17 @@ def cree_rectangle(liste_fractales):
 
 
 def preparer_grapique(data):
+    """
+    Prépare les données pour le graphique.
+
+    Fait deux choses :
+    - appelle trouver_k pour trouver les clusters de fractales
+    - appelle cree_rectangle pour trouver les bornes de chaque cluster
+
+    :param data: les données du stock
+    :return: une liste de tuple. Le premier élément est le centroide, le deuxième est un tuple de deux éléments, le premier élément est un tuple de deux dates (borne inférieure et supérieure de la date), le deuxième élément est un tuple de deux float (borne inférieure et supérieure du montant)
+    :rtype: [ (float, ( (datetime.date, datetime.date), (float, float) ) ) ]
+    """
     premiere_liste = trouver_k(data)
     resultat=[]
     for element in premiere_liste:
@@ -173,7 +206,7 @@ def preparer_grapique(data):
 
 ### DIVERGENCES
 def calculer_pente(x1, y1, x2, y2):
-    """Calculate slope between two points"""
+    """Calcule la pente entre deux points"""
     if x2 == x1:
         return float('inf')
     return (y2 - y1) / (x2 - x1)
