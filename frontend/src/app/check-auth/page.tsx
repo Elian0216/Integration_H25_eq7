@@ -4,12 +4,24 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import Retour from "@/components/retour";
 
+  /**
+   * CheckAuth est un composant Next.js qui vérifie si l'utilisateur est connecté
+   * en faisant une requête GET au backend sur l'endpoint "is-auth/". Si la requête est
+   * réussie, le statut de l'authentification est mis à jour dans l'état local.
+   * Si une erreur se produit, le statut de l'authentification est mis à jour avec
+   * un message d'erreur.
+   *
+   * Le composant affiche le statut de l'authentification actuel, ainsi qu'un bouton
+   * "Réessayer" qui permet de relancer la vérification de l'authentification.
+   * 
+   * C'est une page qui test si l'utilisateur est connecté ou non.
+   */
 export default function CheckAuth() {
   const [authStatus, setAuthStatus] = useState<string>("Vérification ...");
 
   async function checkAuth() {
     try {
-      const response = await fetch("/api/is-auth/", {
+      const response = await fetch(`${process.env.API_PATH}is-auth/`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -25,6 +37,7 @@ export default function CheckAuth() {
     }
   }
 
+  // Effectuer la vérification de l'authentification au montage
   useEffect(() => {
     checkAuth();
   }, []);

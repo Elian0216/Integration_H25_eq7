@@ -1,32 +1,30 @@
 'use client'
-import { Logo } from "@/components/logo";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { HeroHeader } from "@/components/entete";
-import { FooterSection } from "@/components/basDePage";
 import Form from "next/form";
 import { postFetch } from "@/utils/fetch";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 
 
 export default function inscription() {
+  // Traitement du formulaire d'inscription
   async function handleForm(e: any) {
-
+    // On recupere les valeurs des champs du formulaire en les mettant dans un dictionnaire
     let inputs = document.getElementsByTagName("input");
     var map: { [key: string]: string } = {}
     for (let index = 0; index < inputs.length; index++) {
       const element = inputs[index];
       map[element.name] = element.value;
     }
-    console.log(map);
     
     var resp = await postFetch(process.env.API_PATH + "inscription/", map);
-    console.log(resp);
     const data = await resp?.json();
-    console.log(data);
     
+    // Si la reponse est un succes, on redirige vers la page de connexion
+    // Sinon, on affiche un message d'erreur
     if (data.bool) {
       window.location.href = "/connexion";
     } else {

@@ -1,42 +1,22 @@
 "use client";
 
-import Graphique from "@/components/graphique";
-import Retour from "@/components/retour";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import Favoris from "@/components/ui/favoris";
-import { Plus, Search } from "lucide-react";
-import { AsyncCallbackSet } from "next/dist/server/lib/async-callback-set";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { FooterSection } from "@/components/basDePage";
+import { Search } from "lucide-react";
+import React, { useState } from "react";
 import { checkAuth } from "@/utils/fetch";
 
-const transitionVariants = {
-  item: {
-    hidden: {
-      opacity: 0,
-      filter: "blur(12px)",
-      y: 12,
-    },
-    visible: {
-      opacity: 1,
-      filter: "blur(0px)",
-      y: 0,
-      transition: {
-        type: "spring",
-        bounce: 0.3,
-        duration: 1.5,
-      },
-    },
-  },
-};
 
-
+  /**
+   * La page d'analyse d'une action principale. Elle permet de saisir un code boursier
+   * dans une barre de recherche et de rediriger vers la page d'analyse de l'action.
+   */
 const Analyse = () => {
+  // Contenu du champ de recherche
   const [query, setQuery] = useState("");
+
+  // Si l'utilisateur n'est pas connecté, préparer à rediriger vers la page de connexion
   let isAuth = true;
   checkAuth().then((bool) => {
-    console.log("ABCD " + bool);
     isAuth = bool;
   });
 
@@ -44,21 +24,15 @@ const Analyse = () => {
     e.preventDefault();
     // Si le champ de recherche est vide, ne rien faire
     if (!query) return;
+    // On redirige vers la page d'analyse de l'action seulement si l'utilisateur est connecté
     if (!isAuth)
       window.location.href = "/connexion";
     else
       window.location.href = `/analyse/${query.toUpperCase()}`;
   };
 
-  const handleAjouterFavoris = () => {
-    // Logique pour ajouter le token aux favoris
-    // console.log(`Ajouter ${token} aux favoris`);
-  };
-
-
   return (
     <>
-    
       <AnimatedGroup
         variants={{
           container: {

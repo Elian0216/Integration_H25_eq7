@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
 import { Button } from '@/components/ui/button'
-// import { getCookie } from '@/utils/cookie-utils'
 
 
 async function callTestApi() {
@@ -26,6 +25,12 @@ async function callTestApi() {
     }
   }
 
+/**
+ * Page de test qui affiche un bouton "Test"
+ * qui appelle l'API de test en POST.
+ * 
+ * C'est une page qui test la connexion entre le backend et le frontend. Non nécessaire en production.
+ */
 const page = () => {
   return (
     <div>

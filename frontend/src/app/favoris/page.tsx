@@ -6,13 +6,20 @@ import Link from "next/link";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import { HeroHeader } from "@/components/entete";
-import { FooterSection } from "@/components/basDePage";
 import { postFetch } from "@/utils/fetch";
 
+  /**
+   * Page affichant les actions favoris de l'utilisateur.
+   *
+   * - Charge les favoris via l'API.
+   * - Affiche les favoris sous forme de liste.
+   * - Permet de supprimer un favori via un bouton.
+   */
 export default function Favoris() {
-  const [tickersFavoris, setTickersFavoris] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [tickersFavoris, setTickersFavoris] = useState<string[]>([]); // Liste des favoris
+  const [loading, setLoading] = useState(true); // Indicateur de chargement
 
+  // Charge les favoris via l'API au chargement de la page (au montage)
   useEffect(() => {
     fetch(process.env.API_PATH + "obtenirFavoris/")
       .then((res) => res.json())
@@ -26,10 +33,15 @@ export default function Favoris() {
       });
   }, []);
 
+  /**
+   * Supprime un favori via l'API.
+   * @param {string} ticker - Le ticker du favori à supprimer.
+   */
   const supprimerFavori = async (ticker: string) => {
     try {
       const res = await postFetch(process.env.API_PATH + "supprimerFavori/", {ticker: ticker});
 
+      // Si la suppression a reussi, on met a jour la liste des favoris
       if (res?.ok) {
         setTickersFavoris((prev) =>
           prev.filter((t) => t.toUpperCase() !== ticker.toUpperCase())

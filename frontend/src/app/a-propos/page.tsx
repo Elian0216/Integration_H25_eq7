@@ -1,13 +1,17 @@
 import Image from 'next/image'
-import { HeroHeader } from "@/components/entete";
-import { FooterSection } from "@/components/basDePage";
 import { TextEffect } from "@/components/ui/text-effect";
-import { AnimatedGroup } from "@/components/ui/animated-group";
 
+
+/**
+ * ContentSection est un composant qui contient le contenu de la page " À propos de MèchePro".
+ * Il contient un titre, un paragraphe introductif, un graphique de démonstration, un paragraphe sur la technique d'analyse de MèchePro,
+ * un titre pour la section "Notre équipe", un paragraphe sur l'équipe et une image de l'équipe.
+ * Les éléments sont mis en page avec des Grid et des espaces entre eux.
+ * Les éléments sont animés avec des effets de fade-in-blur.
+ */
 export default function ContentSection() {
     return (
         <>  
-              
         <section className="py-16 md:py-32">     
             <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16">       
                 <TextEffect

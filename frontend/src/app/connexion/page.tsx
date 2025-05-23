@@ -6,30 +6,37 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-
-import { postFetch } from "@/utils/fetch";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 
+import { postFetch } from "@/utils/fetch";
 
 
 
 export default function connexion() {
+  
+  /**
+   * Traitement du formulaire de connexion
+   * @param e L'evenement submit du formulaire
+   * On recupere les valeurs des champs du formulaire
+   * On envoie une requete POST a l'API pour se connecter
+   * Si la reponse est un succes, on redirige vers la page d'analyse
+   * Sinon, on affiche un message d'erreur
+   */
   async function handleForm(e: any) {
-
+    // On recupere les valeurs des champs du formulaire en les mettant dans un dictionnaire
     let inputs = document.getElementsByTagName("input");
     var map: { [key: string]: string } = {}
     for (let index = 0; index < inputs.length; index++) {
       const element = inputs[index];
       map[element.name] = element.value;
     }
-    console.log(map);
     
+    // On envoie une requete POST a l'API pour se connecter
     var resp = await postFetch(process.env.API_PATH + "connexion/", map);
-    console.log(resp);
     const data = await resp?.json();
-    console.log(data);
     
+    // Si la reponse est un succes, on redirige vers la page d'analyse
+    // Sinon, on affiche un message d'erreur
     if (data.bool) {
       window.location.href = "/analyse";
     } else {
@@ -39,7 +46,6 @@ export default function connexion() {
 
   return (
     <>
-      {/*  */}
       <AnimatedGroup>
       <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
         <Form
@@ -48,9 +54,6 @@ export default function connexion() {
         >
           <div className="p-8 pb-6">
             <div>
-              <Link href="/" aria-label="go home">
-                {/* logo ici */}
-              </Link>
               <h1 className="text-title mb-1 mt-4 text-xl font-semibold">
                 Connectez vous à votre compte MèchePro
               </h1>

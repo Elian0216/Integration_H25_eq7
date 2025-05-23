@@ -28,16 +28,21 @@ export default function Parametres() {
   const [status, setStatus] = useState<null | "success" | "error">(null);
   const [message, setMessage] = useState("");
 
+  // Vérification de l'authentification, si l'utilisateur n'est pas connecté, on le redirige vers la page de connexion
   useEffect(() => {
     authProtection();
   }, []);
 
+  // Chargement des données de l'utilisateur au chargement de la page et au changement de l'onglet dans les paramètres
   useEffect(() => {
     if (selected === "Mon compte") {
       fetchUserData();
     }
   }, [selected]);
 
+  /**
+   * Charge les données de l'utilisateur actuel.
+   */
   async function fetchUserData() {
     setLoadingUser(true);
     try {
@@ -60,6 +65,10 @@ export default function Parametres() {
     }
   }
 
+  /**
+   * Fonction pour changer le mot de passe de l'utilisateur.
+   * @param e Le formulaire de changement de mot de passe
+   */
   async function handlePasswordChange(e: React.FormEvent) {
     e.preventDefault();
     setStatus(null);
@@ -79,7 +88,6 @@ export default function Parametres() {
         setMessage(res.message || "Mot de passe mis à jour avec succès.");
         setAncienMotDePasse("");
         setNouveauMotDePasse("");
-        // window.location.reload();
       } else {
         throw new Error(res.message || "Échec de la mise à jour.");
       }
@@ -117,6 +125,7 @@ export default function Parametres() {
         <div className="flex flex-col items-center">
           <Button
             onClick={() => {
+              // Fonction de déconnexion. On redirige vers la page de connexion si la requête de déconnexion est un succcess
               postFetch(process.env.API_PATH + "deconnexion/", {})?.then((res) => {
                 if (!res.ok) {
                   console.error(res);
