@@ -9,7 +9,6 @@ urlpatterns = [
     path('about/', views.see_a_propos, name='about'),
     path('connect/', views.see_connexion, name='connect'),
     
-    # path('creerinscription/', views.inscrire_utilisateur, name='inscrire_utilisateur'),
     path('graphique/', views.get_graphique, name='graphique'),
 
     # APIs

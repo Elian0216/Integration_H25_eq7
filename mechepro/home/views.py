@@ -7,12 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import Utilisateur
-from django.db.models.functions import datetime
 from django.utils import timezone
-from django.utils.dateparse import parse_date
 from django.contrib import messages
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import JsonResponse
 
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie, get_token
@@ -23,13 +21,18 @@ from .analyseFinanciere.alpha_vantage import *
 from .analyseFinanciere.graphique import generer_graphique
 from .analyseFinanciere.yahooFinance import get_donnees_stock
 
-# TODO: Question database pourquoi pas tout utilisateur django par defaut
-
-# Create your views here.
-
 
 @ensure_csrf_cookie
 def connexion(request):
+    """
+    Gère la connexion des utilisateurs.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si la connexion a réussi ou échoué.
+    """
     if request.method == 'POST':
         nom_utilisateur = request.POST['nom_utilisateur']
         mot_de_passe = request.POST['mot_de_passe']
@@ -43,17 +46,11 @@ def connexion(request):
                 "username": nom_utilisateur,
                 "bool": True
             })
-            # return redirect('/')
-            # return render(request, 'home.html')
         else:
             return JsonResponse({
                 "message": "Échec de la connexion",
                 "bool": False
             })
-            # return render(request,"connexion.html",{
-            #         "log_in_faux" : True
-            #     })
-        # return render(request, 'home.html')
     else:
         return JsonResponse({"message": "Mauvais type d'appel", "bool": False})
 
@@ -81,6 +78,15 @@ def see_connexion(request):
 
 
 def inscrire_utilisateur(request):
+    """
+    Inscrit un nouvel utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si l'inscription a réussi ou échoué.
+    """
     if request.method != "POST":
         return
     try:
@@ -144,6 +150,15 @@ def inscrire_utilisateur(request):
 
 
 def get_graphique(request):
+    """
+    Génère un graphique boursier.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Les données JSON pour le graphique.
+    """
     # return generer_graphique(request)
     # Test avec AAPL
     ticker = request.POST.get("symbol", "AAPL")
@@ -159,18 +174,45 @@ def get_graphique(request):
 
 @csrf_exempt
 def test_api(request):
+    """
+    Teste l'API.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message de succès.
+    """
     data = {"message": "Test réussi !"}
     return JsonResponse(data)
 
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
+    """
+    Récupère le token CSRF.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Le token CSRF.
+    """
     token = get_token(request)
     return JsonResponse({"detail": "CSRF token a été généré !"})
 
 
 @ensure_csrf_cookie
 def is_auth(request):
+    """
+    Vérifie si l'utilisateur est authentifié.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si l'utilisateur est authentifié.
+    """
     if request.user.is_authenticated:
         username = request.user.username
         return JsonResponse({"message": f"L'utilisateur ({username}) est auth", "bool": True})
@@ -181,6 +223,15 @@ def is_auth(request):
 @ensure_csrf_cookie
 @login_required
 def deconnexion(request):
+    """
+    Déconnecte l'utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si la déconnexion a réussi.
+    """
     try:
         logout(request)
         return JsonResponse({"message": "Deconnexion reussie"})
@@ -191,6 +242,15 @@ def deconnexion(request):
 @ensure_csrf_cookie
 @login_required
 def obtenir_favoris(request):
+    """
+    Obtient les favoris de l'utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: La liste des tickers favoris.
+    """
     try:
         utilisateur = Utilisateur.objects.get(utilisateur=request.user)
         # Supposons que 'favoris' est un champ List ou JSONField
@@ -205,6 +265,15 @@ def obtenir_favoris(request):
 @ensure_csrf_cookie
 @login_required
 def ajouter_favoris(request):
+    """
+    Ajoute un ticker aux favoris de l'utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si l'ajout a réussi.
+    """
     if request.method == 'POST':
         try:
             ticker = request.POST.get('ticker')
@@ -226,6 +295,15 @@ def ajouter_favoris(request):
 @ensure_csrf_cookie
 @login_required
 def enlever_favoris(request):
+    """
+    Enlève un ticker des favoris de l'utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si la suppression a réussi.
+    """
     if request.method == 'POST':
         try:
             ticker = request.POST.get('ticker')
@@ -250,6 +328,15 @@ def enlever_favoris(request):
 @ensure_csrf_cookie
 @login_required
 def est_favori(request):
+    """
+    Vérifie si un ticker est dans les favoris de l'utilisateur.
+
+    Args:
+        request (HttpRequest): L'objet requête HTTP.
+
+    Returns:
+        JsonResponse: Un message indiquant si le ticker est favori.
+    """
     if request.method == 'POST':
         try:
             ticker = request.POST.get('ticker')
@@ -274,17 +361,17 @@ def est_favori(request):
 def get_utilisateur(request):
     """
     Renvoie :
-    {
-      "success": true,
-      "utilisateur": {
-        "nom_utilisateur": "...",
-        "prenom": "...",
-        "nom": "...",
-        "adresse_courriel": "...",
-        "numero_telephone": "...",
-        "date_de_naissance": "YYYY-MM-DD"
-      }
-    }
+        {
+        "success": true,
+        "utilisateur": {
+            "nom_utilisateur": "...",
+            "prenom": "...",
+            "nom": "...",
+            "adresse_courriel": "...",
+            "numero_telephone": "...",
+            "date_de_naissance": "YYYY-MM-DD"
+        }
+        }
     """
     try:
         profil = Utilisateur.objects.get(utilisateur=request.user)
