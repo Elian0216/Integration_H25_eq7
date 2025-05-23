@@ -7,3 +7,4 @@ class Fractale():
 
     def __str__(self):
         return f"{self.date} à {self.montant}$ {self.est_max}"
+    # La méthode ci-haut est utilisé seulement pou tester dans la console
