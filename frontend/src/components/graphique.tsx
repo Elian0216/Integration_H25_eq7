@@ -346,6 +346,7 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
 
   return (
     <div className="block">
+      {/* Script pour Plotly */}
       <Script src="https://cdn.plot.ly/plotly-latest.min.js" strategy="beforeInteractive" />
 
       {/* Favoris */}
