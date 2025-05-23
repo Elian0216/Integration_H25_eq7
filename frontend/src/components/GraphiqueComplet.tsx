@@ -3,8 +3,18 @@ import React, { useState } from 'react'
 import Graphique from './graphique'
 import { AnimatedGroup } from './ui/animated-group'
 import { Button } from './ui/button'
-import { TextEffect } from './ui/text-effect'
 
+/**
+ * Composant qui affiche un graphique complet avec des moyennes mobiles exponentielles, un RSI,
+ * des fractales, des zones de supports et résistances définies par des K-Moyennes.
+ * 
+ * Le composant prend en paramètre le symbole de la société (par exemple "AAPL" pour Apple).
+ * 
+ * Le graphique est mis à jour en fonction de la période de temps sélectionnée.
+ * Les périodes de temps disponibles sont : 6 mois, 1 an, 2 ans, 5 ans, 10 ans, "ytd" (année en cours) ou "max" (maximum).
+ * 
+ * Le composant affiche également des explications sur les indicateurs techniques affichés.
+ */
 const GraphiqueComplet = ({ stock }: { stock: string}) => {
   const [periodIndex, setPeriodIndex] = useState(3);
   const interval = "1d";

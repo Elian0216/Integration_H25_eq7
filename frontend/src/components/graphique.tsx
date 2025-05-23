@@ -7,31 +7,39 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from './ui/button'
 import { AnimatedGroup } from './ui/animated-group'
-import { ArrowBigLeft, ArrowLeftCircle, ArrowLeftFromLineIcon, ArrowLeftIcon, CircleArrowLeftIcon, CircleArrowOutUpLeftIcon, StarIcon } from 'lucide-react'
-import { get } from 'http'
-import { text } from 'stream/consumers'
-import { filter } from 'motion/react-client'
+import { CircleArrowLeftIcon, StarIcon } from 'lucide-react'
 import FlammeChargement from './FlammeChargement'
 
 
+/**
+ * Affiche un graphique pour un symbole de bourse en utilisant Plotly.
+ * La fonction prend en paramètre le symbole de bourse, le timeframe et l'intervalle.
+ * Elle charge le graphique en utilisant une requête POST vers l'API.
+ * Si le symbole n'existe pas, elle affiche un message d'erreur.
+ * Si le symbole est un favori, elle affiche une icône pour le retirer des favoris, sinon,
+ * elle affiche une icône pour l'ajouter aux favoris.
+ * @param symbol Le symbole de bourse.
+ * @param timeframe Le timeframe.
+ * @param interval L'intervalle.
+ * @returns Un JSXElement contenant le graphique.
+ */
 const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: string, interval: string}) => {
   const [loaded, setLoaded] = useState(false);
   const [validTicker, setValidTicker] = useState(false);
   const [estFavori, setEstFavori] = useState(false);
 
   useEffect(() => {
-      // Check authentication
+      // On vérifie si l'utilisateur est connecté
       authProtection("connexion");
 
-
-      // Access the plot container
+      // Accès au div contenant le graphique, utilisé par Plotly
       const plotDiv = document.getElementsByClassName('js-plotly-plot')[0]
       if (!plotDiv) {
         console.error('Plotly container not found')
         return
       }
   
-      // Debounce function (antiRebond)
+      // Fonction anti-rebond, utilisée pour limiter la mise à jour de l'axe y afin de ne pas surcharger le navigateur
       function antiRebond(func, wait) {
         let timeout: any;
         return function(...args: any[]) {
@@ -40,7 +48,7 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
         }
       }
   
-      // Update y-axis function
+      // Mise à jour de l'axe y afin de pouvoir zoomer au maximum sur le graphique
       function updateAxeY() {
         var visibleHighsData = []
         var visibleLowsData = []
@@ -67,6 +75,10 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
   
       var updateAntiRebond = antiRebond(updateAxeY, 100)
 
+      /**
+       * Vérifie si un symbole est un favori pour l'utilisateur courant.
+       * Met à jour l'état estFavori en fonction de la réponse de l'API.
+       */
       async function determinerSiFavori() {
         const res = await postFetch(process.env.API_PATH + 'estFavori/', {ticker: symbol})
         const res_json = await res?.json()
@@ -80,7 +92,12 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
 
       determinerSiFavori()
   
-      // Optionally, you can initialize your plot here if needed:
+  /**
+   * Effectue une requête à l'API pour obtenir les données du graphique, puis met à jour le graphique avec les données reçues.
+   * Si la requête à l'API échoue, cette fonction met l'état validTicker à false et loaded à true.
+   * Si la requête réussit, cette fonction met l'état validTicker à true, loaded à true et ajoute un listener pour les événements de redimensionnement du graphique.
+   * Le listener de redimensionnement met à jour l'axe des ordonnées du graphique pour qu'il montre les plus hauts et les plus bas de la période visible.
+   */
       async function fetchAndPlot() {
         const res = await postFetch(process.env.API_PATH + 'graphique/', {symbol: symbol, timeframe: timeframe, interval: interval})
         const res_json = await res?.json()
@@ -178,7 +195,6 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
       function getProcessedLegendValues(valuesInArray: string[][][]): (any)[] {
         // Les valeurs viennent dans un tableau, on les extrait
         const values = valuesInArray[0];
-        console.log('Values :', values);
 
         // On enlève les valeurs de candlestick avec plus de 4 valeurs (soit celles avec des dates)
         // Des fois, la date n'est pas présente, on vérifie cela
@@ -187,7 +203,6 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
           if (Array.isArray(value[0]) && value[0].length > 4) {
             return false;
           };
-          console.log('- ', value[0]);
           return true;
         });
 
@@ -199,7 +214,6 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
           if (Array.isArray(value[0])) {
             // On sépare le titre candlestick de ses valeurs
             const splitString = value[0][0].split(' : ');
-            console.log('Split string:', splitString);
 
             // On crée un tableau secondaire pour les valeurs du candlestick
             const newCandlestickArray = [];
@@ -220,6 +234,18 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
         return processedValues;
       }
 
+      /**
+       * Crée un élément HTML pour la légende du graphique.
+       * 
+       * Prend un tableau de tableaux de string en paramètre. Chaque sous-tableau
+       * représente une entrée de la légende. Si le sous-tableau a une longueur de
+       * 1, alors il s'agit d'un titre simple. Si le sous-tableau a une longueur
+       * supérieure à 1, alors le premier élément est le titre et les éléments
+       * suivants sont les valeurs associées à ce titre.
+       * 
+       * @param {string[][]} values - données de la légende
+       * @returns {HTMLDivElement} élément HTML de la légende
+       */
       function createLegendElement(values: (string[][])) {
         const newLegendElement = document.createElement('div');
         newLegendElement.className = 'whitespace-normal break-words';
@@ -251,6 +277,8 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
         return newLegendElement;
       }
 
+      // Observateur de mutation de l'élément de légende
+      // Dès que la légende apparait, on la supprime pour la déplacer dans un nouvel élément
       let previousLegendElement: HTMLElement | null = null;
       const legendObserver = new MutationObserver((mutations) => {
         const newElement = document.getElementById('legendElement');
@@ -258,23 +286,15 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
         if (legendElement && legendElement !== previousLegendElement) {
           previousLegendElement = legendElement as HTMLElement;
 
-          console.log('Legend element found:', legendElement);
-          
           const legendValues = getLegendValues(legendElement as HTMLElement);
-          console.log('Legend values:', legendValues);
           const processedLegendValues = getProcessedLegendValues(legendValues);
-          console.log('Processed legend values:', processedLegendValues);
           const newLegendElement = createLegendElement(processedLegendValues);
-          // const legendContent = legendElement.innerHTML;
-          // const newLegendElement = document.createElement('div');
-          // newLegendElement.className = 'whitespace-normal break-words';
-          // newLegendElement.innerHTML = legendContent;
           
           if (newElement && newElement.firstChild) {
             newElement.replaceChild(newLegendElement, newElement.firstChild);
           }
       
-          // Hide the original legend element
+          // Cacher l'élément de légende original
           legendElement.remove();
         }
       });
@@ -286,9 +306,26 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
   
   }, [])
 
+/**
+ * Composant d'icône de favoris.
+ *
+ * Affiche une étoile qui indique si un élément est marqué comme favori ou non.
+ * L'utilisateur peut cliquer sur l'étoile pour ajouter ou supprimer le favori 
+ * via l'API. Un texte d'info-bulle apparaît lors du survol pour indiquer l'action
+ * à entreprendre (ajouter ou supprimer des favoris).
+ *
+ * @param {boolean} estFavori - Indique si l'élément est actuellement un favori.
+ */
+
   const IconeFavoris = ({ estFavori }: { estFavori: boolean }) => {
     const starIconClasses = "h-10 w-10 text-yellow-500 cursor-pointer";
 
+  /**
+   * Fonction qui gère le clic sur l'icône de favoris.
+   * Si l'élément est déjà un favori, on supprime le favori via l'API.
+   * Sinon, on ajoute le favori via l'API.
+   * La fonction met à jour l'état local "estFavori" en fonction de la réponse de l'API.
+   */
     function handleClick() {
       if (estFavori) {
         postFetch(process.env.API_PATH + 'supprimerFavori/', {ticker: symbol})?.then(() => {setEstFavori(false)})
@@ -329,9 +366,6 @@ const Graphique = ({ symbol, timeframe, interval }: {symbol: string, timeframe: 
       <div className="js-plotly-plot mt-12 w-[80vw] h-[80vh] flex items-center justify-center">
         {/* Chargement */}
         {!loaded && 
-          // <div className="flex justify-center items-center h-full">
-          //   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-          // </div>
           <FlammeChargement />      
         }
         {loaded && !validTicker &&
